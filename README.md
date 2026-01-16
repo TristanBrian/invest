@@ -1,30 +1,54 @@
-# Investor liaison platform
+# The Oxic International Group - Investor Liaison Platform
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+A professional investor liaison platform for The Oxic International Group, designed to connect global investors with opportunities in Kenya and East Africa.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/olmT1DZ62Wh)
+## About
 
-## Overview
+The Oxic International Group is building a people-centric, ICT-driven investor liaison and execution platform designed to help global investors enter and scale in Kenya and East Africa with speed, confidence, and reduced risk.
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+### Our Mission
+
+By combining deep local market intelligence, technology-enabled investor journey management, and hands-on stakeholder engagement, we remove the friction, opacity, and execution gaps that typically undermine investments in emerging markets.
+
+### Services
+
+- **Investment Due Diligence** - Comprehensive market research, regulatory guidance, and stakeholder mapping
+- **Market Entry Strategy** - Tailored entry strategies leveraging local partnerships and compliance frameworks
+- **Project Execution** - End-to-end project management, vendor coordination, and quality assurance
+- **Growth & Scaling** - Strategic expansion support, talent acquisition, and operational optimization
+
+### Founder
+
+**Francis Kiame** - Founder & Managing Director
+
+Positioned as a trusted on-the-ground partner, we bridge global capital with bankable opportunities, institutional partners, and scalable growth.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS v4
+- **UI Components**: shadcn/ui
+- **Language**: TypeScript
+- **Deployment**: Vercel
+
+## Features
+
+- Responsive design optimized for all screen sizes
+- Professional landing page with company overview
+- Services showcase with detailed offerings
+- Founder profile section
+- Contact form with WhatsApp integration
+- Payment methods information (Coming Soon)
+
+## Contact
+
+- **WhatsApp**: +254 704 527 743
+- **Website**: [theoxicinternational.com](https://theoxicinternational.com)
 
 ## Deployment
 
-Your project is live at:
+Deployed on Vercel: [https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform](https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform)
 
-**[https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform](https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform)**
+---
 
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.app/chat/olmT1DZ62Wh](https://v0.app/chat/olmT1DZ62Wh)**
-
-## How It Works
-
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+© 2026 The Oxic International Group. All rights reserved.
