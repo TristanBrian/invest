@@ -8,20 +8,25 @@ import { Menu, X } from "lucide-react"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [logoLoaded, setLogoLoaded] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 sm:h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src="/images/logo.jpeg"
-            alt="The Oxic International Group"
-            width={220}
-            height={60}
-            className="h-10 sm:h-14 w-auto"
-            priority
-            quality={100}
-          />
+          <div className="relative h-10 sm:h-14 w-[150px] sm:w-[220px]">
+            {!logoLoaded && <div className="absolute inset-0 bg-muted/50 animate-pulse rounded" />}
+            <Image
+              src="/images/logo.jpeg"
+              alt="The Oxic International Group"
+              width={220}
+              height={60}
+              className={`h-10 sm:h-14 w-auto transition-opacity duration-200 ${logoLoaded ? "opacity-100" : "opacity-0"}`}
+              priority
+              quality={90}
+              onLoad={() => setLogoLoaded(true)}
+            />
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

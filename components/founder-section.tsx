@@ -1,7 +1,12 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image"
 import { Card } from "@/components/ui/card"
 
 export function FounderSection() {
+  const [imageLoaded, setImageLoaded] = useState(false)
+
   return (
     <section id="founder" className="bg-muted/30 py-20 md:py-28">
       <div className="container mx-auto px-4 md:px-6">
@@ -15,13 +20,16 @@ export function FounderSection() {
         <Card className="mx-auto max-w-5xl overflow-hidden border-border">
           <div className="grid gap-8 p-8 md:grid-cols-5 md:gap-12 md:p-12">
             <div className="md:col-span-2">
-              <div className="relative aspect-square overflow-hidden rounded-lg">
+              <div className="relative aspect-square overflow-hidden rounded-lg bg-muted/30">
+                {!imageLoaded && <div className="absolute inset-0 bg-muted/50 animate-pulse" />}
                 <Image
                   src="/images/founder.jpeg"
                   alt="Francis Kiame, Founder & Managing Director"
                   fill
-                  className="object-cover"
-                  quality={100}
+                  className={`object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+                  quality={85}
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  onLoad={() => setImageLoaded(true)}
                 />
               </div>
             </div>

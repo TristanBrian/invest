@@ -1,19 +1,27 @@
+"use client"
+
+import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export function HeroSection() {
+  const [imageLoaded, setImageLoaded] = useState(false)
+
   return (
     <section className="relative w-full">
       {/* Banner Image */}
-      <div className="relative w-full h-[200px] sm:h-[280px] md:h-[350px] lg:h-[400px] shadow-lg">
+      <div className="relative w-full h-[200px] sm:h-[280px] md:h-[350px] lg:h-[400px] shadow-lg bg-primary/10">
+        {!imageLoaded && <div className="absolute inset-0 bg-primary/10 animate-pulse" />}
         <Image
           src="/images/hero-banner.jpeg"
           alt="Bridging Global Capital, Technology & People"
           fill
-          className="object-cover object-center"
+          className={`object-cover object-center transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
           priority
-          quality={100}
+          quality={85}
+          sizes="100vw"
+          onLoad={() => setImageLoaded(true)}
         />
       </div>
 
