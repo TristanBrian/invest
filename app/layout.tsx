@@ -12,21 +12,8 @@ export const metadata: Metadata = {
     "People-centric, ICT-driven investor liaison and execution platform for Kenya and East Africa. Enter and scale with speed, confidence, and reduced risk.",
   generator: "v0.app",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: "/images/whatsapp-20image-202026-01-15-20at-2000.jpeg",
+    apple: "/images/whatsapp-20image-202026-01-15-20at-2000.jpeg",
   },
 }
 
