@@ -19,13 +19,16 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-4">
           <div className="space-y-4 md:col-span-2">
-            <Image
-              src="/images/logo.jpeg"
-              alt="The Oxic International Group"
-              width={200}
-              height={45}
-              className="h-12 w-auto"
-            />
+            <div className="bg-white rounded-lg px-4 py-3 inline-block shadow-md border border-gray-100">
+              <Image
+                src="/images/whatsapp-20image-202026-01-15-20at-2000.jpeg"
+                alt="The Oxic International Group"
+                width={220}
+                height={60}
+                className="h-16 w-auto object-contain"
+                quality={100}
+              />
+            </div>
             <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
               {
                 "Bridging global capital, technology, and people to unlock East Africa's exceptional growth potential through expert investor liaison and execution services."
@@ -80,9 +83,14 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href="mailto:oxicgroupltd@gmail.com" className="transition-colors hover:text-foreground">
-                  {"oxicgroupltd@gmail.com"}
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a href="mailto:Info@oxicinternational.co.ke" className="transition-colors hover:text-foreground">
+                    {"Info@oxicinternational.co.ke"}
+                  </a>
+                  <a href="mailto:oxicgroupltd@gmail.com" className="transition-colors hover:text-foreground">
+                    {"oxicgroupltd@gmail.com"}
+                  </a>
+                </div>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0" />
