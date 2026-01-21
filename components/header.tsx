@@ -1,5 +1,7 @@
 "use client"
 
+import React from "react"
+
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -9,6 +11,15 @@ import { Menu, X } from "lucide-react"
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [logoLoaded, setLogoLoaded] = useState(false)
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault()
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+    setIsMenuOpen(false)
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -31,34 +42,40 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-8 md:flex">
-          <Link
+          <a
             href="#services"
-            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            onClick={(e) => scrollToSection(e, "services")}
+            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground cursor-pointer"
           >
             Services
-          </Link>
-          <Link
+          </a>
+          <a
             href="#value"
-            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            onClick={(e) => scrollToSection(e, "value")}
+            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground cursor-pointer"
           >
             Value Proposition
-          </Link>
-          <Link
+          </a>
+          <a
             href="#founder"
-            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            onClick={(e) => scrollToSection(e, "founder")}
+            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground cursor-pointer"
           >
             Our Founder
-          </Link>
-          <Link
+          </a>
+          <a
             href="#contact"
-            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+            onClick={(e) => scrollToSection(e, "contact")}
+            className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground cursor-pointer"
           >
             Contact
-          </Link>
+          </a>
         </nav>
 
         <Button asChild className="hidden md:inline-flex">
-          <Link href="#contact">Book Advisory Session</Link>
+          <a href="#contact" onClick={(e) => scrollToSection(e, "contact")}>
+            Book Advisory Session
+          </a>
         </Button>
 
         {/* Mobile Menu Button */}
@@ -75,38 +92,38 @@ export function Header() {
       {isMenuOpen && (
         <div className="border-t border-border bg-background md:hidden">
           <nav className="container mx-auto flex flex-col px-4 py-4">
-            <Link
+            <a
               href="#services"
-              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground border-b border-border/50"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => scrollToSection(e, "services")}
+              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground border-b border-border/50 cursor-pointer"
             >
               Services
-            </Link>
-            <Link
+            </a>
+            <a
               href="#value"
-              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground border-b border-border/50"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => scrollToSection(e, "value")}
+              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground border-b border-border/50 cursor-pointer"
             >
               Value Proposition
-            </Link>
-            <Link
+            </a>
+            <a
               href="#founder"
-              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground border-b border-border/50"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => scrollToSection(e, "founder")}
+              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground border-b border-border/50 cursor-pointer"
             >
               Our Founder
-            </Link>
-            <Link
+            </a>
+            <a
               href="#contact"
-              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => scrollToSection(e, "contact")}
+              className="py-3 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground cursor-pointer"
             >
               Contact
-            </Link>
+            </a>
             <Button asChild className="mt-4 w-full">
-              <Link href="#contact" onClick={() => setIsMenuOpen(false)}>
+              <a href="#contact" onClick={(e) => scrollToSection(e, "contact")}>
                 Book Advisory Session
-              </Link>
+              </a>
             </Button>
           </nav>
         </div>

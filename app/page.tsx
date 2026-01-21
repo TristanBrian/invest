@@ -6,6 +6,7 @@ import { FounderSection } from "@/components/founder-section"
 import { PaymentMethodsSection } from "@/components/payment-methods-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <ContactSection />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   )
 }
