@@ -80,14 +80,14 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href="mailto:info@theoxic.com" className="transition-colors hover:text-foreground">
-                  {"info@theoxic.com"}
+                <a href="mailto:oxicgroupltd@gmail.com" className="transition-colors hover:text-foreground">
+                  {"oxicgroupltd@gmail.com"}
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href="tel:+254700000000" className="transition-colors hover:text-foreground">
-                  {"+254 700 000 000"}
+                <a href="tel:+254704527743" className="transition-colors hover:text-foreground">
+                  {"+254 704 527 743"}
                 </a>
               </li>
               <li className="flex items-start gap-2">
@@ -98,8 +98,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
+        <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground space-y-2">
           <p>{"© 2026 The Oxic International Group. All rights reserved."}</p>
+          <p>
+            {"Made with "}<span className="text-red-500">{"❤️"}</span>{" by "}
+            <a
+              href="https://tristanbdev.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {"Tristan"}
+            </a>
+          </p>
         </div>
       </div>
     </footer>
