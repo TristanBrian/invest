@@ -108,17 +108,7 @@ export function Footer() {
 
         <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground space-y-2">
           <p>{"© 2026 The Oxic International Group. All rights reserved."}</p>
-          <p>
-            {"Made with "}<span className="text-red-500">{"❤️"}</span>{" by "}
-            <a
-              href="https://tristanbdev.netlify.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {"Tristan"}
-            </a>
-          </p>
+         
         </div>
       </div>
     </footer>
