@@ -98,7 +98,9 @@ export function ContactSection() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -106,39 +108,47 @@ export function ContactSection() {
     }
 
     setIsSubmitting(true)
+    setSubmitStatus("idle")
 
-    const whatsappMessage = `
-*New Investment Enquiry*
-
-*Name:* ${formData.name}
-*Email:* ${formData.email}
-*Organization:* ${formData.organization || "N/A"}
-*Phone:* ${formData.phone || "N/A"}
-*Investment Interest:* ${formData.interest}
-
-*Message:*
-${formData.message}
-    `.trim()
-
-    const whatsappNumber = "254704527743"
-
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
-
-    window.open(whatsappUrl, "_blank")
-
-    setTimeout(() => {
-      setFormData({
-        name: "",
-        email: "",
-        organization: "",
-        phone: "",
-        interest: "",
-        message: "",
-        consent: false,
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "enquiry",
+          data: {
+            name: formData.name,
+            email: formData.email,
+            organization: formData.organization,
+            phone: formData.phone,
+            interest: formData.interest,
+            message: formData.message,
+          },
+        }),
       })
-      setErrors({})
+
+      const result = await response.json()
+
+      if (result.success) {
+        setSubmitStatus("success")
+        setFormData({
+          name: "",
+          email: "",
+          organization: "",
+          phone: "",
+          interest: "",
+          message: "",
+          consent: false,
+        })
+        setErrors({})
+      } else {
+        setSubmitStatus("error")
+      }
+    } catch {
+      setSubmitStatus("error")
+    } finally {
       setIsSubmitting(false)
-    }, 1000)
+    }
   }
 
   const ErrorMessage = ({ message }: { message?: string }) => {
@@ -301,8 +311,23 @@ ${formData.message}
                 <ErrorMessage message={errors.consent} />
               </div>
 
-              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Sending..." : "Submit Enquiry"}
+{submitStatus === "success" ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center gap-2 text-green-700 font-medium mb-1">
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    Enquiry Sent Successfully
+                  </div>
+                  <p className="text-green-600 text-sm">Thank you for your interest. Our team will contact you within 24 hours.</p>
+                </div>
+              ) : submitStatus === "error" ? (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                  <p className="text-red-700 font-medium mb-1">Failed to send enquiry</p>
+                  <p className="text-red-600 text-sm">Please try again or contact us directly at oxicgroupltd@consultant.com</p>
+                </div>
+              ) : null}
+
+              <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || submitStatus === "success"}>
+                {isSubmitting ? "Sending..." : submitStatus === "success" ? "Enquiry Sent" : "Submit Enquiry"}
               </Button>
             </form>
           </CardContent>

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Card } from "@/components/ui/card"
+import { Linkedin } from "lucide-react"
 
 export function FounderSection() {
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -20,18 +21,27 @@ export function FounderSection() {
         <Card className="mx-auto max-w-5xl overflow-hidden border-border">
           <div className="grid gap-8 p-8 md:grid-cols-5 md:gap-12 md:p-12">
             <div className="md:col-span-2">
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-muted/30">
+              <div className="relative aspect-square overflow-hidden rounded-xl bg-muted/30 shadow-lg">
                 {!imageLoaded && <div className="absolute inset-0 bg-muted/50 animate-pulse" />}
                 <Image
-                  src="/images/founder.jpeg"
+                  src="/images/founder-francis-kiame.jpeg"
                   alt="Francis Kiame, Founder & Managing Director"
                   fill
-                  className={`object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
-                  quality={85}
+                  className={`object-cover object-top transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+                  quality={90}
                   sizes="(max-width: 768px) 100vw, 40vw"
                   onLoad={() => setImageLoaded(true)}
                 />
               </div>
+              <a
+                href="https://www.linkedin.com/in/francis-kiame-a4a46294/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 mt-4 w-full px-5 py-3 bg-[#0077b5] hover:bg-[#005885] text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+              >
+                <Linkedin className="h-5 w-5" />
+                <span>Connect</span>
+              </a>
             </div>
 
             <div className="flex flex-col justify-center space-y-6 md:col-span-3">

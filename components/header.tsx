@@ -39,22 +39,17 @@ export function Header() {
   const scrolledStyles = mounted && isScrolled
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolledStyles ? "bg-background/98 shadow-lg border-b border-border" : "bg-background/95 border-b border-border/50"} backdrop-blur-md`}>
-      <div className="container mx-auto flex h-16 lg:h-20 items-center justify-between px-4 lg:px-8">
-        {/* Logo - Click to scroll to top */}
-        <a
-          href="#"
-          onClick={scrollToTop}
-          className="flex items-center cursor-pointer group"
-        >
-          <div className={`relative bg-white rounded-lg px-2 py-1.5 sm:px-3 sm:py-2 shadow-md border border-gray-100 transition-all duration-300 group-hover:shadow-lg ${scrolledStyles ? "scale-95" : "scale-100"}`}>
-            {!logoLoaded && <div className="absolute inset-0 bg-muted/50 animate-pulse rounded-lg" />}
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolledStyles ? "bg-background/98 shadow-lg border-b border-border" : "bg-background border-b border-border/50"} backdrop-blur-md`}>
+      <div className="container mx-auto flex h-18 lg:h-22 items-center justify-between px-4 lg:px-6">
+        <a href="#" onClick={scrollToTop} className="flex items-center cursor-pointer group">
+          <div className={`relative transition-all duration-300 group-hover:scale-105 ${scrolledStyles ? "scale-95" : "scale-100"}`}>
+            {!logoLoaded && <div className="absolute inset-0 bg-muted/20 animate-pulse rounded" />}
             <Image
-              src="/images/whatsapp-20image-202026-01-15-20at-2000.jpeg"
+              src="/images/logo1.png"
               alt="The Oxic International Group"
-              width={180}
-              height={50}
-              className={`h-8 sm:h-10 lg:h-11 w-auto object-contain transition-opacity duration-200 ${logoLoaded ? "opacity-100" : "opacity-0"}`}
+              width={280}
+              height={80}
+              className={`h-14 sm:h-16 lg:h-20 w-auto object-contain transition-opacity duration-200 ${logoLoaded ? "opacity-100" : "opacity-0"}`}
               priority
               quality={100}
               onLoad={() => setLogoLoaded(true)}
