@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Card } from "@/components/ui/card"
+import { Linkedin } from "lucide-react"
 
 export function FounderSection() {
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -23,7 +24,7 @@ export function FounderSection() {
               <div className="relative aspect-square overflow-hidden rounded-lg bg-muted/30">
                 {!imageLoaded && <div className="absolute inset-0 bg-muted/50 animate-pulse" />}
                 <Image
-                  src="/images/founder.jpeg"
+                  src="/images/whatsapp-20image-202026-01-14-20at-2022.jpeg"
                   alt="Francis Kiame, Founder & Managing Director"
                   fill
                   className={`object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
@@ -38,6 +39,15 @@ export function FounderSection() {
               <div>
                 <h3 className="mb-1 text-2xl font-bold text-foreground">{"Francis Kiame"}</h3>
                 <p className="text-lg text-secondary">{"Founder & Managing Director"}</p>
+                <a
+                  href="https://www.linkedin.com/in/francis-kiame-a4a46294/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-[#0077b5] hover:bg-[#006097] text-white text-sm font-medium rounded-lg transition-all duration-300 hover:shadow-md"
+                >
+                  <Linkedin className="h-4 w-4" />
+                  Connect on LinkedIn
+                </a>
               </div>
 
               <div className="space-y-4 text-base leading-relaxed text-foreground/80">

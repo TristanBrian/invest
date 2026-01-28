@@ -19,9 +19,9 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-4">
           <div className="space-y-4 md:col-span-2">
-            <div className="bg-white rounded-lg px-4 py-3 inline-block shadow-md border border-gray-100">
+            <div className="inline-block">
               <Image
-                src="/images/whatsapp-20image-202026-01-15-20at-2000.jpeg"
+                src="/images/logo1.png"
                 alt="The Oxic International Group"
                 width={220}
                 height={60}
