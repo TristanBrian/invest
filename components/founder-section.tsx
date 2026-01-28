@@ -33,21 +33,21 @@ export function FounderSection() {
                   onLoad={() => setImageLoaded(true)}
                 />
               </div>
+              <a
+                href="https://www.linkedin.com/in/francis-kiame-a4a46294/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 mt-4 w-full px-5 py-3 bg-[#0077b5] hover:bg-[#005885] text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+              >
+                <Linkedin className="h-5 w-5" />
+                <span>Connect</span>
+              </a>
             </div>
 
             <div className="flex flex-col justify-center space-y-6 md:col-span-3">
               <div>
                 <h3 className="mb-1 text-2xl font-bold text-foreground">{"Francis Kiame"}</h3>
                 <p className="text-lg text-secondary">{"Founder & Managing Director"}</p>
-                <a
-                  href="https://www.linkedin.com/in/francis-kiame-a4a46294/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 mt-4 px-5 py-2.5 bg-[#0077b5] hover:bg-[#005885] text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 border border-[#0077b5]/20"
-                >
-                  <Linkedin className="h-5 w-5" />
-                  <span>Connect on LinkedIn</span>
-                </a>
               </div>
 
               <div className="space-y-4 text-base leading-relaxed text-foreground/80">

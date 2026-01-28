@@ -316,10 +316,39 @@ export function PaymentMethodsSection() {
 
   const handleSendInvoice = async () => {
     setInvoiceLoading(true)
-    // Simulate sending invoice
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setInvoiceLoading(false)
-    setInvoiceStep("sent")
+    setErrorMessage("")
+
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "invoice",
+          data: {
+            invoiceNumber,
+            companyName,
+            companyAddress,
+            contactPerson,
+            email: invoiceEmail,
+            amount: invoiceAmount,
+            currency: invoiceCurrency,
+            description: invoiceDescription,
+          },
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setInvoiceStep("sent")
+      } else {
+        setErrorMessage("Failed to send invoice. Please try again.")
+      }
+    } catch {
+      setErrorMessage("Network error. Please try again.")
+    } finally {
+      setInvoiceLoading(false)
+    }
   }
 
   const handleDownloadInvoice = () => {

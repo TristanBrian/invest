@@ -87,8 +87,8 @@ export function Footer() {
                   <a href="mailto:Info@oxicinternational.co.ke" className="transition-colors hover:text-foreground">
                     {"Info@oxicinternational.co.ke"}
                   </a>
-                  <a href="mailto:oxicgroupltd@gmail.com" className="transition-colors hover:text-foreground">
-                    {"oxicgroupltd@gmail.com"}
+                  <a href="mailto:oxicgroupltd@consultant.com" className="transition-colors hover:text-foreground">
+                    {"oxicgroupltd@consultant.com"}
                   </a>
                 </div>
               </li>
