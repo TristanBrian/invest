@@ -47,14 +47,14 @@ export function Header() {
           onClick={scrollToTop}
           className="flex items-center cursor-pointer group"
         >
-          <div className={`relative transition-all duration-300 group-hover:scale-105 ${scrolledStyles ? "scale-95" : "scale-100"}`}>
-            {!logoLoaded && <div className="absolute inset-0 bg-muted/50 animate-pulse rounded-lg" />}
+          <div className={`relative transition-all duration-300 group-hover:scale-105 ${scrolledStyles ? "scale-[0.92]" : "scale-100"}`}>
+            {!logoLoaded && <div className="absolute inset-0 bg-transparent animate-pulse rounded-lg" />}
             <Image
               src="/images/logo1.png"
               alt="The Oxic International Group"
-              width={180}
-              height={50}
-              className={`h-10 sm:h-12 lg:h-14 w-auto object-contain transition-opacity duration-200 ${logoLoaded ? "opacity-100" : "opacity-0"}`}
+              width={240}
+              height={70}
+              className={`h-12 sm:h-14 lg:h-16 w-auto object-contain transition-opacity duration-200 ${logoLoaded ? "opacity-100" : "opacity-0"}`}
               priority
               quality={100}
               onLoad={() => setLogoLoaded(true)}
