@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description:
     "People-centric, ICT-driven investor liaison and execution platform for Kenya and East Africa. Enter and scale with speed, confidence, and reduced risk.",
   icons: {
-    icon: "/images/whatsapp-20image-202026-01-15-20at-2000.jpeg",
-    apple: "/images/whatsapp-20image-202026-01-15-20at-2000.jpeg",
+    icon: "/images/logo1.png",
+    apple: "/images/logo1.png",
   },
     generator: 'v0.app'
 }
