@@ -34,14 +34,14 @@ This guide will help you set up all required environment variables for the Oxic 
 3. You must verify `oxicgroupltd@consultant.com` as a sender
 
 **Environment variables:**
-```
+\`\`\`
 SENDGRID_API_KEY=SG.xxxxxxxxxxxxx
 SENDGRID_FROM_EMAIL=oxicgroupltd@consultant.com
 SENDGRID_FROM_NAME=The Oxic International Group
 SENDGRID_ENQUIRY_TO=oxicgroupltd@consultant.com
 SENDGRID_INVOICE_TO=oxicgroupltd@consultant.com
 SENDGRID_ACCOUNT_EMAIL=accounts@oxicgroup.com
-```
+\`\`\`
 
 ---
 
@@ -76,14 +76,14 @@ SENDGRID_ACCOUNT_EMAIL=accounts@oxicgroup.com
 4. Update all credentials
 
 **Environment variables:**
-```
+\`\`\`
 MPESA_CONSUMER_KEY=xxxxxxxxxxxxx
 MPESA_CONSUMER_SECRET=xxxxxxxxxxxxx
 MPESA_PASSKEY=xxxxxxxxxxxxx
 MPESA_SHORTCODE=174379
 MPESA_ENV=sandbox
 MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
-```
+\`\`\`
 
 **Test credentials (sandbox):**
 - Phone: 254700000000 - 254700100000
@@ -123,27 +123,27 @@ MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
 - CVC: Any 3 digits (e.g., 123)
 
 **Environment variables:**
-```
+\`\`\`
 STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxx
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxx
 STRIPE_WEBHOOK_SECRET=whsec_test_xxxxxxxxxxxxx
-```
+\`\`\`
 
 ---
 
 ### 4. APPLICATION URLS
 
 **Local Development:**
-```
+\`\`\`
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NODE_ENV=development
-```
+\`\`\`
 
 **Production (Netlify):**
-```
+\`\`\`
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
 NODE_ENV=production
-```
+\`\`\`
 
 ---
 
@@ -184,10 +184,10 @@ Before going live, verify:
 ## Testing the APIs
 
 ### Test Email:
-```bash
+\`\`\`bash
 # Run a test from contact form with test email
 # Check your inbox and spam folder
-```
+\`\`\`
 
 ### Test M-Pesa:
 1. Use sandbox shortcode: 174379

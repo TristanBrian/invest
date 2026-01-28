@@ -8,8 +8,8 @@
 # Environment variables - Set these in Netlify Dashboard
 # Build settings
 [build.environment]
-  NODE_VERSION = "18"
-  NPM_VERSION = "9"
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
 
 # Redirects for API routes
 [[redirects]]
