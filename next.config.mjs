@@ -6,7 +6,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
- 
+  experimental: {
+    staticGenerationRetryCount: 1,
+  },
 }
 
 export default nextConfig
