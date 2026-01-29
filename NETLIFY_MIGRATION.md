@@ -13,13 +13,13 @@ This document guides you through the migration to use @netlify/plugin-nextjs@5 w
 - Removed `[functions."api/**"]` configuration (plugin manages API routes)
 
 ✅ Added plugin configuration:
-```toml
+\`\`\`toml
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [plugins.inputs]
   cacheOnClient = true
-```
+\`\`\`
 
 ### 2. **next.config.mjs Configuration**
 
