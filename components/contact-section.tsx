@@ -100,7 +100,7 @@ export function ContactSection() {
 
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -108,11 +108,40 @@ export function ContactSection() {
     }
 
     setIsSubmitting(true)
+    setSubmitStatus("idle")
 
-    // For Netlify Forms, we submit the form normally
-    // Netlify will handle the submission and redirect
-    const form = e.currentTarget as HTMLFormElement
-    form.submit()
+    try {
+      const formElement = e.currentTarget as HTMLFormElement
+      const formData = new FormData(formElement)
+
+      // Submit to Netlify Forms
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
+      })
+
+      if (response.ok) {
+        setSubmitStatus("success")
+        setFormData({
+          name: "",
+          email: "",
+          organization: "",
+          phone: "",
+          interest: "",
+          message: "",
+          consent: false,
+        })
+        setErrors({})
+      } else {
+        setSubmitStatus("error")
+      }
+    } catch (error) {
+      console.error("[v0] Form submission error:", error)
+      setSubmitStatus("error")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const ErrorMessage = ({ message }: { message?: string }) => {
@@ -164,6 +193,7 @@ export function ContactSection() {
                   </Label>
                   <Input
                     id="name"
+                    name="name"
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={(e) => {
@@ -183,6 +213,7 @@ export function ContactSection() {
                   </Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="john@example.com"
                     value={formData.email}
@@ -198,6 +229,7 @@ export function ContactSection() {
                   <Label htmlFor="organization">{"Organization"}</Label>
                   <Input
                     id="organization"
+                    name="organization"
                     placeholder="Company Name"
                     value={formData.organization}
                     onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
@@ -208,6 +240,7 @@ export function ContactSection() {
                   <Label htmlFor="phone">{"Phone"}</Label>
                   <Input
                     id="phone"
+                    name="phone"
                     type="tel"
                     placeholder="+254 700 000 000"
                     value={formData.phone}
@@ -231,7 +264,7 @@ export function ContactSection() {
                     }
                   }}
                 >
-                  <SelectTrigger id="interest" className={errors.interest ? "border-destructive" : ""}>
+                  <SelectTrigger id="interest" name="interest" className={errors.interest ? "border-destructive" : ""}>
                     <SelectValue placeholder="Select your interest area" />
                   </SelectTrigger>
                   <SelectContent>
@@ -253,6 +286,7 @@ export function ContactSection() {
                 </Label>
                 <Textarea
                   id="message"
+                  name="message"
                   placeholder="Tell us about your investment goals and how we can help..."
                   rows={5}
                   value={formData.message}
@@ -271,6 +305,7 @@ export function ContactSection() {
                 <div className="flex items-start space-x-3">
                   <Checkbox
                     id="consent"
+                    name="consent"
                     checked={formData.consent}
                     onCheckedChange={(checked) => {
                       setFormData({ ...formData, consent: checked as boolean })
