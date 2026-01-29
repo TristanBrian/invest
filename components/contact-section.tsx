@@ -100,7 +100,7 @@ export function ContactSection() {
 
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -108,47 +108,11 @@ export function ContactSection() {
     }
 
     setIsSubmitting(true)
-    setSubmitStatus("idle")
 
-    try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "enquiry",
-          data: {
-            name: formData.name,
-            email: formData.email,
-            organization: formData.organization,
-            phone: formData.phone,
-            interest: formData.interest,
-            message: formData.message,
-          },
-        }),
-      })
-
-      const result = await response.json()
-
-      if (result.success) {
-        setSubmitStatus("success")
-        setFormData({
-          name: "",
-          email: "",
-          organization: "",
-          phone: "",
-          interest: "",
-          message: "",
-          consent: false,
-        })
-        setErrors({})
-      } else {
-        setSubmitStatus("error")
-      }
-    } catch {
-      setSubmitStatus("error")
-    } finally {
-      setIsSubmitting(false)
-    }
+    // For Netlify Forms, we submit the form normally
+    // Netlify will handle the submission and redirect
+    const form = e.currentTarget as HTMLFormElement
+    form.submit()
   }
 
   const ErrorMessage = ({ message }: { message?: string }) => {
@@ -179,7 +143,20 @@ export function ContactSection() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+            <form 
+              name="contact-enquiry" 
+              method="POST" 
+              data-netlify="true" 
+              netlify-honeypot="bot-field"
+              onSubmit={handleSubmit} 
+              className="space-y-6" 
+              noValidate
+            >
+              {/* Netlify form name field */}
+              <input type="hidden" name="form-name" value="contact-enquiry" />
+              
+              {/* Netlify spam protection */}
+              <input type="hidden" name="bot-field" />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">
