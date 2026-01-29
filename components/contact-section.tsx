@@ -173,19 +173,10 @@ export function ContactSection() {
           </CardHeader>
           <CardContent>
             <form 
-              name="contact-enquiry" 
-              method="POST" 
-              data-netlify="true" 
-              netlify-honeypot="bot-field"
               onSubmit={handleSubmit} 
               className="space-y-6" 
               noValidate
             >
-              {/* Netlify form name field */}
-              <input type="hidden" name="form-name" value="contact-enquiry" />
-              
-              {/* Netlify spam protection */}
-              <input type="hidden" name="bot-field" />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">
