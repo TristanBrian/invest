@@ -12,11 +12,13 @@
   NPM_VERSION = "10.4.0"
   NODE_ENV = "production"
 
-# Redirects for API routes
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+# Next.js Runtime configuration
+[functions."api/**"]
+  node_bundler = "esbuild"
+
+# Netlify Next.js Plugin Configuration
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Security headers
 [[headers]]
@@ -39,10 +41,7 @@
   [headers.values]
     Cache-Control = "public, max-age=86400"
 
-# Webhook configuration
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
+
 
 # Environment-specific settings
 [context.production]
