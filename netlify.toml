@@ -2,7 +2,6 @@
 
 [build]
   command = "npm run build"
-  functions = "netlify/functions"
   publish = ".next"
 
 # Environment variables - Set these in Netlify Dashboard
@@ -12,13 +11,12 @@
   NPM_VERSION = "10.4.0"
   NODE_ENV = "production"
 
-# Next.js Runtime configuration
-[functions."api/**"]
-  node_bundler = "esbuild"
-
-# Netlify Next.js Plugin Configuration
+# Netlify Next.js Plugin Configuration for Forms Support
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+  
+[plugins.inputs]
+  cacheOnClient = true
 
 # Security headers
 [[headers]]
