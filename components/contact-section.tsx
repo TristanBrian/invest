@@ -111,25 +111,17 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      const response = await fetch("/api/send-email", {
+      const formElement = e.currentTarget as HTMLFormElement
+      const formData = new FormData(formElement)
+
+      // Submit to Netlify Forms
+      const response = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "enquiry",
-          data: {
-            name: formData.name,
-            email: formData.email,
-            organization: formData.organization,
-            phone: formData.phone,
-            interest: formData.interest,
-            message: formData.message,
-          },
-        }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
       })
 
-      const result = await response.json()
-
-      if (result.success) {
+      if (response.ok) {
         setSubmitStatus("success")
         setFormData({
           name: "",
@@ -144,7 +136,8 @@ export function ContactSection() {
       } else {
         setSubmitStatus("error")
       }
-    } catch {
+    } catch (error) {
+      console.error("[v0] Form submission error:", error)
       setSubmitStatus("error")
     } finally {
       setIsSubmitting(false)
@@ -179,7 +172,20 @@ export function ContactSection() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+            <form 
+              name="contact-enquiry" 
+              method="POST" 
+              data-netlify="true" 
+              netlify-honeypot="bot-field"
+              onSubmit={handleSubmit} 
+              className="space-y-6" 
+              noValidate
+            >
+              {/* Netlify form name field */}
+              <input type="hidden" name="form-name" value="contact-enquiry" />
+              
+              {/* Netlify spam protection */}
+              <input type="hidden" name="bot-field" />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">
@@ -187,6 +193,7 @@ export function ContactSection() {
                   </Label>
                   <Input
                     id="name"
+                    name="name"
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={(e) => {
@@ -206,6 +213,7 @@ export function ContactSection() {
                   </Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="john@example.com"
                     value={formData.email}
@@ -221,6 +229,7 @@ export function ContactSection() {
                   <Label htmlFor="organization">{"Organization"}</Label>
                   <Input
                     id="organization"
+                    name="organization"
                     placeholder="Company Name"
                     value={formData.organization}
                     onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
@@ -231,6 +240,7 @@ export function ContactSection() {
                   <Label htmlFor="phone">{"Phone"}</Label>
                   <Input
                     id="phone"
+                    name="phone"
                     type="tel"
                     placeholder="+254 700 000 000"
                     value={formData.phone}
@@ -254,7 +264,7 @@ export function ContactSection() {
                     }
                   }}
                 >
-                  <SelectTrigger id="interest" className={errors.interest ? "border-destructive" : ""}>
+                  <SelectTrigger id="interest" name="interest" className={errors.interest ? "border-destructive" : ""}>
                     <SelectValue placeholder="Select your interest area" />
                   </SelectTrigger>
                   <SelectContent>
@@ -276,6 +286,7 @@ export function ContactSection() {
                 </Label>
                 <Textarea
                   id="message"
+                  name="message"
                   placeholder="Tell us about your investment goals and how we can help..."
                   rows={5}
                   value={formData.message}
@@ -294,6 +305,7 @@ export function ContactSection() {
                 <div className="flex items-start space-x-3">
                   <Checkbox
                     id="consent"
+                    name="consent"
                     checked={formData.consent}
                     onCheckedChange={(checked) => {
                       setFormData({ ...formData, consent: checked as boolean })
@@ -312,17 +324,26 @@ export function ContactSection() {
               </div>
 
 {submitStatus === "success" ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                  <div className="flex items-center justify-center gap-2 text-green-700 font-medium mb-1">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                    Enquiry Sent Successfully
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <svg className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    <div className="flex-1">
+                      <h3 className="text-green-800 font-semibold mb-1">Enquiry Acknowledged</h3>
+                      <p className="text-green-700 text-sm mb-2">Thank you for reaching out to The Oxic International Group. We have successfully received your enquiry and appreciate your interest in our investment advisory services.</p>
+                      <p className="text-green-700 text-sm font-medium">Our team will review your message and get back to you within 24 hours at the email address you provided.</p>
+                    </div>
                   </div>
-                  <p className="text-green-600 text-sm">Thank you for your interest. Our team will contact you within 24 hours.</p>
                 </div>
               ) : submitStatus === "error" ? (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                  <p className="text-red-700 font-medium mb-1">Failed to send enquiry</p>
-                  <p className="text-red-600 text-sm">Please try again or contact us directly at oxicgroupltd@consultant.com</p>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <svg className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <div className="flex-1">
+                      <p className="text-red-800 font-semibold mb-1">Unable to Send Enquiry</p>
+                      <p className="text-red-700 text-sm mb-2">We encountered an issue processing your enquiry. Please try again or contact us directly.</p>
+                      <a href="mailto:info@oxicinternational.co.ke" className="text-red-700 font-medium hover:underline text-sm">Email us at info@oxicinternational.co.ke</a>
+                    </div>
+                  </div>
                 </div>
               ) : null}
 
