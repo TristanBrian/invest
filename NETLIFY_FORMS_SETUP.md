@@ -51,7 +51,7 @@ If the form doesn't appear:
    - **From:** noreply@oxicgroup.netlify.app
    - **Subject:** We Received Your Enquiry
    - **Body Template:**
-     ```
+     \`\`\`
      Thank you for your enquiry!
      
      We appreciate your interest in The Oxic International Group.
@@ -61,7 +61,7 @@ If the form doesn't appear:
      
      Best regards,
      The Oxic International Group
-     ```
+     \`\`\`
 
 ### Step 4: Test the Form
 
@@ -112,14 +112,14 @@ The form includes **Honeypot protection** (the `bot-field`) which automatically 
 You can customize email templates by adding a custom notification webhook or using Netlify's template syntax:
 
 **Available Template Variables:**
-```
+\`\`\`
 {{ email }}      - Submitter's email
 {{ name }}       - Submitter's name
 {{ message }}    - Message content
 {{ interest }}   - Investment interest selection
 {{ created_at }} - Submission date/time
 {{ number }}     - Submission number
-```
+\`\`\`
 
 ## Troubleshooting
 
