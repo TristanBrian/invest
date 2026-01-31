@@ -412,11 +412,12 @@ export function PaymentMethodsSection() {
               </div>
               <div class="footer">
                 <strong>Payment Instructions:</strong><br/>
-                Bank: Kenya Commercial Bank (KCB)<br/>
-                Account Name: The Oxic International Group Ltd<br/>
-                Account Number: Contact accounts@oxicgroup.com<br/>
-                SWIFT Code: KCABORBB<br/><br/>
-                <strong>Contact:</strong> accounts@oxicgroup.com | +254 700 000 000
+                Bank: KCB BANK (K) LIMITED<br/>
+                Account Name: THE OXIC INTERNATIONAL GROUP LIMITED<br/>
+                Account Number: 1316115194<br/>
+                SWIFT Code: KCBLKENX<br/>
+                M-Pesa Paybill: 522522<br/><br/>
+                <strong>Contact:</strong> info@oxicinternational.co.ke
               </div>
             </body>
           </html>
@@ -439,7 +440,7 @@ export function PaymentMethodsSection() {
             <ul className="space-y-1 text-muted-foreground">
               <li>1. Review the invoice in your email</li>
               <li>2. Process payment via bank transfer</li>
-              <li>3. Send payment confirmation to accounts@oxicgroup.com</li>
+              <li>3. Send payment confirmation to info@oxicinternational.co.ke</li>
             </ul>
           </div>
           <div className="flex gap-2">
@@ -565,7 +566,7 @@ export function PaymentMethodsSection() {
         <div className="text-center pt-2 border-t border-border">
           <p className="text-xs text-muted-foreground mb-2">Need assistance?</p>
           <div className="flex justify-center gap-4 text-xs">
-            <a href="mailto:accounts@oxicgroup.com" className="flex items-center gap-1 text-[#1e3a5f] hover:underline"><Mail className="h-3 w-3" />accounts@oxicgroup.com</a>
+              <a href="mailto:info@oxicinternational.co.ke" className="flex items-center gap-1 text-[#1e3a5f] hover:underline"><Mail className="h-3 w-3" />info@oxicinternational.co.ke</a>
             <a href="tel:+254700000000" className="flex items-center gap-1 text-[#1e3a5f] hover:underline"><Phone className="h-3 w-3" />+254 700 000 000</a>
           </div>
         </div>
@@ -586,29 +587,29 @@ export function PaymentMethodsSection() {
         <div className="bg-muted/50 rounded-lg p-4 space-y-3">
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-muted-foreground text-sm">Bank Name</span>
-            <span className="font-medium text-sm">Kenya Commercial Bank (KCB)</span>
+            <span className="font-medium text-sm">KCB BANK (K) LIMITED</span>
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-muted-foreground text-sm">Account Name</span>
-            <span className="font-medium text-sm">The Oxic International Group Ltd</span>
+            <span className="font-medium text-sm">THE OXIC INTERNATIONAL GROUP LIMITED</span>
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
-            <span className="text-muted-foreground text-sm">Branch</span>
-            <span className="font-medium text-sm">Nairobi Main Branch</span>
+            <span className="text-muted-foreground text-sm">Account Number (KES)</span>
+            <span className="font-medium text-sm font-mono">1316115194</span>
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-muted-foreground text-sm">SWIFT Code</span>
             <span className="font-medium text-sm font-mono">KCBLKENX</span>
           </div>
           <div className="flex justify-between py-2">
-            <span className="text-muted-foreground text-sm">Account Number</span>
-            <span className="font-medium text-sm">Contact for details</span>
+            <span className="text-muted-foreground text-sm">M-Pesa Paybill</span>
+            <span className="font-medium text-sm font-mono">522522</span>
           </div>
         </div>
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-          <p className="text-sm text-amber-800">Please email <span className="font-medium">accounts@oxicgroup.com</span> with your transfer details for account number and payment reference.</p>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <p className="text-sm text-blue-800">Use account number <span className="font-medium">1316115194</span> as reference for all transfers. For invoices and wire transfers, contact our accounts team.</p>
         </div>
-        <Button className="w-full bg-[#1e3a5f] hover:bg-[#152a45]" onClick={() => window.location.href = "mailto:accounts@oxicgroup.com?subject=Bank Transfer Inquiry"}>
+        <Button className="w-full bg-[#1e3a5f] hover:bg-[#152a45]" onClick={() => window.location.href = "mailto:info@oxicinternational.co.ke?subject=Bank Transfer Inquiry"}>
           <Mail className="h-4 w-4 mr-2" />Contact Accounts Team
         </Button>
       </div>

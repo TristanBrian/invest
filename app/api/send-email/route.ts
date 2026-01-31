@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
 const FROM_EMAIL = "noreply@oxicinternational.co.ke"
-const TO_EMAIL = "oxicgroupltd@consultant.com"
+const TO_EMAIL = "info@oxicinternational.co.ke"
 
 interface EmailRequest {
   type: "enquiry" | "invoice"
