@@ -111,17 +111,32 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      const formElement = e.currentTarget as HTMLFormElement
-      const formData = new FormData(formElement)
-
-      // Submit to Netlify Forms
-      const response = await fetch("/", {
+      // Send email via SendGrid
+      const emailResponse = await fetch("/api/send-email", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "enquiry",
+          data: formData,
+        }),
       })
 
-      if (response.ok) {
+      const emailResult = await emailResponse.json()
+
+      if (emailResult.success) {
+        // Also submit to Netlify Forms for backup
+        try {
+          const formElement = e.currentTarget as HTMLFormElement
+          const netlifyFormData = new FormData(formElement)
+          await fetch("/", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams(netlifyFormData as any).toString(),
+          })
+        } catch {
+          // Netlify submission is optional
+        }
+
         setSubmitStatus("success")
         setFormData({
           name: "",
