@@ -4,9 +4,11 @@ import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { StoryModal } from "@/components/story-modal"
 
 export function HeroSection() {
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [storyModalOpen, setStoryModalOpen] = useState(false)
 
   return (
     <section className="relative w-full">
@@ -25,7 +27,28 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 mt-8 sm:mt-10 md:mt-12 lg:mt-16">
+      {/* Company Story Section - Right After Banner */}
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-10 sm:py-12 md:py-14 lg:py-16">
+        <div className="max-w-3xl">
+          <div className="space-y-4">
+            <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary">
+              Our Story
+            </h2>
+            <p className="text-sm sm:text-base md:text-base text-foreground/70 leading-relaxed max-w-2xl">
+              The Oxic International Group was founded on a simple belief: global capital flows to opportunity, not geography. We recognized a critical gap in the East African investment ecosystem. The need for trusted, technology-enabled advisors who understand both international investor expectations and local market dynamics.
+            </p>
+            <Button 
+              className="bg-primary hover:bg-primary/90 mt-4"
+              onClick={() => setStoryModalOpen(true)}
+            >
+              Learn More About Our Track Record
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main CTA Section - After Story */}
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 mb-8 sm:mb-10 md:mb-12 lg:mb-14">
         <div className="bg-secondary rounded-xl sm:rounded-2xl shadow-2xl border border-secondary-foreground/10 py-8 sm:py-10 md:py-14 lg:py-16 mx-2 sm:mx-4 md:mx-8 lg:mx-auto lg:max-w-5xl">
           <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 px-4 sm:px-6 md:px-8">
             <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold text-secondary bg-primary rounded-full shadow-md">
@@ -63,6 +86,8 @@ export function HeroSection() {
       </div>
 
       <div className="h-12 sm:h-14 md:h-16 lg:h-20 bg-background"></div>
+
+      <StoryModal open={storyModalOpen} onOpenChange={setStoryModalOpen} />
     </section>
   )
 }

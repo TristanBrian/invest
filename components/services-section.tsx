@@ -41,10 +41,10 @@ const stats = [
 
 export function ServicesSection() {
   return (
-    <section id="services" className="bg-muted/30 py-12 sm:py-16 md:py-20 lg:py-28">
+    <section id="services" className="bg-muted/30 py-12 sm:py-14 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
-        <div className="mb-8 sm:mb-10 md:mb-12 text-center">
+        <div className="mb-8 sm:mb-10 md:mb-10 text-center">
           <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 mb-3 sm:mb-4 text-xs sm:text-sm font-semibold text-white bg-primary rounded-full">
             What We Offer
           </span>
