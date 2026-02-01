@@ -36,7 +36,7 @@ export function HeroSection() {
                   Our Story
                 </h2>
                 <p className="text-base sm:text-lg text-foreground/70 leading-relaxed">
-                  The Oxic International Group was founded on a simple belief: global capital flows to opportunity, not geography. We recognized a critical gap in the East African investment ecosystem—the need for trusted, technology-enabled advisors who understand both international investor expectations and local market dynamics.
+                  The Oxic International Group was founded on a simple belief: global capital flows to opportunity, not geography. We recognized a critical gap in the East African investment ecosystem. The need for trusted, technology-enabled advisors who understand both international investor expectations and local market dynamics.
                 </p>
               </div>
               
