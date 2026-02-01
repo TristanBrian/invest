@@ -9,9 +9,9 @@ export function FounderSection() {
   const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
-    <section id="founder" className="bg-muted/30 py-20 md:py-28">
+    <section id="founder" className="bg-muted/30 py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-12 text-center">
+        <div className="mb-8 md:mb-10 text-center">
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-balance md:text-4xl">{"Meet Our Founder"}</h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-pretty">
             {"Leadership rooted in experience, integrity, and deep market knowledge"}

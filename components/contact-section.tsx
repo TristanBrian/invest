@@ -170,9 +170,9 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-20 md:py-28">
+    <section id="contact" className="py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-12 text-center">
+        <div className="mb-8 md:mb-10 text-center">
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-balance md:text-4xl">{"Get In Touch"}</h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-pretty">
             {"Ready to explore investment opportunities in East Africa? Contact us for a consultation"}
