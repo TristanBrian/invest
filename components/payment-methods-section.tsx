@@ -621,56 +621,48 @@ export function PaymentMethodsSection() {
     return (
       <>
         <DialogHeader>
-          <DialogTitle className="text-2xl">Pay with Cryptocurrency</DialogTitle>
-          <DialogDescription>Secure, instant payments using Binance Pay, Bitcoin, Ethereum, and more</DialogDescription>
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-[#F0B90B]/20">
+            <Zap className="h-6 w-6 text-[#F0B90B]" />
+          </div>
+          <DialogTitle className="text-center">Cryptocurrency Payment</DialogTitle>
+          <DialogDescription className="text-center">Binance Pay, Bitcoin, Ethereum, USDT & BNB accepted</DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-6 py-4">
-          {/* Binance Pay */}
-          <div className="border rounded-lg p-4 hover:border-primary/50 transition-colors">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-[#F0B90B]/10 rounded-lg flex items-center justify-center">
-                <span className="font-bold text-[#F0B90B]">₿</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-primary">Binance Pay</h3>
-                <p className="text-xs text-muted-foreground">Direct app-to-app payment</p>
-              </div>
-            </div>
-            <Button className="w-full bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold mb-2">Pay with Binance Pay</Button>
-          </div>
+        <div className="space-y-4 py-4">
+          {/* Binance Pay - Primary */}
+          <Button className="w-full bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold h-12" onClick={() => window.location.href = "https://www.binance.com/en/pay"}>
+            <Zap className="h-4 w-4 mr-2" />Pay with Binance Pay
+          </Button>
 
-          {/* Wallet Addresses */}
-          <div className="space-y-3">
-            <p className="text-sm font-semibold text-primary">Wallet Addresses</p>
+          {/* Crypto Addresses */}
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-primary">Send Crypto Directly</p>
             
-            <div className="bg-muted/50 rounded-lg p-3 space-y-2">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">BTC (Bitcoin)</p>
-                <p className="text-xs font-mono bg-background px-2 py-1 rounded break-all">1A1z7agoat7SfLcNQUok7XJRZJ72gYXxqM</p>
+            <div className="space-y-2 text-xs">
+              <div className="bg-muted/50 rounded-lg p-2">
+                <p className="text-muted-foreground font-medium mb-1">Bitcoin (BTC)</p>
+                <p className="font-mono break-all text-[11px] bg-background px-2 py-1 rounded">1A1z7agoat7SfLcNQUok7XJRZJ72gYXxqM</p>
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">ETH (Ethereum)</p>
-                <p className="text-xs font-mono bg-background px-2 py-1 rounded break-all">0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f</p>
+              
+              <div className="bg-muted/50 rounded-lg p-2">
+                <p className="text-muted-foreground font-medium mb-1">Ethereum/USDT (ERC-20)</p>
+                <p className="font-mono break-all text-[11px] bg-background px-2 py-1 rounded">0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f</p>
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">BNB (Binance Coin)</p>
-                <p className="text-xs font-mono bg-background px-2 py-1 rounded break-all">0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">USDT (Tether)</p>
-                <p className="text-xs font-mono bg-background px-2 py-1 rounded break-all">0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f</p>
+              
+              <div className="bg-muted/50 rounded-lg p-2">
+                <p className="text-muted-foreground font-medium mb-1">BNB/USDT (BSC)</p>
+                <p className="font-mono break-all text-[11px] bg-background px-2 py-1 rounded">0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f</p>
               </div>
             </div>
           </div>
 
           {/* Instructions */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p className="text-sm text-blue-800"><span className="font-semibold">Confirmation Note:</span> Please allow 10-30 minutes for blockchain confirmation. Send your transaction ID via WhatsApp to +254 748 992 777 for order processing.</p>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-2.5 text-xs">
+            <p className="text-blue-900"><span className="font-semibold">Important:</span> After sending, confirm via WhatsApp with your transaction ID for processing.</p>
           </div>
 
-          <Button className="w-full bg-[#1e3a5f] hover:bg-[#152a45]" onClick={() => window.location.href = "https://wa.me/254748992777?text=I%20have%20sent%20a%20crypto%20payment"}>
-            <Send className="h-4 w-4 mr-2" />Confirm Payment via WhatsApp
+          <Button className="w-full bg-[#1e3a5f] hover:bg-[#152a45]" onClick={() => window.location.href = "https://wa.me/254748992777?text=I%20have%20sent%20a%20crypto%20payment%20-%20Tx%20ID:%20"}>
+            <Send className="h-4 w-4 mr-2" />Confirm via WhatsApp
           </Button>
         </div>
       </>
@@ -705,23 +697,28 @@ export function PaymentMethodsSection() {
           <p className="mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground">Secure payment methods for seamless transactions</p>
         </div>
         <div className="mx-auto max-w-5xl space-y-6">
-          {/* Featured - Cryptocurrency */}
-          <div>
-            <Card className="border-2 border-[#F0B90B] bg-gradient-to-br from-[#F0B90B]/5 to-transparent text-center transition-all hover:shadow-lg hover:border-[#F0B90B] cursor-pointer group md:col-span-2" onClick={() => handleCardClick("Cryptocurrency", "crypto")}>
-              <CardHeader className="pb-2 px-4 pt-6">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-lg bg-[#F0B90B]/20 group-hover:bg-[#F0B90B]/30 transition-colors">
-                  <Zap className="h-7 w-7 text-[#F0B90B]" />
+          {/* Featured - Cryptocurrency - Compact */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="border-2 border-[#F0B90B] bg-gradient-to-br from-[#F0B90B]/5 to-transparent transition-all hover:shadow-md hover:border-[#F0B90B] cursor-pointer group md:col-span-3" onClick={() => handleCardClick("Cryptocurrency", "crypto")}>
+              <CardHeader className="pb-3 px-4 pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F0B90B]/20 group-hover:bg-[#F0B90B]/30 transition-colors">
+                      <Zap className="h-5 w-5 text-[#F0B90B]" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-base text-[#F0B90B]">Cryptocurrency</CardTitle>
+                      <p className="text-xs text-muted-foreground">Binance Pay • BTC • ETH • USDT</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1">
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-[#F0B90B]/10 text-xs text-[#F0B90B] font-semibold">Instant</span>
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-green-100/80 text-xs text-green-700 font-semibold">Secure</span>
+                  </div>
                 </div>
-                <CardTitle className="text-lg text-[#F0B90B]">Cryptocurrency Payments</CardTitle>
-                <p className="text-sm text-muted-foreground mt-2">Binance Pay • Bitcoin • Ethereum • More</p>
               </CardHeader>
-              <CardContent className="px-4 pb-6">
-                <p className="text-xs text-muted-foreground mb-3">Secure, instant transactions with instant confirmation</p>
-                <div className="flex justify-center gap-2 flex-wrap">
-                  <span className="inline-block px-2 py-1 rounded-full bg-[#F0B90B]/10 text-xs text-[#F0B90B] font-medium">Binance</span>
-                  <span className="inline-block px-2 py-1 rounded-full bg-orange-100 text-xs text-orange-700 font-medium">BTC</span>
-                  <span className="inline-block px-2 py-1 rounded-full bg-purple-100 text-xs text-purple-700 font-medium">ETH</span>
-                </div>
+              <CardContent className="px-4 pb-3">
+                <p className="text-xs text-muted-foreground">Fast blockchain transactions with real-time settlement for international payments</p>
               </CardContent>
             </Card>
           </div>
