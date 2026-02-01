@@ -25,46 +25,8 @@ export function HeroSection() {
         />
       </div>
 
-      {/* Main CTA Section */}
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 mt-16 sm:mt-20 md:mt-24 lg:mt-28 mb-12 sm:mb-16 md:mb-20 lg:mb-24">
-        <div className="bg-secondary rounded-xl sm:rounded-2xl shadow-2xl border border-secondary-foreground/10 py-8 sm:py-10 md:py-14 lg:py-16 mx-2 sm:mx-4 md:mx-8 lg:mx-auto lg:max-w-5xl">
-          <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 px-4 sm:px-6 md:px-8">
-            <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold text-secondary bg-primary rounded-full shadow-md">
-              Your Trusted Partner in East Africa
-            </span>
-
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-primary text-balance">
-              Unlock Investment Opportunities with Confidence
-            </h1>
-
-            <p className="text-sm sm:text-base md:text-lg text-primary/80 max-w-2xl mx-auto leading-relaxed text-pretty">
-              We provide end-to-end investor liaison services, combining deep local market intelligence with
-              technology-enabled execution to help global investors enter and scale in Kenya and East Africa.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-3 sm:pt-4">
-              <Button
-                asChild
-                size="lg"
-                className="bg-primary text-white hover:bg-primary/90 text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all"
-              >
-                <Link href="#services">Explore Our Services</Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-2 border-primary text-primary hover:bg-primary hover:text-white text-sm sm:text-base font-semibold transition-all bg-white/50 backdrop-blur-sm"
-              >
-                <Link href="#contact">Book Advisory Session</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Company Story Section - After Banner CTA */}
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 border-t border-border/20">
+      {/* Company Story Section - Right After Banner */}
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Story Text */}
@@ -134,6 +96,44 @@ export function HeroSection() {
                   <p className="text-sm text-foreground/70">Dedicated Support & Execution</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main CTA Section - After Story */}
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 mb-12 sm:mb-16 md:mb-20 lg:mb-24">
+        <div className="bg-secondary rounded-xl sm:rounded-2xl shadow-2xl border border-secondary-foreground/10 py-8 sm:py-10 md:py-14 lg:py-16 mx-2 sm:mx-4 md:mx-8 lg:mx-auto lg:max-w-5xl">
+          <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 px-4 sm:px-6 md:px-8">
+            <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold text-secondary bg-primary rounded-full shadow-md">
+              Your Trusted Partner in East Africa
+            </span>
+
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight tracking-tight text-primary text-balance">
+              Unlock Investment Opportunities with Confidence
+            </h1>
+
+            <p className="text-sm sm:text-base md:text-lg text-primary/80 max-w-2xl mx-auto leading-relaxed text-pretty">
+              We provide end-to-end investor liaison services, combining deep local market intelligence with
+              technology-enabled execution to help global investors enter and scale in Kenya and East Africa.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-3 sm:pt-4">
+              <Button
+                asChild
+                size="lg"
+                className="bg-primary text-white hover:bg-primary/90 text-sm sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all"
+              >
+                <Link href="#services">Explore Our Services</Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-2 border-primary text-primary hover:bg-primary hover:text-white text-sm sm:text-base font-semibold transition-all bg-white/50 backdrop-blur-sm"
+              >
+                <Link href="#contact">Book Advisory Session</Link>
+              </Button>
             </div>
           </div>
         </div>
