@@ -14,6 +14,8 @@ import { Building2, Smartphone, CreditCard, FileText, Clock, Loader2, CheckCircl
 
 type PaymentStatus = "idle" | "form" | "processing" | "waiting" | "success" | "error"
 type InvoiceStep = "form" | "preview" | "sent"
+type CryptoPaymentStep = "method" | "confirm"
+type CryptoCurrency = "BTC" | "ETH" | "BNB"
 
 const paymentMethods = [
   { icon: Zap, title: "Cryptocurrency", description: "Binance Pay, Bitcoin & others", type: "crypto", featured: true },
@@ -36,6 +38,12 @@ const usdPresets = [
   { label: "$500", value: 500 },
   { label: "$1,000", value: 1000 },
 ]
+
+const cryptoWallets = {
+  BTC: "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy",
+  ETH: "0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE",
+  BNB: "bnb1q33q99393q993q993q993q993q993q993q993",
+}
 
 export function PaymentMethodsSection() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -60,11 +68,15 @@ export function PaymentMethodsSection() {
   const [invoiceAmount, setInvoiceAmount] = useState("")
   const [invoiceCurrency, setInvoiceCurrency] = useState("USD")
   const [invoiceDescription, setInvoiceDescription] = useState("")
-  const [showWalletAddresses, setShowWalletAddresses] = useState(false)
-  const [selectedCrypto, setSelectedCrypto] = useState<"BTC" | "ETH" | "BNB" | null>(null)
-  const [cryptoPaymentStep, setCryptoPaymentStep] = useState<"method" | "confirm">("method")
+  const [showQRCode, setShowQRCode] = useState(false)
+  const [cryptoConfirmed, setCryptoConfirmed] = useState(false)
   const [invoiceNumber, setInvoiceNumber] = useState("")
   const [invoiceLoading, setInvoiceLoading] = useState(false)
+
+  // Crypto fields
+  const [cryptoPaymentStep, setCryptoPaymentStep] = useState<CryptoPaymentStep>("method")
+  const [selectedCrypto, setSelectedCrypto] = useState<CryptoCurrency | "">("")
+  const [showWalletAddresses, setShowWalletAddresses] = useState(false)
 
   const resetForm = () => {
     setPhone("")
@@ -81,6 +93,9 @@ export function PaymentMethodsSection() {
     setInvoiceEmail("")
     setInvoiceAmount("")
     setInvoiceDescription("")
+    setCryptoPaymentStep("method")
+    setSelectedCrypto("")
+    setShowWalletAddresses(false)
   }
 
   const handleCardClick = (methodTitle: string, methodType: string) => {
@@ -620,18 +635,16 @@ export function PaymentMethodsSection() {
     )
   }
 
-  const cryptoWallets = {
-    BTC: "1A1z7agoat7SfLcNQUok7XJRZJ72gYXxqM",
-    ETH: "0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f",
-    BNB: "0x742d35Cc6634C0532925a3b844Bc7e7595f8c1f"
-  }
-
   const handleBinancePayNow = () => {
     setCryptoPaymentStep("confirm")
   }
 
   const handleBinanceScanQR = () => {
     window.open("https://www.binance.com/en/pay", "_blank")
+  }
+
+  const handleWhatsAppConfirm = () => {
+    window.location.href = `https://wa.me/254748992777?text=I%20have%20completed%20a%20Binance%20Pay%20cryptocurrency%20transaction.%20Please%20confirm%20receipt%20-%20Tx%20ID:%20`
   }
 
   const handleDirectTransfer = (crypto: "BTC" | "ETH" | "BNB") => {
@@ -650,41 +663,92 @@ export function PaymentMethodsSection() {
   }
 
   const renderCryptoContent = () => {
-    if (cryptoPaymentStep === "confirm") {
+    if (showQRCode) {
       return (
         <>
           <DialogHeader>
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-green-100/20">
-              <CheckCircle className="h-7 w-7 text-green-600" />
-            </div>
-            <DialogTitle className="text-2xl">Payment Initiated</DialogTitle>
-            <DialogDescription className="text-base">Your cryptocurrency transaction has been initiated via Binance Pay</DialogDescription>
+            <DialogTitle className="text-2xl text-center">Scan QR Code</DialogTitle>
+            <DialogDescription className="text-center">Use Binance Pay app to scan and complete payment</DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-6">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <p className="text-sm text-green-900 mb-3"><span className="font-semibold">Transaction Status:</span> Waiting for payment confirmation</p>
-              <div className="space-y-2 text-xs text-green-800">
-                <p>✓ Payment method: Binance Pay</p>
-                <p>✓ Processing time: 1-5 minutes typically</p>
-                <p>✓ Settlement: Automatic upon blockchain confirmation</p>
+          <div className="space-y-4 py-6 flex flex-col items-center">
+            {/* QR Code Placeholder */}
+            <div className="bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg p-6 border-2 border-primary/20">
+              <div className="w-48 h-48 bg-white rounded-lg flex items-center justify-center border border-gray-200">
+                <div className="text-center space-y-2">
+                  <div className="text-sm text-muted-foreground font-medium">QR Code</div>
+                  <svg className="w-32 h-32 mx-auto text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm13-2v8h8V3h-8zm2 2h4v4h-4V5zM3 16v8h8v-8H3zm2 2h4v4H5v-4zm10-2h2v2h-2v-2zm2 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
+                  </svg>
+                </div>
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-900"><span className="font-semibold">Next:</span> After Binance confirms payment, please notify us via WhatsApp with your transaction reference for order processing and delivery confirmation.</p>
+            <p className="text-sm text-center text-muted-foreground max-w-xs">
+              Open Binance Pay app and scan this QR code to complete your cryptocurrency payment securely
+            </p>
+
+            <div className="w-full space-y-2 pt-2">
+              <Button 
+                className="w-full bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold h-11"
+                onClick={() => {
+                  setCryptoConfirmed(true)
+                  setShowQRCode(false)
+                }}
+              >
+                Payment Scanned
+              </Button>
+
+              <Button 
+                variant="outline"
+                className="w-full bg-transparent"
+                onClick={() => setShowQRCode(false)}
+              >
+                Back
+              </Button>
+            </div>
+          </div>
+        </>
+      )
+    }
+
+    if (cryptoConfirmed) {
+      return (
+        <>
+          <DialogHeader>
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-green-100/20 mx-auto">
+              <CheckCircle className="h-7 w-7 text-green-600" />
+            </div>
+            <DialogTitle className="text-center text-2xl">Payment Complete</DialogTitle>
+            <DialogDescription className="text-center">Please confirm via WhatsApp for order processing</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
+              <p className="text-sm text-green-900 font-semibold">✓ Binance Pay Transaction Initiated</p>
+              <p className="text-xs text-green-800">Processing time: 1-5 minutes typically. Settlement is automatic upon blockchain confirmation.</p>
             </div>
 
-            <Button className="w-full bg-[#1e3a5f] hover:bg-[#152a45] h-11 font-semibold" onClick={handleConfirmPayment}>
-              <Send className="h-5 w-5 mr-2" />Confirm Payment via WhatsApp
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-900"><span className="font-semibold">Next Step:</span> Notify us via WhatsApp with your transaction ID for final confirmation and order delivery.</p>
+            </div>
+
+            <Button 
+              className="w-full bg-[#1e3a5f] hover:bg-[#152a45] h-11 font-semibold"
+              onClick={handleWhatsAppConfirm}
+            >
+              <Send className="h-5 w-5 mr-2" />Confirm via WhatsApp
             </Button>
 
             <Button 
-              variant="outline" 
-              className="w-full h-10 bg-transparent"
-              onClick={() => setCryptoPaymentStep("method")}
+              variant="outline"
+              className="w-full bg-transparent"
+              onClick={() => {
+                setCryptoConfirmed(false)
+                setShowQRCode(false)
+              }}
             >
-              Back to Payment Options
+              Start Over
             </Button>
           </div>
         </>
@@ -694,114 +758,43 @@ export function PaymentMethodsSection() {
     return (
       <>
         <DialogHeader>
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#F0B90B]/20 to-[#F0B90B]/10">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-[#F0B90B]/20 to-[#F0B90B]/10 mx-auto">
             <Zap className="h-7 w-7 text-[#F0B90B]" />
           </div>
-          <DialogTitle className="text-2xl">Cryptocurrency Payment</DialogTitle>
-          <DialogDescription className="text-base">Choose your preferred payment method</DialogDescription>
+          <DialogTitle className="text-center text-2xl">Cryptocurrency Payment</DialogTitle>
+          <DialogDescription className="text-center">Fast, secure, and instant transactions</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 py-6">
-          {/* Option 1: Binance Pay */}
-          <div className="space-y-3">
-            <p className="text-sm font-semibold text-primary">Option 1: Quick Payment via Binance</p>
-            <p className="text-xs text-muted-foreground">Fastest and most secure method. Redirects to official Binance payment page.</p>
-            <div className="grid grid-cols-2 gap-3">
-              <Button 
-                className="bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold h-12" 
-                onClick={handleBinancePayNow}
-              >
-                <Zap className="h-5 w-5 mr-2" />Pay Now
-              </Button>
-              <Button 
-                className="bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold h-12" 
-                onClick={handleBinanceScanQR}
-              >
-                <Zap className="h-5 w-5 mr-2" />Scan QR
-              </Button>
-            </div>
+        <div className="space-y-4 py-6">
+          <p className="text-sm text-muted-foreground text-center">Choose your preferred payment method</p>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Button 
+              className="bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold h-12 flex flex-col gap-1"
+              onClick={handleBinancePayNow}
+            >
+              <Zap className="h-4 w-4" />
+              <span className="text-xs">Pay Now</span>
+            </Button>
+
+            <Button 
+              className="bg-[#F0B90B] hover:bg-[#E0A90A] text-black font-semibold h-12 flex flex-col gap-1"
+              onClick={handleBinanceScanQR}
+            >
+              <Zap className="h-4 w-4" />
+              <span className="text-xs">Scan QR</span>
+            </Button>
           </div>
 
-          <div className="border-t border-border/30"></div>
-
-          {/* Option 2: Direct Transfer */}
-          <div className="space-y-3">
-            <p className="text-sm font-semibold text-primary">Option 2: Send Crypto Directly</p>
-            <p className="text-xs text-muted-foreground">Send from your wallet to our address. Click on a currency to reveal the wallet address.</p>
-            
-            {!showWalletAddresses ? (
-              <div className="grid grid-cols-3 gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-10 bg-transparent"
-                  onClick={() => handleDirectTransfer("BTC")}
-                >
-                  Bitcoin
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-10 bg-transparent"
-                  onClick={() => handleDirectTransfer("ETH")}
-                >
-                  Ethereum
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-10 bg-transparent"
-                  onClick={() => handleDirectTransfer("BNB")}
-                >
-                  BNB/USDT
-                </Button>
-              </div>
-            ) : (
-              <div className="bg-gradient-to-br from-orange-50 to-orange-50/50 border border-orange-200 rounded-lg p-4 space-y-3">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-semibold text-orange-900">{selectedCrypto} Payment Address</p>
-                  <button 
-                    onClick={() => setShowWalletAddresses(false)}
-                    className="text-xs text-orange-600 hover:text-orange-700 font-medium"
-                  >
-                    Hide
-                  </button>
-                </div>
-                
-                <div className="bg-white rounded-lg p-3 border border-orange-200">
-                  <p className="text-xs text-muted-foreground mb-2 font-medium">Wallet Address</p>
-                  <p className="font-mono text-xs break-all text-foreground mb-3 bg-muted/50 p-2 rounded">
-                    {cryptoWallets[selectedCrypto as keyof typeof cryptoWallets]}
-                  </p>
-                  <Button 
-                    size="sm" 
-                    className="w-full h-8 text-xs bg-[#1e3a5f] hover:bg-[#152a45]"
-                    onClick={() => handleCopyAddress(cryptoWallets[selectedCrypto as keyof typeof cryptoWallets])}
-                  >
-                    Copy Address
-                  </Button>
-                </div>
-
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 text-xs text-yellow-800">
-                  <p><span className="font-semibold">⚠ Security:</span> Verify address accuracy before sending. Do not share this address publicly.</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Confirmation Message */}
           <div className="bg-gradient-to-r from-blue-50 to-blue-50/50 border border-blue-200 rounded-lg p-4">
             <p className="text-sm text-blue-900">
-              <span className="font-semibold">After Payment:</span> Confirm your transaction via WhatsApp (+254 748 992 777) with your Transaction ID and amount. Your order will be processed immediately upon payment verification.
+              <span className="font-semibold">Accepted:</span> Binance Pay, Bitcoin, Ethereum, USDT, and BNB via secure blockchain transfer
             </p>
           </div>
 
-          <Button 
-            className="w-full bg-[#1e3a5f] hover:bg-[#152a45] h-11 font-semibold" 
-            onClick={handleConfirmPayment}
-          >
-            <Send className="h-5 w-5 mr-2" />Contact Support via WhatsApp
-          </Button>
+          <p className="text-xs text-center text-muted-foreground">
+            After payment, you'll be guided to confirm via WhatsApp for final verification and order processing.
+          </p>
         </div>
       </>
     )

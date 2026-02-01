@@ -4,9 +4,11 @@ import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { StoryModal } from "@/components/story-modal"
 
 export function HeroSection() {
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [storyModalOpen, setStoryModalOpen] = useState(false)
 
   return (
     <section className="relative w-full">
@@ -27,50 +29,20 @@ export function HeroSection() {
 
       {/* Company Story Section - Right After Banner */}
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-10 sm:py-12 md:py-14 lg:py-16">
-        <div className="max-w-full">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {/* Story Heading & Text */}
-            <div className="md:col-span-2 space-y-4">
-              <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary">
-                Our Story
-              </h2>
-              <p className="text-sm sm:text-base md:text-base text-foreground/70 leading-relaxed max-w-2xl">
-                The Oxic International Group was founded on a simple belief: global capital flows to opportunity, not geography. We recognized a critical gap in the East African investment ecosystem. The need for trusted, technology-enabled advisors who understand both international investor expectations and local market dynamics.
-              </p>
-            </div>
-            
-            {/* Key Differentiators - Horizontal Layout */}
-            <div className="md:col-span-1 space-y-3">
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center pt-0.5">
-                  <span className="text-primary font-bold text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-primary">Local Expertise</h3>
-                  <p className="text-xs text-foreground/70">Deep market knowledge</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center pt-0.5">
-                  <span className="text-primary font-bold text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-primary">Tech-Enabled</h3>
-                  <p className="text-xs text-foreground/70">Modern execution</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center pt-0.5">
-                  <span className="text-primary font-bold text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-primary">Investor Focus</h3>
-                  <p className="text-xs text-foreground/70">Your success first</p>
-                </div>
-              </div>
-            </div>
+        <div className="max-w-3xl">
+          <div className="space-y-4">
+            <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary">
+              Our Story
+            </h2>
+            <p className="text-sm sm:text-base md:text-base text-foreground/70 leading-relaxed max-w-2xl">
+              The Oxic International Group was founded on a simple belief: global capital flows to opportunity, not geography. We recognized a critical gap in the East African investment ecosystem. The need for trusted, technology-enabled advisors who understand both international investor expectations and local market dynamics.
+            </p>
+            <Button 
+              className="bg-primary hover:bg-primary/90 mt-4"
+              onClick={() => setStoryModalOpen(true)}
+            >
+              Learn More About Our Track Record
+            </Button>
           </div>
         </div>
       </div>
@@ -114,6 +86,8 @@ export function HeroSection() {
       </div>
 
       <div className="h-12 sm:h-14 md:h-16 lg:h-20 bg-background"></div>
+
+      <StoryModal open={storyModalOpen} onOpenChange={setStoryModalOpen} />
     </section>
   )
 }
