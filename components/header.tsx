@@ -42,8 +42,8 @@ export function Header() {
     <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolledStyles ? "bg-background/98 shadow-lg border-b border-border" : "bg-background border-b border-border/50"} backdrop-blur-md`}>
       <div className="container mx-auto flex h-18 lg:h-22 items-center justify-between px-4 lg:px-6">
         <a href="#" onClick={scrollToTop} className="flex items-center cursor-pointer group">
-          <div className={`relative transition-all duration-300 group-hover:scale-105 ${scrolledStyles ? "scale-95" : "scale-100"}`}>
-            {!logoLoaded && <div className="absolute inset-0 bg-muted/20 animate-pulse rounded" />}
+          <div className={`relative transition-all duration-300 group-hover:scale-105 ${scrolledStyles ? "scale-95" : "scale-100"} px-3 py-2 rounded-lg bg-white/80 backdrop-blur-sm shadow-md border border-white/40 hover:shadow-lg transition-shadow`}>
+            {!logoLoaded && <div className="absolute inset-0 bg-muted/20 animate-pulse rounded-lg" />}
             <Image
               src="/images/logo1.png"
               alt="The Oxic International Group"

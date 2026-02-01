@@ -36,9 +36,9 @@ The Oxic International Group website now has a fully integrated email service fo
 
 ### Step 2: Add Environment Variable
 Add to your `.env.local` file:
-```
+\`\`\`
 SENDGRID_API_KEY=your_api_key_here
-```
+\`\`\`
 
 ### Step 3: Verify Sender Email
 1. In SendGrid dashboard, go to Settings → Sender Authentication

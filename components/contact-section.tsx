@@ -248,7 +248,7 @@ export function ContactSection() {
                     id="phone"
                     name="phone"
                     type="tel"
-                    placeholder="+254 700 000 000"
+                    placeholder="+254 748 992 777"
                     value={formData.phone}
                     onChange={(e) => handlePhoneChange(e.target.value)}
                     className={errors.phone ? "border-destructive" : ""}
