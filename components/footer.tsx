@@ -3,7 +3,7 @@
 import React from "react"
 
 import Image from "next/image"
-import { Mail, Phone, MapPin } from "lucide-react"
+import { Mail, Phone, MapPin, Instagram, Linkedin, TrendingUp } from "lucide-react"
 
 export function Footer() {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
@@ -18,7 +18,7 @@ export function Footer() {
     <footer className="border-t border-border bg-muted/30">
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-4">
-          <div className="space-y-4 md:col-span-2">
+          <div className="space-y-6 md:col-span-2">
             <div className="inline-block">
               <Image
                 src="/images/logo1.png"
@@ -29,11 +29,35 @@ export function Footer() {
                 quality={100}
               />
             </div>
-            <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-              {
-                "Bridging global capital, technology, and people to unlock East Africa's exceptional growth potential through expert investor liaison and execution services."
-              }
-            </p>
+            <div className="flex gap-6">
+              <a 
+                href="https://www.instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://www.tiktok.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="TikTok"
+              >
+                <TrendingUp className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://www.linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -84,18 +108,18 @@ export function Footer() {
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
                 <div className="flex flex-col gap-1">
+                  <a href="mailto:oxicgroupltd@group.com" className="transition-colors hover:text-foreground">
+                    {"oxicgroupltd@group.com"}
+                  </a>
                   <a href="mailto:Info@oxicinternational.co.ke" className="transition-colors hover:text-foreground">
                     {"Info@oxicinternational.co.ke"}
-                  </a>
-                  <a href="mailto:oxicgroupltd@consultant.com" className="transition-colors hover:text-foreground">
-                    {"oxicgroupltd@consultant.com"}
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href="tel:+254704527743" className="transition-colors hover:text-foreground">
-                  {"+254 704 527 743"}
+                <a href="tel:+254748992777" className="transition-colors hover:text-foreground">
+                  {"+254 748 992 777"}
                 </a>
               </li>
               <li className="flex items-start gap-2">

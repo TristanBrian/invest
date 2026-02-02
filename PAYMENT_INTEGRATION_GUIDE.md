@@ -23,11 +23,11 @@ This document provides comprehensive technical specifications for all payment me
    - Generate API credentials
 
 2. **Environment Variables**
-   ```
+   \`\`\`
    BINANCE_PAY_MERCHANT_ID=your_merchant_id
    BINANCE_PAY_API_KEY=your_api_key
    BINANCE_PAY_API_SECRET=your_api_secret
-   ```
+   \`\`\`
 
 #### Supported Currencies & Cryptocurrencies
 
@@ -46,7 +46,7 @@ This document provides comprehensive technical specifications for all payment me
 #### API Endpoints
 
 **Create Order:**
-```
+\`\`\`
 POST https://api.binance.com/api/v3/bpay/order
 Headers:
   - BPay-Api-Key: {API_KEY}
@@ -74,10 +74,10 @@ Body:
   "cancelUrl": "https://oxicinternational.co.ke/payment/cancel",
   "webhookUrl": "https://oxicinternational.co.ke/api/webhooks/binance"
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "code": "000000",
   "message": "success",
@@ -87,14 +87,14 @@ Body:
     "status": "PENDING"
   }
 }
-```
+\`\`\`
 
 #### Webhook Configuration
 
 **Endpoint:** `POST /api/webhooks/binance`
 
 **Expected Payload:**
-```json
+\`\`\`json
 {
   "merchantId": "1234567890",
   "orderId": "OXIC-invoice-12345",
@@ -109,10 +109,10 @@ Body:
   "paymentMethod": "CRYPTO",
   "signature": "..."
 }
-```
+\`\`\`
 
 **Verification:**
-```typescript
+\`\`\`typescript
 import crypto from 'crypto'
 
 function verifyBinanceSignature(payload: string, signature: string, apiSecret: string): boolean {
@@ -122,7 +122,7 @@ function verifyBinanceSignature(payload: string, signature: string, apiSecret: s
     .digest('hex')
   return hash === signature
 }
-```
+\`\`\`
 
 ---
 
@@ -153,7 +153,7 @@ function verifyBinanceSignature(payload: string, signature: string, apiSecret: s
 
 #### Implementation Example
 
-```typescript
+\`\`\`typescript
 // Verify Bitcoin transaction
 async function verifyBitcoinTransaction(txid: string, expectedAmount: number) {
   const response = await fetch(`https://blockchain.info/rawtx/${txid}?format=json`)
@@ -171,7 +171,7 @@ async function verifyBitcoinTransaction(txid: string, expectedAmount: number) {
     isValid: amountReceived >= expectedAmount
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -181,13 +181,13 @@ async function verifyBitcoinTransaction(txid: string, expectedAmount: number) {
 
 **API Provider:** Safaricom Daraja  
 **Environment Variables:**
-```
+\`\`\`
 MPESA_CONSUMER_KEY=your_consumer_key
 MPESA_CONSUMER_SECRET=your_consumer_secret
 MPESA_SHORTCODE=522522
 MPESA_PASSKEY=your_passkey
 MPESA_CALLBACK_URL=https://oxicinternational.co.ke/api/mpesa/callback
-```
+\`\`\`
 
 ### 2.2 STK Push Flow
 
@@ -201,7 +201,7 @@ MPESA_CALLBACK_URL=https://oxicinternational.co.ke/api/mpesa/callback
 
 **File:** `/app/api/mpesa/route.ts`
 
-```typescript
+\`\`\`typescript
 POST /api/mpesa
 Content-Type: application/json
 
@@ -211,7 +211,7 @@ Content-Type: application/json
   "accountReference": "OxicGroup",
   "transactionDesc": "Investment Payment"
 }
-```
+\`\`\`
 
 ### 2.3 Callback Handling
 
@@ -230,17 +230,17 @@ Processes real-time payment confirmations and updates invoice status.
 **Currencies:** USD, KES (via DynamicCurrency Conversion)
 
 **Environment Variables:**
-```
+\`\`\`
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_PUBLISHABLE_KEY=pk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-```
+\`\`\`
 
 ### 3.2 Checkout Flow
 
 **File:** `/app/api/stripe/checkout/route.ts`
 
-```typescript
+\`\`\`typescript
 POST /api/stripe/checkout
 Content-Type: application/json
 
@@ -251,15 +251,15 @@ Content-Type: application/json
   "customerEmail": "investor@example.com",
   "customerName": "John Doe"
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "url": "https://checkout.stripe.com/pay/cs_..."
 }
-```
+\`\`\`
 
 ### 3.3 Webhook Handling
 
@@ -308,7 +308,7 @@ Monitors payment intent events:
 
 **File:** `/app/api/send-email/route.ts`
 
-```json
+\`\`\`json
 {
   "type": "invoice",
   "data": {
@@ -322,7 +322,7 @@ Monitors payment intent events:
     "invoiceNumber": "OXIC-202601-0001"
   }
 }
-```
+\`\`\`
 
 ### 5.2 Invoice Elements
 
@@ -370,22 +370,22 @@ All transactions logged with:
 ### 7.1 Sandbox Credentials
 
 **Stripe Test Keys:**
-```
+\`\`\`
 pk_test_51234567890abcdef
 sk_test_123456789ABCDEFGH
-```
+\`\`\`
 
 **Binance Pay Test:**
-```
+\`\`\`
 Environment: testnet
 Merchant ID: TEST_MERCHANT_12345
-```
+\`\`\`
 
 **M-Pesa Sandbox:**
-```
+\`\`\`
 Consumer Key: sandbox_key
 Consumer Secret: sandbox_secret
-```
+\`\`\`
 
 ### 7.2 Test Transactions
 

@@ -356,6 +356,10 @@ export function PaymentMethodsSection() {
         }),
       })
 
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
       const result = await response.json()
 
       if (result.success) {
@@ -363,7 +367,8 @@ export function PaymentMethodsSection() {
       } else {
         setErrorMessage("Failed to send invoice. Please try again.")
       }
-    } catch {
+    } catch (error) {
+      console.error("[v0] Invoice send error:", error)
       setErrorMessage("Network error. Please try again.")
     } finally {
       setInvoiceLoading(false)
@@ -831,15 +836,15 @@ export function PaymentMethodsSection() {
           {/* All Payment Methods - Single Row */}
           <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
             {/* Binance - Minimized First */}
-            <Card className="border-2 border-[#F0B90B] bg-gradient-to-br from-[#F0B90B]/5 to-transparent transition-all hover:shadow-md hover:border-[#F0B90B] cursor-pointer group" onClick={() => handleCardClick("Cryptocurrency", "crypto")}>
+            <Card className="border-border text-center transition-all hover:shadow-md hover:border-secondary/50 cursor-pointer group" onClick={() => handleCardClick("Cryptocurrency", "crypto")}>
               <CardHeader className="pb-2 px-3 pt-3">
-                <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-[#F0B90B]/20 group-hover:bg-[#F0B90B]/30 transition-colors">
-                  <Zap className="h-4 w-4 text-[#F0B90B]" />
+                <div className="mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-secondary/20 transition-colors">
+                  <Zap className="h-4 w-4 text-primary group-hover:text-secondary transition-colors" />
                 </div>
-                <CardTitle className="text-xs text-[#F0B90B]">Binance Pay</CardTitle>
+                <CardTitle className="text-xs">Cryptocurrency</CardTitle>
               </CardHeader>
               <CardContent className="px-3 pb-3">
-                <p className="text-xs text-muted-foreground">BTC • ETH • USDT</p>
+                <p className="text-xs text-muted-foreground">Binance, BTC, ETH, USDT</p>
               </CardContent>
             </Card>
 

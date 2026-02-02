@@ -100,7 +100,7 @@ export function ContactSection() {
 
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -111,32 +111,17 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      // Send email via SendGrid
-      const emailResponse = await fetch("/api/send-email", {
+      // Submit to Netlify Forms
+      const formElement = e.currentTarget
+      const formData = new FormData(formElement)
+      
+      const response = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "enquiry",
-          data: formData,
-        }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
       })
 
-      const emailResult = await emailResponse.json()
-
-      if (emailResult.success) {
-        // Also submit to Netlify Forms for backup
-        try {
-          const formElement = e.currentTarget as HTMLFormElement
-          const netlifyFormData = new FormData(formElement)
-          await fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(netlifyFormData as any).toString(),
-          })
-        } catch {
-          // Netlify submission is optional
-        }
-
+      if (response.ok) {
         setSubmitStatus("success")
         setFormData({
           name: "",
@@ -148,6 +133,9 @@ export function ContactSection() {
           consent: false,
         })
         setErrors({})
+        
+        // Auto-clear success message after 5 seconds
+        setTimeout(() => setSubmitStatus("idle"), 5000)
       } else {
         setSubmitStatus("error")
       }
@@ -191,7 +179,12 @@ export function ContactSection() {
               onSubmit={handleSubmit} 
               className="space-y-6" 
               noValidate
+              name="investment-enquiry"
+              method="POST"
+              netlify-honeypot="bot-field"
+              data-netlify="true"
             >
+              <input type="hidden" name="form-name" value="investment-enquiry" />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">

@@ -29,20 +29,24 @@ export function HeroSection() {
 
       {/* Company Story Section - Right After Banner */}
       <div className="container mx-auto px-4 md:px-6 lg:px-8 py-10 sm:py-12 md:py-14 lg:py-16">
-        <div className="max-w-3xl">
-          <div className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary">
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-4 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary text-balance">
               Our Story
             </h2>
-            <p className="text-sm sm:text-base md:text-base text-foreground/70 leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base md:text-base text-foreground/70 leading-relaxed text-pretty mx-auto">
               The Oxic International Group was founded on a simple belief: global capital flows to opportunity, not geography. We recognized a critical gap in the East African investment ecosystem. The need for trusted, technology-enabled advisors who understand both international investor expectations and local market dynamics.
             </p>
-            <Button 
-              className="bg-primary hover:bg-primary/90 mt-4"
-              onClick={() => setStoryModalOpen(true)}
-            >
-              Learn More About Our Track Record
-            </Button>
+            <div className="flex justify-center">
+              <Button 
+                asChild
+                className="bg-primary hover:bg-primary/90 mt-4"
+              >
+                <Link href="/story">
+                  Learn More About Us
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -86,8 +90,6 @@ export function HeroSection() {
       </div>
 
       <div className="h-12 sm:h-14 md:h-16 lg:h-20 bg-background"></div>
-
-      <StoryModal open={storyModalOpen} onOpenChange={setStoryModalOpen} />
     </section>
   )
 }
