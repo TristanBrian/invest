@@ -43,7 +43,7 @@ export function HeroSection() {
                 className="bg-primary hover:bg-primary/90 mt-4"
               >
                 <Link href="/story">
-                  Learn More About Our Track Record
+                  Learn More About Us
                 </Link>
               </Button>
             </div>

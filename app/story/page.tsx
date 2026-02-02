@@ -23,13 +23,16 @@ export default function StoryPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 text-balance">
-            The Oxic International Group Story
+      <section className="bg-gradient-to-b from-primary/5 to-transparent container mx-auto px-4 md:px-6 lg:px-8 py-16 md:py-20 lg:py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-block px-4 py-2 mb-6 bg-primary/10 rounded-full border border-primary/20">
+            <span className="text-sm font-semibold text-primary">Our Journey</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary mb-6 text-balance">
+            Who We Are
           </h1>
-          <p className="text-lg text-foreground/70 leading-relaxed">
-            Bridging global capital, technology, and people to unlock East Africa's exceptional growth potential
+          <p className="text-xl md:text-2xl text-foreground/70 leading-relaxed max-w-3xl mx-auto">
+            We bridge global capital with African opportunity through trusted investor liaison, technology-enabled execution, and institutional-grade market intelligence.
           </p>
         </div>
       </section>
@@ -115,66 +118,81 @@ export default function StoryPage() {
           </div>
 
           {/* Track Record */}
-          <div className="space-y-6 bg-muted/30 rounded-xl p-8 border border-border/30">
-            <h2 className="text-3xl font-bold text-primary">Our Track Record</h2>
+          <div className="space-y-8 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-10 border border-primary/20">
+            <div>
+              <h2 className="text-3xl font-bold text-primary mb-2">Our Track Record</h2>
+              <p className="text-lg text-foreground/60">Proven execution excellence across East Africa</p>
+            </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50+</div>
-                <p className="text-sm text-foreground/70">Successful Transactions</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center bg-white/50 rounded-lg p-6 border border-border/20">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-3">50+</div>
+                <p className="text-sm font-medium text-foreground/70">Successful Transactions</p>
               </div>
 
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">$500M+</div>
-                <p className="text-sm text-foreground/70">Capital Deployed</p>
+              <div className="text-center bg-white/50 rounded-lg p-6 border border-border/20">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-3">$500M+</div>
+                <p className="text-sm font-medium text-foreground/70">Capital Deployed</p>
               </div>
 
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">15+</div>
-                <p className="text-sm text-foreground/70">Countries Networked</p>
+              <div className="text-center bg-white/50 rounded-lg p-6 border border-border/20">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-3">15+</div>
+                <p className="text-sm font-medium text-foreground/70">Countries Networked</p>
               </div>
 
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">24/7</div>
-                <p className="text-sm text-foreground/70">Dedicated Support</p>
+              <div className="text-center bg-white/50 rounded-lg p-6 border border-border/20">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-3">95%</div>
+                <p className="text-sm font-medium text-foreground/70">Client Retention</p>
               </div>
             </div>
 
-            <div className="border-t border-border/30 pt-6 space-y-3">
-              <h3 className="font-semibold text-primary text-lg">Investment Highlights</h3>
-              <ul className="space-y-2">
-                <li className="flex gap-3">
-                  <span className="text-primary font-bold text-lg">•</span>
-                  <span className="text-foreground/70">Average deal closure time reduced by 60% vs. traditional advisors</span>
+            <div className="border-t border-primary/10 pt-8 space-y-4">
+              <h3 className="font-bold text-primary text-lg">Why Institutional Investors Trust Us</h3>
+              <ul className="space-y-3 grid md:grid-cols-2 gap-4">
+                <li className="flex gap-3 bg-white/30 rounded-lg p-4 border border-border/10">
+                  <span className="text-primary font-bold text-2xl flex-shrink-0">✓</span>
+                  <span className="text-foreground/75"><strong>60% faster</strong> deal closure vs traditional advisors</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="text-primary font-bold text-lg">•</span>
-                  <span className="text-foreground/70">Zero transaction failure rate due to rigorous due diligence and risk management</span>
+                <li className="flex gap-3 bg-white/30 rounded-lg p-4 border border-border/10">
+                  <span className="text-primary font-bold text-2xl flex-shrink-0">✓</span>
+                  <span className="text-foreground/75"><strong>Zero failures</strong> through rigorous due diligence</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="text-primary font-bold text-lg">•</span>
-                  <span className="text-foreground/70">Client retention rate of 95%+ with repeat investments averaging 3x initial commitment</span>
+                <li className="flex gap-3 bg-white/30 rounded-lg p-4 border border-border/10">
+                  <span className="text-primary font-bold text-2xl flex-shrink-0">✓</span>
+                  <span className="text-foreground/75"><strong>3x repeat</strong> commitments from satisfied clients</span>
+                </li>
+                <li className="flex gap-3 bg-white/30 rounded-lg p-4 border border-border/10">
+                  <span className="text-primary font-bold text-2xl flex-shrink-0">✓</span>
+                  <span className="text-foreground/75"><strong>24/7</strong> institutional-grade support</span>
                 </li>
               </ul>
             </div>
           </div>
 
           {/* Investment Thesis */}
-          <div className="border-l-4 border-secondary bg-secondary/5 p-8 rounded-r-lg">
-            <blockquote className="italic text-lg text-foreground/80 leading-relaxed">
-              <span className="text-4xl font-serif text-primary/50">"</span>
-              We are raising strategic capital to strengthen our digital infrastructure, expand regional coverage, and scale a high-margin advisory and execution model serving global investors seeking disciplined entry and sustainable returns in East Africa.
-              <span className="text-4xl font-serif text-primary/50">"</span>
+          <div className="border-l-4 border-secondary bg-gradient-to-r from-secondary/10 to-transparent p-10 rounded-r-xl border-r border-border/20">
+            <h3 className="text-lg font-semibold text-secondary mb-4">Our Investment Thesis</h3>
+            <blockquote className="italic text-lg md:text-xl text-foreground/80 leading-relaxed font-serif">
+              <span className="text-5xl text-primary/40 leading-none align-middle mr-3">"</span>
+              <span className="inline">We are raising strategic capital to strengthen our digital infrastructure, expand regional coverage, and scale a high-margin advisory and execution model serving global investors seeking disciplined entry and sustainable returns in East Africa.</span>
+              <span className="text-5xl text-primary/40 leading-none align-middle ml-3">"</span>
             </blockquote>
           </div>
 
           {/* CTA */}
-          <div className="bg-primary text-white rounded-lg p-8 text-center space-y-4">
-            <h3 className="text-2xl font-bold">Ready to Explore Opportunities?</h3>
-            <p className="text-primary/90">Let's discuss how we can help accelerate your investment journey in East Africa.</p>
-            <Button asChild className="bg-white text-primary hover:bg-white/90" size="lg">
-              <Link href="/#contact">Book Advisory Session</Link>
-            </Button>
+          <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-xl p-12 text-center space-y-6 border border-primary/30 shadow-lg">
+            <div className="space-y-3">
+              <h3 className="text-3xl md:text-4xl font-bold">Ready to Explore Opportunities?</h3>
+              <p className="text-lg text-white/90 max-w-2xl mx-auto">Join 50+ successful institutional investors who have accelerated their East Africa portfolio growth with our guidance.</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold">
+                <Link href="/#contact">Schedule Advisory Session</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10 bg-transparent">
+                <a href="mailto:oxicgroupltd@group.com">Contact Team</a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
