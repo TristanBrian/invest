@@ -39,10 +39,12 @@ export function HeroSection() {
             </p>
             <div className="flex justify-center">
               <Button 
+                asChild
                 className="bg-primary hover:bg-primary/90 mt-4"
-                onClick={() => setStoryModalOpen(true)}
               >
-                Learn More About Our Track Record
+                <Link href="/story">
+                  Learn More About Our Track Record
+                </Link>
               </Button>
             </div>
           </div>
@@ -88,8 +90,6 @@ export function HeroSection() {
       </div>
 
       <div className="h-12 sm:h-14 md:h-16 lg:h-20 bg-background"></div>
-
-      <StoryModal open={storyModalOpen} onOpenChange={setStoryModalOpen} />
     </section>
   )
 }
