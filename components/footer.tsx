@@ -3,7 +3,7 @@
 import React from "react"
 
 import Image from "next/image"
-import { Mail, Phone, MapPin } from "lucide-react"
+import { Mail, Phone, MapPin, Instagram, Linkedin, TrendingUp } from "lucide-react"
 
 export function Footer() {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
@@ -83,19 +83,14 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <div className="flex flex-col gap-1">
-                  <a href="mailto:Info@oxicinternational.co.ke" className="transition-colors hover:text-foreground">
-                    {"Info@oxicinternational.co.ke"}
-                  </a>
-                  <a href="mailto:oxicgroupltd@consultant.com" className="transition-colors hover:text-foreground">
-                    {"oxicgroupltd@consultant.com"}
-                  </a>
-                </div>
+                <a href="mailto:oxicgroupltd@group.com" className="transition-colors hover:text-foreground">
+                  {"oxicgroupltd@group.com"}
+                </a>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href="tel:+254704527743" className="transition-colors hover:text-foreground">
-                  {"+254 704 527 743"}
+                <a href="tel:+254748992777" className="transition-colors hover:text-foreground">
+                  {"+254 748 992 777"}
                 </a>
               </li>
               <li className="flex items-start gap-2">
@@ -103,6 +98,39 @@ export function Footer() {
                 <span>{"Nairobi, Kenya"}</span>
               </li>
             </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">{"Follow Us"}</h3>
+            <div className="flex gap-4">
+              <a 
+                href="https://www.instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.tiktok.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="TikTok"
+              >
+                <TrendingUp className="h-5 w-5" />
+              </a>
+              <a 
+                href="https://www.linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+            </div>
           </div>
         </div>
 

@@ -111,32 +111,23 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      // Send email via SendGrid
-      const emailResponse = await fetch("/api/send-email", {
+      // Submit to Netlify Functions for both emails
+      const netlifyResponse = await fetch("/.netlify/functions/send-enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "enquiry",
-          data: formData,
+          name: formData.name,
+          email: formData.email,
+          organization: formData.organization,
+          phone: formData.phone,
+          interest: formData.interest,
+          message: formData.message,
         }),
       })
 
-      const emailResult = await emailResponse.json()
+      const netlifyResult = await netlifyResponse.json()
 
-      if (emailResult.success) {
-        // Also submit to Netlify Forms for backup
-        try {
-          const formElement = e.currentTarget as HTMLFormElement
-          const netlifyFormData = new FormData(formElement)
-          await fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(netlifyFormData as any).toString(),
-          })
-        } catch {
-          // Netlify submission is optional
-        }
-
+      if (netlifyResult.success) {
         setSubmitStatus("success")
         setFormData({
           name: "",
@@ -148,6 +139,9 @@ export function ContactSection() {
           consent: false,
         })
         setErrors({})
+        
+        // Auto-clear success message after 5 seconds
+        setTimeout(() => setSubmitStatus("idle"), 5000)
       } else {
         setSubmitStatus("error")
       }
