@@ -111,23 +111,30 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      // Submit to Netlify Functions for both emails
-      const netlifyResponse = await fetch("/.netlify/functions/send-enquiry", {
+      // Submit to API endpoint which sends to both emails via SendGrid
+      const apiResponse = await fetch("/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          organization: formData.organization,
-          phone: formData.phone,
-          interest: formData.interest,
-          message: formData.message,
+          type: "enquiry",
+          data: {
+            name: formData.name,
+            email: formData.email,
+            organization: formData.organization,
+            phone: formData.phone,
+            interest: formData.interest,
+            message: formData.message,
+          },
         }),
       })
 
-      const netlifyResult = await netlifyResponse.json()
+      if (!apiResponse.ok) {
+        throw new Error(`API error: ${apiResponse.status}`)
+      }
 
-      if (netlifyResult.success) {
+      const result = await apiResponse.json()
+
+      if (result.success) {
         setSubmitStatus("success")
         setFormData({
           name: "",

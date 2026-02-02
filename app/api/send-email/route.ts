@@ -5,7 +5,10 @@ import { NextRequest, NextResponse } from "next/server"
 
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
 const FROM_EMAIL = "noreply@oxicinternational.co.ke"
-const TO_EMAIL = "info@oxicinternational.co.ke"
+const TO_EMAILS = [
+  "oxicgroupltd@group.com",
+  "Info@oxicinternational.co.ke"
+]
 
 interface EmailRequest {
   type: "enquiry" | "invoice"
@@ -49,12 +52,12 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         personalizations: [
           {
-            to: [{ email: TO_EMAIL }],
+            to: TO_EMAILS.map(email => ({ email })),
             subject: subject,
           },
         ],
         from: { email: FROM_EMAIL, name: "The Oxic International Group" },
-        reply_to: { email: data.email as string || TO_EMAIL },
+        reply_to: { email: data.email as string || TO_EMAILS[0] },
         content: [
           {
             type: "text/html",

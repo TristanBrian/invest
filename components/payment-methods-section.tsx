@@ -338,20 +338,27 @@ export function PaymentMethodsSection() {
     setErrorMessage("")
 
     try {
-      const response = await fetch("/.netlify/functions/send-invoice", {
+      const response = await fetch("/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          invoiceNumber,
-          companyName,
-          companyAddress,
-          contactPerson,
-          email: invoiceEmail,
-          amount: invoiceAmount,
-          currency: invoiceCurrency,
-          description: invoiceDescription,
+          type: "invoice",
+          data: {
+            invoiceNumber,
+            companyName,
+            companyAddress,
+            contactPerson,
+            email: invoiceEmail,
+            amount: invoiceAmount,
+            currency: invoiceCurrency,
+            description: invoiceDescription,
+          },
         }),
       })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
 
       const result = await response.json()
 
