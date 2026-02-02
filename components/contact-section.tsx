@@ -100,7 +100,7 @@ export function ContactSection() {
 
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!validateForm()) {
@@ -111,30 +111,17 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      // Submit to API endpoint which sends to both emails via SendGrid
-      const apiResponse = await fetch("/api/send-email", {
+      // Submit to Netlify Forms
+      const formElement = e.currentTarget
+      const formData = new FormData(formElement)
+      
+      const response = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "enquiry",
-          data: {
-            name: formData.name,
-            email: formData.email,
-            organization: formData.organization,
-            phone: formData.phone,
-            interest: formData.interest,
-            message: formData.message,
-          },
-        }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
       })
 
-      if (!apiResponse.ok) {
-        throw new Error(`API error: ${apiResponse.status}`)
-      }
-
-      const result = await apiResponse.json()
-
-      if (result.success) {
+      if (response.ok) {
         setSubmitStatus("success")
         setFormData({
           name: "",
@@ -192,7 +179,12 @@ export function ContactSection() {
               onSubmit={handleSubmit} 
               className="space-y-6" 
               noValidate
+              name="investment-enquiry"
+              method="POST"
+              netlify-honeypot="bot-field"
+              data-netlify="true"
             >
+              <input type="hidden" name="form-name" value="investment-enquiry" />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">

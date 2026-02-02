@@ -67,15 +67,18 @@ export function FounderSection() {
                   }
                 </p>
               </div>
-
-              <blockquote className="border-l-4 border-secondary bg-muted/50 p-8 italic text-foreground/90 -mx-8 md:-mx-12 md:col-span-3">
-                <p className="text-base md:text-lg leading-relaxed text-justify">
-                  <span className="text-3xl font-serif text-primary/50 pr-1">"</span>We are raising strategic capital to strengthen our digital infrastructure, expand regional coverage, and scale a high-margin advisory and execution model serving global investors seeking disciplined entry and sustainable returns in East Africa.<span className="text-3xl font-serif text-primary/50 pl-1">"</span>
-                </p>
-              </blockquote>
             </div>
           </div>
         </Card>
+
+        {/* Investment Thesis Quote - Full Width */}
+        <blockquote className="mx-auto max-w-5xl mt-8 border-l-4 border-secondary bg-muted/50 p-8 md:p-12 italic text-foreground/90 rounded-r-lg">
+          <p className="text-lg md:text-xl leading-relaxed text-justify">
+            <span className="text-4xl font-serif text-primary/40 align-middle">"</span>
+            <span className="inline">We are raising strategic capital to strengthen our digital infrastructure, expand regional coverage, and scale a high-margin advisory and execution model serving global investors seeking disciplined entry and sustainable returns in East Africa.</span>
+            <span className="text-4xl font-serif text-primary/40 align-middle">"</span>
+          </p>
+        </blockquote>
       </div>
     </section>
   )
