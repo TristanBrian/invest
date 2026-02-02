@@ -56,7 +56,7 @@ In your Netlify site settings:
 ## Form Configuration
 
 ### Form Attributes
-```jsx
+\`\`\`jsx
 <form
   name="investment-enquiry"
   method="POST"
@@ -66,7 +66,7 @@ In your Netlify site settings:
   <input type="hidden" name="form-name" value="investment-enquiry" />
   {/* form fields */}
 </form>
-```
+\`\`\`
 
 ### Hidden Fields
 - `form-name`: Must match the form's `name` attribute

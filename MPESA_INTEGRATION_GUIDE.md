@@ -17,7 +17,7 @@ The M-Pesa integration enables investors to make payments directly from their mo
 
 Add these variables to your `.env.local` (development) and Vercel deployment environment variables:
 
-```
+\`\`\`
 # M-Pesa Credentials
 MPESA_CONSUMER_KEY=your_daraja_consumer_key
 MPESA_CONSUMER_SECRET=your_daraja_consumer_secret
@@ -30,7 +30,7 @@ MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
 
 # Email Notifications
 SENDGRID_API_KEY=your_sendgrid_api_key
-```
+\`\`\`
 
 ## Getting Your M-Pesa Credentials
 
@@ -52,9 +52,9 @@ SENDGRID_API_KEY=your_sendgrid_api_key
 ### 3. Configure Callback URL
 
 1. In the Daraja portal, set your callback URL to:
-   ```
+   \`\`\`
    https://yourdomain.com/api/mpesa/callback
-   ```
+   \`\`\`
 2. This URL will receive payment confirmations from M-Pesa
 
 ## Implementation
@@ -74,23 +74,23 @@ SENDGRID_API_KEY=your_sendgrid_api_key
 Initiates an M-Pesa payment request.
 
 **Request:**
-```json
+\`\`\`json
 {
   "phoneNumber": "254700000000",
   "amount": "1000",
   "accountReference": "INV-001",
   "transactionDesc": "Investment Payment"
 }
-```
+\`\`\`
 
 **Response (Success):**
-```json
+\`\`\`json
 {
   "success": true,
   "message": "STK push sent successfully",
   "checkoutRequestID": "..."
 }
-```
+\`\`\`
 
 #### POST `/api/mpesa/callback`
 Receives payment confirmations from M-Pesa. Automatically sends emails to both company recipients.

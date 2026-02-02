@@ -15,11 +15,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Netlify Forms Configuration
-[build]
-  command = "npm run build"
-  publish = ".next"
-
 # Form submissions handling
 [[redirects]]
   from = "/*"
