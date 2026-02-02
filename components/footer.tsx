@@ -18,7 +18,7 @@ export function Footer() {
     <footer className="border-t border-border bg-muted/30">
       <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-4">
-          <div className="space-y-4 md:col-span-2">
+          <div className="space-y-6 md:col-span-2">
             <div className="inline-block">
               <Image
                 src="/images/logo1.png"
@@ -29,11 +29,35 @@ export function Footer() {
                 quality={100}
               />
             </div>
-            <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
-              {
-                "Bridging global capital, technology, and people to unlock East Africa's exceptional growth potential through expert investor liaison and execution services."
-              }
-            </p>
+            <div className="flex gap-6">
+              <a 
+                href="https://www.instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://www.tiktok.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="TikTok"
+              >
+                <TrendingUp className="h-6 w-6" />
+              </a>
+              <a 
+                href="https://www.linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -83,9 +107,14 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <a href="mailto:oxicgroupltd@group.com" className="transition-colors hover:text-foreground">
-                  {"oxicgroupltd@group.com"}
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a href="mailto:oxicgroupltd@group.com" className="transition-colors hover:text-foreground">
+                    {"oxicgroupltd@group.com"}
+                  </a>
+                  <a href="mailto:Info@oxicinternational.co.ke" className="transition-colors hover:text-foreground">
+                    {"Info@oxicinternational.co.ke"}
+                  </a>
+                </div>
               </li>
               <li className="flex items-start gap-2">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0" />
@@ -98,39 +127,6 @@ export function Footer() {
                 <span>{"Nairobi, Kenya"}</span>
               </li>
             </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">{"Follow Us"}</h3>
-            <div className="flex gap-4">
-              <a 
-                href="https://www.instagram.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a 
-                href="https://www.tiktok.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="TikTok"
-              >
-                <TrendingUp className="h-5 w-5" />
-              </a>
-              <a 
-                href="https://www.linkedin.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
           </div>
         </div>
 

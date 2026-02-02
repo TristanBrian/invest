@@ -68,13 +68,15 @@ export function FounderSection() {
                 </p>
               </div>
 
-              <blockquote className="border-l-4 border-secondary bg-muted/50 p-6 italic text-foreground/90">
-                <p className="text-base md:text-lg leading-relaxed text-justify">
-                  <span className="text-2xl font-serif text-primary/60 mr-2">"</span>
-                  {
-                    "We are raising strategic capital to strengthen our digital infrastructure, expand regional coverage, and scale a high-margin advisory and execution model serving global investors seeking disciplined entry and sustainable returns in East Africa."
-                  }
-                  <span className="text-2xl font-serif text-primary/60 ml-2">"</span>
+              <blockquote className="border-l-4 border-secondary bg-muted/50 p-8 italic text-foreground/90">
+                <p className="text-base md:text-lg leading-relaxed text-justify hyphens-auto">
+                  <span className="text-3xl font-serif text-primary/50 align-middle mr-3">"</span>
+                  <span className="inline">
+                    {
+                      "We are raising strategic capital to strengthen our digital infrastructure, expand regional coverage, and scale a high-margin advisory and execution model serving global investors seeking disciplined entry and sustainable returns in East Africa."
+                    }
+                  </span>
+                  <span className="text-3xl font-serif text-primary/50 align-middle ml-3">"</span>
                 </p>
               </blockquote>
             </div>

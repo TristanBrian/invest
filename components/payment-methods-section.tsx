@@ -338,21 +338,18 @@ export function PaymentMethodsSection() {
     setErrorMessage("")
 
     try {
-      const response = await fetch("/api/send-email", {
+      const response = await fetch("/.netlify/functions/send-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "invoice",
-          data: {
-            invoiceNumber,
-            companyName,
-            companyAddress,
-            contactPerson,
-            email: invoiceEmail,
-            amount: invoiceAmount,
-            currency: invoiceCurrency,
-            description: invoiceDescription,
-          },
+          invoiceNumber,
+          companyName,
+          companyAddress,
+          contactPerson,
+          email: invoiceEmail,
+          amount: invoiceAmount,
+          currency: invoiceCurrency,
+          description: invoiceDescription,
         }),
       })
 
@@ -363,7 +360,8 @@ export function PaymentMethodsSection() {
       } else {
         setErrorMessage("Failed to send invoice. Please try again.")
       }
-    } catch {
+    } catch (error) {
+      console.error("[v0] Invoice send error:", error)
       setErrorMessage("Network error. Please try again.")
     } finally {
       setInvoiceLoading(false)
