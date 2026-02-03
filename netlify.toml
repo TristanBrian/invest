@@ -11,14 +11,9 @@
   NPM_VERSION = "10.4.0"
   NODE_ENV = "production"
 
-# Netlify Next.js Plugin Configuration with Forms support
+# Netlify Next.js Plugin Configuration
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-  [plugins.inputs]
-    # Next.js Runtime configuration
-    appDir = true
-    # Forms configuration for Netlify Forms integration
-    skipStaticOptimization = false
 
 # Security headers
 [[headers]]
