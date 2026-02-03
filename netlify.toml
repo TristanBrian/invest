@@ -9,9 +9,16 @@
   NPM_VERSION = "10.4.0"
   NODE_ENV = "production"
 
-# Netlify Next.js Plugin Configuration
+# Netlify Next.js Plugin Configuration with Forms support
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Netlify Forms configuration
+[[forms]]
+  name = "investment-enquiry"
+  honeypot = "bot-field"
+  [forms.notifications]
+    # Form submission notifications are sent to the default site email
 
 # Security headers
 [[headers]]
