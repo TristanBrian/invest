@@ -1,91 +1,36 @@
 import { NextRequest, NextResponse } from "next/server"
 
-// SendGrid API Configuration
-// Environment variable required: SENDGRID_API_KEY
-
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
-const FROM_EMAIL = "noreply@oxicinternational.co.ke"
-const TO_EMAILS = [
-  "oxicgroupltd@group.com",
-  "Info@oxicinternational.co.ke"
-]
-
-interface EmailRequest {
-  type: "enquiry" | "invoice"
-  data: Record<string, string | number>
-}
+/**
+ * Email Service API Route - DEPRECATED
+ * 
+ * This route is no longer used. Email submissions are now handled exclusively
+ * through Netlify Forms, which automatically sends notifications to:
+ * - oxicgroupltd@group.com
+ * - Info@oxicinternational.co.ke
+ * 
+ * To submit an inquiry or invoice request, use the contact form at /#contact
+ */
 
 export async function POST(request: NextRequest) {
   try {
-    const { type, data }: EmailRequest = await request.json()
-
-    if (!SENDGRID_API_KEY) {
-      console.error("SendGrid API key not configured")
-      return NextResponse.json(
-        { success: false, error: "Email service not configured" },
-        { status: 503 }
-      )
-    }
-
-    let subject = ""
-    let htmlContent = ""
-
-    if (type === "enquiry") {
-      subject = `New Investment Enquiry from ${data.name}`
-      htmlContent = generateEnquiryEmail(data)
-    } else if (type === "invoice") {
-      subject = `Invoice Request: ${data.invoiceNumber} - ${data.companyName}`
-      htmlContent = generateInvoiceEmail(data)
-    } else {
-      return NextResponse.json(
-        { success: false, error: "Invalid email type" },
-        { status: 400 }
-      )
-    }
-
-    const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${SENDGRID_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        personalizations: [
-          {
-            to: TO_EMAILS.map(email => ({ email })),
-            subject: subject,
-          },
-        ],
-        from: { email: FROM_EMAIL, name: "The Oxic International Group" },
-        reply_to: { email: data.email as string || TO_EMAILS[0] },
-        content: [
-          {
-            type: "text/html",
-            value: htmlContent,
-          },
-        ],
-      }),
-    })
-
-    if (response.ok || response.status === 202) {
-      return NextResponse.json({ success: true, message: "Email sent successfully" })
-    } else {
-      const errorText = await response.text()
-      console.error("SendGrid error:", errorText)
-      return NextResponse.json(
-        { success: false, error: "Failed to send email" },
-        { status: 500 }
-      )
-    }
-  } catch (error) {
-    console.error("Email sending error:", error)
     return NextResponse.json(
-      { success: false, error: "Failed to process email request" },
-      { status: 500 }
+      {
+        success: false,
+        error: "This endpoint is deprecated. Use Netlify Forms instead.",
+        contactForm: "https://oxicinternational.co.ke/#contact",
+      },
+      { status: 410 } // 410 Gone
+    )
+  } catch (error) {
+    console.error("[v0] Deprecated email API error:", error)
+    return NextResponse.json(
+      { success: false, error: "This endpoint is no longer available" },
+      { status: 410 }
     )
   }
 }
 
+// Legacy functions kept for reference only - not used
 function generateEnquiryEmail(data: Record<string, string | number>): string {
   const date = new Date().toLocaleDateString("en-US", {
     weekday: "long",

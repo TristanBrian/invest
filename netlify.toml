@@ -4,8 +4,6 @@
   command = "npm run build"
   publish = ".next"
 
-# Environment variables - Set these in Netlify Dashboard
-# Build settings
 [build.environment]
   NODE_VERSION = "20.11.0"
   NPM_VERSION = "10.4.0"
