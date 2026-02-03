@@ -185,6 +185,7 @@ export function ContactSection() {
               data-netlify="true"
             >
               <input type="hidden" name="form-name" value="investment-enquiry" />
+              <input type="hidden" name="bot-field" style={{ display: "none" }} />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">

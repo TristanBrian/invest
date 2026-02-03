@@ -19,50 +19,20 @@ async function sendPaymentNotification(
   errorMessage?: string
 ) {
   try {
-    // Send email notification to both company emails
-    if (process.env.SENDGRID_API_KEY) {
-      const sgMail = require("@sendgrid/mail")
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
-      const subject = isSuccess
-        ? `✓ M-Pesa Payment Received - KES ${paymentDetails.amount}`
-        : "M-Pesa Payment Failed"
-
-      const htmlContent = isSuccess
-        ? `
-          <h2>Payment Received Successfully</h2>
-          <p>Thank you! We have received your M-Pesa payment.</p>
-          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Receipt Number:</strong> ${paymentDetails.mpesaReceiptNumber}</p>
-            <p><strong>Amount:</strong> KES ${paymentDetails.amount.toLocaleString()}</p>
-            <p><strong>Phone:</strong> ${paymentDetails.phoneNumber}</p>
-            <p><strong>Transaction Date:</strong> ${new Date(
-              paymentDetails.transactionDate
-            ).toLocaleString()}</p>
-          </div>
-          <p>Your investment journey is progressing. Our team will contact you shortly to confirm next steps.</p>
-        `
-        : `
-          <h2>Payment Transaction Failed</h2>
-          <p>We encountered an issue processing your M-Pesa payment.</p>
-          <div style="background-color: #fff5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Error:</strong> ${errorMessage || "Unknown error"}</p>
-            <p><strong>Phone:</strong> ${paymentDetails.phoneNumber}</p>
-          </div>
-          <p>Please contact our support team for assistance: +254 748 992 777</p>
-        `
-
-      await sgMail.send({
-        to: ["oxicgroupltd@group.com", "Info@oxicinternational.co.ke"],
-        from: "notifications@oxicinternational.co.ke",
-        subject,
-        html: htmlContent,
-      })
-
-      console.log("[v0] Payment notification sent successfully")
+    // Log payment notification for processing
+    const notificationData = {
+      timestamp: new Date().toISOString(),
+      status: isSuccess ? "success" : "failed",
+      paymentDetails,
+      errorMessage,
     }
+
+    console.log("[v0] M-Pesa Payment Notification:", JSON.stringify(notificationData, null, 2))
+
+    // TODO: Integrate with email service (SendGrid, Mailgun, or Netlify Forms submission)
+    // For now, payment data is logged and can be processed via webhooks or background jobs
   } catch (error) {
-    console.error("[v0] Failed to send payment notification:", error)
+    console.error("[v0] Failed to log payment notification:", error)
   }
 }
 
