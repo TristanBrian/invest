@@ -1,37 +1,65 @@
 import { NextRequest, NextResponse } from "next/server"
 
+interface FormSubmission {
+  name: string
+  email: string
+  organization?: string
+  phone?: string
+  interest: string
+  message: string
+  consent: boolean
+}
+
 /**
- * Form submission handler for investment enquiry form
- * Receives form data from Netlify Forms and processes it
+ * Investment enquiry form submission handler
+ * Accepts JSON POST requests and logs/processes form data
  */
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData()
+    const body = await request.json() as FormSubmission
 
-    // Extract form fields
-    const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      organization: formData.get("organization"),
-      phone: formData.get("phone"),
-      interest: formData.get("interest"),
-      message: formData.get("message"),
-      consent: formData.get("consent"),
-      timestamp: new Date().toISOString(),
+    // Validate required fields
+    if (!body.name || !body.email || !body.interest || !body.message || !body.consent) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Missing required form fields",
+        },
+        { status: 400 }
+      )
     }
 
-    // Log the submission (in production, you'd send this to an email service or database)
-    console.log("[v0] Form submission received:", {
-      ...data,
-      // Don't log sensitive data
-      email: `${String(data.email).substring(0, 3)}***@${String(data.email).split("@")[1] || ""}`,
+    // Prepare submission data
+    const data = {
+      name: body.name,
+      email: body.email,
+      organization: body.organization || "Not provided",
+      phone: body.phone || "Not provided",
+      interest: body.interest,
+      message: body.message,
+      consent: body.consent,
+      timestamp: new Date().toISOString(),
+      ipAddress: request.headers.get("x-forwarded-for") || "Unknown",
+    }
+
+    // Log the submission (in production, integrate with email service or CRM)
+    console.log("[v0] Investment enquiry received:", {
+      name: data.name,
+      email: data.email.substring(0, 3) + "***" + data.email.substring(data.email.lastIndexOf("@")),
+      organization: data.organization,
+      interest: data.interest,
+      timestamp: data.timestamp,
     })
 
-    // Return success response to Netlify Forms
+    // TODO: Send email notification or store in database
+    // - Send to oxicgroupltd@group.com
+    // - Send to Info@oxicinternational.co.ke
+    // - Store in database for follow-up
+
     return NextResponse.json(
       {
         success: true,
-        message: "Form submitted successfully. We will contact you soon.",
+        message: "Thank you for your enquiry. We will contact you within 24 hours.",
       },
       { status: 200 }
     )
@@ -41,7 +69,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: "An error occurred while processing your submission.",
+        message: "An error occurred while processing your submission. Please try again.",
       },
       { status: 500 }
     )
