@@ -163,9 +163,13 @@ export function PaymentMethodsSection() {
       })
 
       if (data.success) {
-        // Payment initiated successfully - waiting for user to enter PIN
-        console.log("[v0] M-Pesa payment successful, awaiting user PIN")
-        setTransactionId(data.checkoutRequestID || data.merchantRequestID || "PENDING")
+        // Payment initiated successfully - use professional transaction ID from API
+        console.log("[v0] M-Pesa payment successful", {
+          transactionId: data.transactionId,
+          checkoutRequestID: data.checkoutRequestID,
+        })
+        
+        setTransactionId(data.transactionId || data.checkoutRequestID || data.merchantRequestID || "PENDING")
         setPaymentStatus("waiting")
       } else {
         // Handle errors based on status code and response
@@ -271,18 +275,70 @@ export function PaymentMethodsSection() {
 
     if (paymentStatus === "success") {
       return (
-        <div className="text-center py-6">
-          <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Payment Submitted</h3>
-          <p className="text-muted-foreground mb-4">Your payment is being processed. You will receive a confirmation SMS.</p>
-          <div className="bg-muted/50 rounded-lg p-4 mb-4 text-left">
-            <div className="flex justify-between py-1"><span className="text-muted-foreground">Amount:</span><span className="font-medium">KES {parseFloat(amount).toLocaleString()}</span></div>
-            <div className="flex justify-between py-1"><span className="text-muted-foreground">Phone:</span><span className="font-medium">{phone}</span></div>
-            <div className="flex justify-between py-1"><span className="text-muted-foreground">Reference:</span><span className="font-medium">{transactionId}</span></div>
+        <div className="text-center py-6 space-y-4">
+          <div className="mx-auto mb-4">
+            <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
           </div>
-          <Button variant="outline" className="w-full bg-transparent" onClick={handleClose}>
-            <Download className="h-4 w-4 mr-2" />Download Receipt
-          </Button>
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Payment Confirmed</h3>
+            <p className="text-sm text-muted-foreground">Your payment has been received and is being processed</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 text-left space-y-3 border border-green-200">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Amount</p>
+                <p className="text-lg font-bold text-green-600">KES {parseFloat(amount).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Phone</p>
+                <p className="text-lg font-semibold">{phone}</p>
+              </div>
+            </div>
+            
+            <div className="pt-2 border-t border-green-200">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Transaction ID</p>
+              <p className="font-mono text-sm font-semibold text-green-700 break-all">{transactionId}</p>
+            </div>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded p-2">
+              <p className="text-xs text-blue-900">
+                <span className="font-semibold">Note:</span> Keep your transaction ID for reference. A detailed invoice will be emailed shortly.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Button 
+              className="w-full bg-green-600 hover:bg-green-700"
+              onClick={() => {
+                const txData = {
+                  transactionId,
+                  amount: parseFloat(amount),
+                  phone,
+                  date: new Date().toISOString(),
+                }
+                const element = document.createElement("a")
+                element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(txData, null, 2)))
+                element.setAttribute("download", `receipt-${transactionId}.txt`)
+                element.style.display = "none"
+                document.body.appendChild(element)
+                element.click()
+                document.body.removeChild(element)
+              }}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download Receipt
+            </Button>
+            
+            <Button 
+              variant="outline"
+              className="w-full bg-transparent"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+          </div>
         </div>
       )
     }

@@ -4,129 +4,139 @@ import {
   initiateMpesaStkPush,
   getMpesaConfig,
 } from "@/lib/mpesa"
+import transactionManager from "@/lib/transaction-manager"
+import emailService from "@/lib/email-service"
+import {
+  getClientIp,
+  isValidOrigin,
+  validatePaymentRequest,
+  addSecurityHeaders,
+  addCorsHeaders,
+  logSecurityEvent,
+  detectSuspiciousActivity,
+  rateLimiter,
+} from "@/lib/security"
 
 /**
- * M-Pesa STK Push API Route
+ * M-Pesa STK Push API Route with Security & Transaction Management
  * POST /api/mpesa
  *
  * Request body:
  * {
- *   phoneNumber: string (e.g., "0712345678" or "+254712345678")
- *   amount: number (KES, between 1-150,000)
- *   accountReference?: string (optional, defaults to "OXIC")
- *   transactionDesc?: string (optional, defaults to "Payment")
- * }
- *
- * Response:
- * {
- *   success: boolean
- *   message?: string
- *   error?: string
- *   checkoutRequestID?: string
- *   merchantRequestID?: string
+ *   phoneNumber: string (e.g., "0712345678")
+ *   amount: number (KES, 1-150,000)
+ *   accountReference?: string
+ *   transactionDesc?: string
+ *   customerEmail?: string (for invoice)
+ *   customerName?: string (for invoice)
  * }
  */
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("[v0] M-Pesa API Route: Received POST request")
+    const clientIp = getClientIp(request)
+    console.log("[v0] M-Pesa API: Request from", clientIp)
 
-    // Parse request body
+    // Security: Rate limiting
+    if (rateLimiter.isLimited(clientIp)) {
+      logSecurityEvent("RATE_LIMIT_EXCEEDED", { ip: clientIp })
+      return addSecurityHeaders(
+        NextResponse.json(
+          {
+            success: false,
+            error: "Too many requests. Please try again in a minute.",
+          },
+          { status: 429 }
+        )
+      )
+    }
+
+    // Security: Origin validation
+    if (!isValidOrigin(request)) {
+      logSecurityEvent("INVALID_ORIGIN", {
+        origin: request.headers.get("origin"),
+        ip: clientIp,
+      })
+      return addSecurityHeaders(
+        NextResponse.json(
+          { success: false, error: "Request origin not allowed" },
+          { status: 403 }
+        )
+      )
+    }
+
+    // Parse and validate request
     let body
     try {
       body = await request.json()
-      console.log("[v0] M-Pesa API Route: Request parsed successfully")
-    } catch (error) {
-      console.error("[v0] M-Pesa API Route: Failed to parse JSON", error)
-      return NextResponse.json(
-        { success: false, error: "Invalid JSON in request body" },
-        { status: 400 }
+    } catch {
+      return addSecurityHeaders(
+        NextResponse.json(
+          { success: false, error: "Invalid JSON in request body" },
+          { status: 400 }
+        )
       )
     }
 
-    const { phoneNumber, amount, accountReference, transactionDesc } = body
-
-    console.log("[v0] M-Pesa API Route: Request parameters:", {
-      phoneNumber,
-      amount,
-      accountReference: accountReference || "OXIC",
-      transactionDesc: transactionDesc || "Payment",
-    })
-
-    // Validate request fields
-    if (!phoneNumber) {
-      console.warn("[v0] M-Pesa API Route: Phone number is missing")
-      return NextResponse.json(
-        { success: false, error: "Phone number is required" },
-        { status: 400 }
+    // Validate payment parameters
+    const validation = validatePaymentRequest(body)
+    if (!validation.isValid) {
+      return addSecurityHeaders(
+        NextResponse.json(
+          { success: false, error: validation.error },
+          { status: 400 }
+        )
       )
     }
 
-    if (amount === undefined || amount === null) {
-      console.warn("[v0] M-Pesa API Route: Amount is missing")
-      return NextResponse.json(
-        { success: false, error: "Amount is required" },
-        { status: 400 }
-      )
+    const phoneNumber = validation.phoneNumber!
+    const amount = validation.amount!
+    const accountReference = body.accountReference || "OXIC"
+    const transactionDesc = body.transactionDesc || "Payment"
+    const customerEmail = body.customerEmail
+    const customerName = body.customerName
+
+    // Security: Detect suspicious activity
+    const suspicion = detectSuspiciousActivity(phoneNumber, amount, clientIp)
+    if (suspicion.isSuspicious) {
+      logSecurityEvent("SUSPICIOUS_ACTIVITY", {
+        reason: suspicion.reason,
+        ip: clientIp,
+        phoneNumber: phoneNumber.slice(-4),
+        amount,
+      })
     }
 
     // Validate M-Pesa configuration
-    console.log("[v0] M-Pesa API Route: Validating M-Pesa configuration...")
     const configCheck = validateMpesaConfig()
     if (!configCheck.isValid) {
-      console.error(
-        "[v0] M-Pesa API Route: Configuration validation failed:",
-        configCheck.missing
-      )
-      return NextResponse.json(
-        {
-          success: false,
-          error: configCheck.error,
-          missingCredentials: configCheck.missing,
-          hint: "Add these to Netlify environment variables and redeploy",
-        },
-        { status: 503 }
+      return addSecurityHeaders(
+        NextResponse.json(
+          {
+            success: false,
+            error: configCheck.error,
+          },
+          { status: 503 }
+        )
       )
     }
 
-    console.log("[v0] M-Pesa API Route: Configuration validated successfully")
-
-    // Get config - callback URL MUST be set in environment variables
     const config = getMpesaConfig()
-    
-    // Log what we're about to send
-    console.log("[v0] M-Pesa API Route: Environment configuration:", {
-      hasConsumerKey: !!config.consumerKey,
-      hasConsumerSecret: !!config.consumerSecret,
-      shortcode: config.shortcode,
-      env: config.env,
-      callbackUrlConfigured: !!config.callbackUrl,
-      callbackUrlValue: config.callbackUrl || "NOT SET",
-    })
 
-    // Callback URL MUST be configured - no fallback to request.nextUrl.origin
     if (!config.callbackUrl) {
-      console.error("[v0] M-Pesa API Route: MPESA_CALLBACK_URL not configured in Netlify")
-      return NextResponse.json(
-        {
-          success: false,
-          error: "M-Pesa callback URL not configured. Set MPESA_CALLBACK_URL in Netlify environment variables.",
-          example: "https://oxicinternational.co.ke/api/mpesa/callback",
-          setupUrl: "https://app.netlify.com/sites/YOUR_SITE/settings/build",
-        },
-        { status: 503 }
+      return addSecurityHeaders(
+        NextResponse.json(
+          {
+            success: false,
+            error: "M-Pesa callback URL not configured",
+          },
+          { status: 503 }
+        )
       )
     }
 
-    console.log("[v0] M-Pesa API Route: Initiating STK Push with:", {
-      phone: phoneNumber,
-      amount,
-      env: config.env,
-      callbackUrl: config.callbackUrl,
-    })
-
-    // Initiate STK Push - callback URL is validated inside the function
-    const result = await initiateMpesaStkPush(
+    // Create transaction record
+    const transaction = await initiateMpesaStkPush(
       phoneNumber,
       amount,
       accountReference,
@@ -134,62 +144,74 @@ export async function POST(request: NextRequest) {
       config.callbackUrl
     )
 
-    if (result.success) {
-      console.log("[v0] M-Pesa API Route: STK Push successful", {
-        checkoutRequestID: result.checkoutRequestID,
-      })
-
-      return NextResponse.json({
-        success: true,
-        message:
-          "STK push sent successfully. Please check your phone to complete the payment.",
-        checkoutRequestID: result.checkoutRequestID,
-        merchantRequestID: result.merchantRequestID,
-      })
-    } else {
-      console.error("[v0] M-Pesa API Route: STK Push failed:", {
-        error: result.error,
-        responseCode: result.responseCode,
-      })
-
-      return NextResponse.json(
-        {
-          success: false,
-          error: result.error,
-          responseCode: result.responseCode,
-        },
-        { status: 400 }
+    if (transaction.success) {
+      // Generate professional transaction ID
+      const txRecord = transactionManager.createTransaction(
+        transaction.merchantRequestID || "",
+        transaction.checkoutRequestID || "",
+        phoneNumber,
+        amount,
+        accountReference,
+        transactionDesc
       )
+
+      logSecurityEvent("PAYMENT_INITIATED", {
+        transactionId: txRecord.transactionId,
+        amount,
+        ip: clientIp,
+      })
+
+      const response = addSecurityHeaders(
+        NextResponse.json({
+          success: true,
+          message: "STK push sent. Please enter M-Pesa PIN on your phone.",
+          transactionId: txRecord.transactionId,
+          checkoutRequestID: transaction.checkoutRequestID,
+          merchantRequestID: transaction.merchantRequestID,
+        })
+      )
+
+      return addCorsHeaders(response, request)
+    } else {
+      logSecurityEvent("PAYMENT_FAILED", {
+        error: transaction.error,
+        amount,
+        ip: clientIp,
+      })
+
+      const response = addSecurityHeaders(
+        NextResponse.json(
+          {
+            success: false,
+            error: transaction.error,
+          },
+          { status: 400 }
+        )
+      )
+
+      return addCorsHeaders(response, request)
     }
   } catch (error) {
-    const errorMsg =
-      error instanceof Error ? error.message : "Unknown error"
-    console.error("[v0] M-Pesa API Route: Caught exception:", {
-      message: errorMsg,
-      errorType: error instanceof Error ? error.constructor.name : typeof error,
-      stack: error instanceof Error ? error.stack : undefined,
-    })
+    const errorMsg = error instanceof Error ? error.message : "Unknown error"
+    console.error("[v0] M-Pesa API Error:", errorMsg)
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Internal server error. Please try again later.",
-        details: process.env.NODE_ENV === "development" ? errorMsg : undefined,
-      },
-      { status: 500 }
+    const response = addSecurityHeaders(
+      NextResponse.json(
+        {
+          success: false,
+          error: "Payment processing failed. Please try again.",
+        },
+        { status: 500 }
+      )
     )
+
+    return addCorsHeaders(response, request)
   }
 }
 
-export async function OPTIONS() {
-  return NextResponse.json(
-    {},
-    {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    }
+export async function OPTIONS(request: NextRequest) {
+  const response = addSecurityHeaders(
+    NextResponse.json({}, { status: 200 })
   )
+  return addCorsHeaders(response, request)
 }
