@@ -1,8 +1,7 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 
-import { useState } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -180,15 +179,22 @@ export function PaymentMethodsSection() {
           customerName: name,
         }),
       })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       if (data.success && data.url) {
         window.location.href = data.url
       } else {
-        setErrorMessage(data.error || "Failed to create checkout session")
+        setErrorMessage(data.error || "Failed to create checkout session. Please try again.")
         setPaymentStatus("error")
       }
-    } catch {
-      setErrorMessage("Network error. Please check your connection.")
+    } catch (error) {
+      console.error("[v0] Stripe payment error:", error)
+      const errorMsg = error instanceof Error ? error.message : "Network error"
+      setErrorMessage(`Payment error: ${errorMsg}. Please check your connection and try again.`)
       setPaymentStatus("error")
     }
   }
