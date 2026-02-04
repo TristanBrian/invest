@@ -518,6 +518,7 @@ export function PaymentMethodsSection() {
       )
     }
 
+    // Default form - rendered when paymentStatus is "form" or "idle"
     return (
       <form onSubmit={handleMpesaSubmit} className="space-y-4">
         <DialogHeader>
@@ -541,8 +542,8 @@ export function PaymentMethodsSection() {
           </div>
         </div>
         {errorMessage && <div className="flex items-center gap-2 text-red-500 text-sm"><AlertCircle className="h-4 w-4" />{errorMessage}</div>}
-        <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={paymentStatus === "processing"}>
-          {paymentStatus === "processing" ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Sending STK Push...</> : "Pay with M-Pesa"}
+        <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={(paymentStatus as PaymentStatus) === "processing"}>
+          {(paymentStatus as PaymentStatus) === "processing" ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Sending STK Push...</> : "Pay with M-Pesa"}
         </Button>
       </form>
     )
