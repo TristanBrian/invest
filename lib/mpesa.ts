@@ -72,7 +72,7 @@ export function getMpesaConfig(): MpesaConfig {
 /**
  * Validate M-Pesa configuration
  * Returns missing credentials for debugging
- * Note: MPESA_PASSKEY is optional for testing with sandbox/demo accounts
+ * MPESA_PASSKEY is REQUIRED for STK Push (both sandbox and production)
  */
 export function validateMpesaConfig(): {
   isValid: boolean
@@ -82,7 +82,7 @@ export function validateMpesaConfig(): {
   const config = getMpesaConfig()
   const missing: string[] = []
 
-  // Required credentials for authentication and STK push
+  // All of these are REQUIRED for STK Push to work
   if (!config.consumerKey || config.consumerKey.length === 0) {
     missing.push("MPESA_CONSUMER_KEY")
   }
@@ -92,9 +92,9 @@ export function validateMpesaConfig(): {
   if (!config.shortcode || config.shortcode.length === 0) {
     missing.push("MPESA_SHORTCODE")
   }
-
-  // PASSKEY is optional - some test accounts may not require it
-  // Production accounts should have it configured
+  if (!config.passkey || config.passkey.length === 0) {
+    missing.push("MPESA_PASSKEY")
+  }
 
   if (missing.length > 0) {
     console.error(
@@ -104,7 +104,7 @@ export function validateMpesaConfig(): {
     return {
       isValid: false,
       missing,
-      error: `Missing M-Pesa credentials: ${missing.join(", ")}. Add these to Netlify environment variables.`,
+      error: `Missing M-Pesa credentials: ${missing.join(", ")}. All are REQUIRED for STK Push. Get MPESA_PASSKEY from https://developer.safaricom.co.ke under Lipa Na M-Pesa Online. Add to Netlify environment variables.`,
     }
   }
 
@@ -249,30 +249,29 @@ export function generateMpesaTimestamp(): string {
 }
 
 /**
- * Generate M-Pesa password: Base64(Shortcode + Passkey + Timestamp)
- * If passkey is not available, uses shortcode + timestamp
- * (Some test/sandbox accounts may work without passkey)
+ * Generate M-Pesa password: Base64(BusinessShortCode + MPESA_PASSKEY + Timestamp)
+ * According to Safaricom STK Push API specification
+ * Passkey is REQUIRED (both sandbox and production)
  */
 export function generateMpesaPassword(timestamp: string): string {
   const config = getMpesaConfig()
 
-  // If passkey is configured, use it (production)
-  if (config.passkey && config.passkey.length > 0) {
-    const str = `${config.shortcode}${config.passkey}${timestamp}`
-    const password = Buffer.from(str).toString("base64")
-    console.log("[v0] M-Pesa Password: Generated with passkey")
-    return password
+  // Passkey is REQUIRED - M-Pesa will reject without it
+  if (!config.passkey || config.passkey.length === 0) {
+    throw new Error(
+      "MPESA_PASSKEY is required to generate password. Get it from https://developer.safaricom.co.ke -> Lipa Na M-Pesa Online. Add to Netlify environment variables."
+    )
   }
 
-  // If passkey is not configured, warn and use shortcode + timestamp only
-  // This is for testing with sandbox/demo accounts
-  console.warn(
-    "[v0] M-Pesa: MPESA_PASSKEY not configured. Using shortcode + timestamp only for password generation."
-  )
-
-  const str = `${config.shortcode}${timestamp}`
+  const str = `${config.shortcode}${config.passkey}${timestamp}`
   const password = Buffer.from(str).toString("base64")
-  console.log("[v0] M-Pesa Password: Generated without passkey (test mode)")
+  
+  console.log("[v0] M-Pesa Password Generated:", {
+    inputLength: str.length,
+    base64Length: password.length,
+    base64Preview: password.substring(0, 20) + "...",
+  })
+  
   return password
 }
 
