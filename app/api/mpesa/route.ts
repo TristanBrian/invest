@@ -9,28 +9,43 @@ import { NextRequest, NextResponse } from "next/server"
 // - MPESA_ENV: "sandbox" for testing, "production" for live
 // - MPESA_CALLBACK_URL: URL for payment confirmations (optional, auto-generated if not set)
 
-const MPESA_CONSUMER_KEY = process.env.MPESA_CONSUMER_KEY || ""
-const MPESA_CONSUMER_SECRET = process.env.MPESA_CONSUMER_SECRET || ""
-const MPESA_PASSKEY = process.env.MPESA_PASSKEY || ""
-const MPESA_SHORTCODE = process.env.MPESA_SHORTCODE || ""
-const MPESA_ENV = process.env.MPESA_ENV || "sandbox"
+// Read environment variables at request time to ensure they're loaded from Netlify
+function getConfig() {
+  return {
+    MPESA_CONSUMER_KEY: process.env.MPESA_CONSUMER_KEY || "",
+    MPESA_CONSUMER_SECRET: process.env.MPESA_CONSUMER_SECRET || "",
+    MPESA_PASSKEY: process.env.MPESA_PASSKEY || "",
+    MPESA_SHORTCODE: process.env.MPESA_SHORTCODE || "",
+    MPESA_ENV: process.env.MPESA_ENV || "production",
+    MPESA_CALLBACK_URL: process.env.MPESA_CALLBACK_URL || ""
+  }
+}
 
 const getBaseUrl = () => {
-  return MPESA_ENV === "production"
+  const env = process.env.MPESA_ENV || "production"
+  return env === "production"
     ? "https://api.safaricom.co.ke"
     : "https://sandbox.safaricom.co.ke"
 }
 
 // Validate configuration
 function validateConfig(): { valid: boolean; error?: string; missing?: string[] } {
+  const config = getConfig()
   const missing: string[] = []
   
-  if (!MPESA_CONSUMER_KEY) missing.push("MPESA_CONSUMER_KEY")
-  if (!MPESA_CONSUMER_SECRET) missing.push("MPESA_CONSUMER_SECRET")
-  if (!MPESA_PASSKEY) missing.push("MPESA_PASSKEY")
-  if (!MPESA_SHORTCODE) missing.push("MPESA_SHORTCODE")
+  if (!config.MPESA_CONSUMER_KEY) missing.push("MPESA_CONSUMER_KEY")
+  if (!config.MPESA_CONSUMER_SECRET) missing.push("MPESA_CONSUMER_SECRET")
+  if (!config.MPESA_PASSKEY) missing.push("MPESA_PASSKEY")
+  if (!config.MPESA_SHORTCODE) missing.push("MPESA_SHORTCODE")
   
   if (missing.length > 0) {
+    console.error("[v0] M-Pesa Configuration Error - Missing credentials:", missing)
+    console.error("[v0] Environment check:", {
+      MPESA_CONSUMER_KEY: config.MPESA_CONSUMER_KEY ? "SET" : "MISSING",
+      MPESA_CONSUMER_SECRET: config.MPESA_CONSUMER_SECRET ? "SET" : "MISSING",
+      MPESA_PASSKEY: config.MPESA_PASSKEY ? "SET" : "MISSING",
+      MPESA_SHORTCODE: config.MPESA_SHORTCODE ? "SET" : "MISSING",
+    })
     return {
       valid: false,
       error: `M-Pesa credentials not configured. Missing: ${missing.join(", ")}`,
@@ -38,11 +53,13 @@ function validateConfig(): { valid: boolean; error?: string; missing?: string[] 
     }
   }
   
+  console.log("[v0] M-Pesa Configuration: All credentials loaded successfully")
   return { valid: true }
 }
 
 async function getAccessToken(): Promise<string> {
-  const auth = Buffer.from(`${MPESA_CONSUMER_KEY}:${MPESA_CONSUMER_SECRET}`).toString("base64")
+  const config = getConfig()
+  const auth = Buffer.from(`${config.MPESA_CONSUMER_KEY}:${config.MPESA_CONSUMER_SECRET}`).toString("base64")
   
   const response = await fetch(`${getBaseUrl()}/oauth/v1/generate?grant_type=client_credentials`, {
     method: "GET",
@@ -71,7 +88,8 @@ function generateTimestamp(): string {
 }
 
 function generatePassword(timestamp: string): string {
-  const str = `${MPESA_SHORTCODE}${MPESA_PASSKEY}${timestamp}`
+  const config = getConfig()
+  const str = `${config.MPESA_SHORTCODE}${config.MPESA_PASSKEY}${timestamp}`
   return Buffer.from(str).toString("base64")
 }
 
@@ -145,13 +163,15 @@ export async function POST(request: NextRequest) {
 
     // Production mode - make actual M-Pesa API call
     try {
+      const config = getConfig()
+      
       // Get access token
       const accessToken = await getAccessToken()
       const timestamp = generateTimestamp()
       const password = generatePassword(timestamp)
 
       // Get callback URL from environment or construct from request
-      const callbackUrl = process.env.MPESA_CALLBACK_URL || `${request.nextUrl.origin}/api/mpesa/callback`
+      const callbackUrl = config.MPESA_CALLBACK_URL || `${request.nextUrl.origin}/api/mpesa/callback`
 
       // STK Push request
       const stkPushResponse = await fetch(`${getBaseUrl()}/mpesa/stkpush/v1/processrequest`, {
@@ -161,13 +181,13 @@ export async function POST(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          BusinessShortCode: MPESA_SHORTCODE,
+          BusinessShortCode: config.MPESA_SHORTCODE,
           Password: password,
           Timestamp: timestamp,
           TransactionType: "CustomerPayBillOnline",
           Amount: Math.round(amount),
           PartyA: formattedPhone,
-          PartyB: MPESA_SHORTCODE,
+          PartyB: config.MPESA_SHORTCODE,
           PhoneNumber: formattedPhone,
           CallBackURL: callbackUrl,
           AccountReference: accountReference || "TheOxicGroup",
