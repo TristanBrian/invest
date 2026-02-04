@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
             product_data: {
               name: "The Oxic International Group",
               description: description || "Investment Advisory Services - East Africa",
-              images: [`${origin}/images/logo1.png`],
+              images: [`${origin}/images/oxic-logo.png`],
             },
             unit_amount: Math.round(numAmount * 100),
           },

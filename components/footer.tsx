@@ -21,11 +21,11 @@ export function Footer() {
           <div className="space-y-6 md:col-span-2">
             <div className="inline-block">
               <Image
-                src="/images/logo1.png"
+                src="/images/oxic-logo.png"
                 alt="The Oxic International Group"
-                width={380}
-                height={110}
-                className="h-24 w-auto object-contain"
+                width={450}
+                height={135}
+                className="h-28 w-auto object-contain"
                 quality={100}
               />
             </div>

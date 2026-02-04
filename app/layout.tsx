@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     canonical: "https://oxicinternational.co.ke",
   },
   icons: {
-    icon: "/images/logo1.png",
-    apple: "/images/logo1.png",
+    icon: "/images/oxic-logo.png",
+    apple: "/images/oxic-logo.png",
   },
   openGraph: {
     type: "website",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
       "Secure M-Pesa payment gateway and investment advisory platform for Kenya and East Africa",
     images: [
       {
-        url: "/images/logo1.png",
+        url: "/images/oxic-logo.png",
         width: 1200,
         height: 630,
         alt: "Oxic International Group",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     description:
       "Secure M-Pesa payment gateway and investment advisory platform for Kenya and East Africa",
     creator: "@OxicInternational",
-    images: ["/images/logo1.png"],
+    images: ["/images/oxic-logo.png"],
   },
   robots: {
     index: true,
