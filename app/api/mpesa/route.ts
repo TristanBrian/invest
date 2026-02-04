@@ -91,25 +91,47 @@ export async function POST(request: NextRequest) {
 
     console.log("[v0] M-Pesa API Route: Configuration validated successfully")
 
-    // Get config to determine callback URL
+    // Get config - callback URL MUST be set in environment variables
     const config = getMpesaConfig()
-    const callbackUrl =
-      config.callbackUrl || `${request.nextUrl.origin}/api/mpesa/callback`
+    
+    // Log what we're about to send
+    console.log("[v0] M-Pesa API Route: Environment configuration:", {
+      hasConsumerKey: !!config.consumerKey,
+      hasConsumerSecret: !!config.consumerSecret,
+      shortcode: config.shortcode,
+      env: config.env,
+      callbackUrlConfigured: !!config.callbackUrl,
+      callbackUrlValue: config.callbackUrl || "NOT SET",
+    })
+
+    // Callback URL MUST be configured - no fallback to request.nextUrl.origin
+    if (!config.callbackUrl) {
+      console.error("[v0] M-Pesa API Route: MPESA_CALLBACK_URL not configured in Netlify")
+      return NextResponse.json(
+        {
+          success: false,
+          error: "M-Pesa callback URL not configured. Set MPESA_CALLBACK_URL in Netlify environment variables.",
+          example: "https://oxicinternational.co.ke/api/mpesa/callback",
+          setupUrl: "https://app.netlify.com/sites/YOUR_SITE/settings/build",
+        },
+        { status: 503 }
+      )
+    }
 
     console.log("[v0] M-Pesa API Route: Initiating STK Push with:", {
       phone: phoneNumber,
       amount,
       env: config.env,
-      callbackUrl,
+      callbackUrl: config.callbackUrl,
     })
 
-    // Initiate STK Push
+    // Initiate STK Push - callback URL is validated inside the function
     const result = await initiateMpesaStkPush(
       phoneNumber,
       amount,
       accountReference,
       transactionDesc,
-      callbackUrl
+      config.callbackUrl
     )
 
     if (result.success) {
