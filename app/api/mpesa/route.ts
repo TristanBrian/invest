@@ -22,13 +22,22 @@ const getBaseUrl = () => {
 }
 
 // Validate configuration
-function validateConfig(): { valid: boolean; error?: string } {
-  if (!MPESA_CONSUMER_KEY || !MPESA_CONSUMER_SECRET) {
-    return { valid: false, error: "M-Pesa API credentials not configured" }
+function validateConfig(): { valid: boolean; error?: string; missing?: string[] } {
+  const missing: string[] = []
+  
+  if (!MPESA_CONSUMER_KEY) missing.push("MPESA_CONSUMER_KEY")
+  if (!MPESA_CONSUMER_SECRET) missing.push("MPESA_CONSUMER_SECRET")
+  if (!MPESA_PASSKEY) missing.push("MPESA_PASSKEY")
+  if (!MPESA_SHORTCODE) missing.push("MPESA_SHORTCODE")
+  
+  if (missing.length > 0) {
+    return {
+      valid: false,
+      error: `M-Pesa credentials not configured. Missing: ${missing.join(", ")}`,
+      missing
+    }
   }
-  if (!MPESA_PASSKEY || !MPESA_SHORTCODE) {
-    return { valid: false, error: "M-Pesa business credentials not configured" }
-  }
+  
   return { valid: true }
 }
 
@@ -71,8 +80,10 @@ export async function POST(request: NextRequest) {
     // Validate configuration first
     const configCheck = validateConfig()
     if (!configCheck.valid) {
+      console.error("[v0] M-Pesa Configuration Error:", configCheck.error)
+      console.error("[v0] Missing credentials:", configCheck.missing)
       return NextResponse.json(
-        { success: false, error: configCheck.error },
+        { success: false, error: configCheck.error, missing: configCheck.missing },
         { status: 503 }
       )
     }
