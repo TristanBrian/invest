@@ -76,6 +76,10 @@ export function PaymentMethodsSection() {
   const [cryptoPaymentStep, setCryptoPaymentStep] = useState<CryptoPaymentStep>("method")
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoCurrency | "">("")
   const [showWalletAddresses, setShowWalletAddresses] = useState(false)
+  
+  // Processing timeout tracking
+  const [processingTimeRemaining, setProcessingTimeRemaining] = useState(0)
+  const [processStartTime, setProcessStartTime] = useState<number | null>(null)
 
   const resetForm = () => {
     setPhone("")
@@ -95,7 +99,30 @@ export function PaymentMethodsSection() {
     setCryptoPaymentStep("method")
     setSelectedCrypto("")
     setShowWalletAddresses(false)
+    setProcessingTimeRemaining(0)
+    setProcessStartTime(null)
   }
+
+  // Timer effect for processing state timeout (2 minutes)
+  useEffect(() => {
+    if (paymentStatus !== "processing" || !processStartTime) return
+
+    const PROCESSING_TIMEOUT = 120000 // 2 minutes in milliseconds
+
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - processStartTime
+      const remaining = Math.max(0, PROCESSING_TIMEOUT - elapsed)
+      setProcessingTimeRemaining(Math.ceil(remaining / 1000))
+
+      // Auto-timeout after 2 minutes
+      if (remaining <= 0) {
+        clearInterval(interval)
+        setPaymentStatus("waiting")
+      }
+    }, 100)
+
+    return () => clearInterval(interval)
+  }, [paymentStatus, processStartTime])
 
   const handleCardClick = (methodTitle: string, methodType: string) => {
     setSelectedMethod(methodTitle)
@@ -116,31 +143,31 @@ export function PaymentMethodsSection() {
 
   const handleMpesaSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!phone || !amount) {
-      setErrorMessage("Please enter phone number and amount")
+
+    // Validate phone
+    if (!phone || !/^(\+254|0)[0-9]{9}$/.test(phone.replace(/[\s-]/g, ""))) {
+      setErrorMessage("Enter a valid Kenyan phone number (e.g., 0712345678 or +254712345678)")
       return
     }
 
-    if (!validatePhone(phone)) {
-      setErrorMessage("Invalid Kenyan phone number. Use format: 07XXXXXXXX or 01XXXXXXXX")
-      return
-    }
-
+    // Validate amount
     if (!amount || parseFloat(amount) < 1 || parseFloat(amount) > 150000) {
-      setErrorMessage("Amount must be between KES 1 and 150,000")
+      setErrorMessage("Enter a valid amount between KES 1 and KES 150,000")
       return
     }
 
+    // Set processing state with start time
+    console.log("[v0] Sending M-Pesa payment request:", {
+      phoneNumber: phone,
+      amount: parseFloat(amount),
+    })
+    
     setPaymentStatus("processing")
+    setProcessStartTime(Date.now())
+    setProcessingTimeRemaining(120)
     setErrorMessage("")
 
     try {
-      console.log("[v0] Sending M-Pesa payment request:", {
-        phoneNumber: phone,
-        amount: parseFloat(amount),
-      })
-
       const response = await fetch("/api/mpesa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -248,27 +275,175 @@ export function PaymentMethodsSection() {
   }
 
   const renderMpesaContent = () => {
+    if (paymentStatus === "processing") {
+      const progressPercent = Math.round(((120 - processingTimeRemaining) / 120) * 100)
+      
+      return (
+        <div className="text-center py-8 space-y-6">
+          {/* Animated processing indicator */}
+          <div className="flex justify-center">
+            <div className="relative w-24 h-24">
+              {/* Outer rotating ring */}
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-green-500 border-r-green-500 animate-spin"></div>
+              
+              {/* Middle pulsing ring */}
+              <div className="absolute inset-2 rounded-full border-2 border-green-200 animate-pulse"></div>
+              
+              {/* Inner icon */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-green-50 rounded-full p-3">
+                  <Phone className="h-8 w-8 text-green-600 animate-bounce" style={{animationDelay: "0s"}} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Status text */}
+          <div>
+            <h3 className="text-xl font-bold text-foreground mb-1">Processing Payment</h3>
+            <p className="text-muted-foreground">Sending STK push to your phone...</p>
+          </div>
+
+          {/* Progress bar */}
+          <div className="space-y-2">
+            <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+              <div 
+                className="bg-gradient-to-r from-green-500 to-emerald-500 h-full transition-all duration-300"
+                style={{width: `${progressPercent}%`}}
+              ></div>
+            </div>
+            <p className="text-xs text-muted-foreground">{processingTimeRemaining}s remaining</p>
+          </div>
+
+          {/* Payment details card */}
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 border border-green-200 space-y-3 text-left">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Amount</p>
+                <p className="text-lg font-bold text-green-600 mt-1">KES {parseFloat(amount).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Phone</p>
+                <p className="text-lg font-semibold text-foreground mt-1">{phone}</p>
+              </div>
+            </div>
+            
+            <div className="pt-3 border-t border-green-200">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold mb-2">Transaction ID</p>
+              <p className="font-mono text-sm font-semibold text-green-700 break-all bg-white rounded px-2 py-2">{transactionId}</p>
+            </div>
+          </div>
+
+          {/* Info box */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-2">
+            <p className="text-sm font-semibold text-blue-900">What's happening?</p>
+            <ul className="text-xs text-blue-800 space-y-1 text-left">
+              <li className="flex items-start gap-2">
+                <span className="text-blue-500 mt-0.5">✓</span>
+                <span>M-Pesa prompt will appear on your phone</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blue-500 mt-0.5">✓</span>
+                <span>Enter your M-Pesa PIN to confirm payment</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blue-500 mt-0.5">✓</span>
+                <span>You'll receive an SMS confirmation</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              className="flex-1 bg-transparent"
+              onClick={() => {
+                setPaymentStatus("form")
+                setProcessStartTime(null)
+                setProcessingTimeRemaining(0)
+              }}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )
+    }
+
     if (paymentStatus === "waiting") {
       return (
-        <div className="text-center py-6">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 animate-pulse">
-            <Phone className="h-8 w-8 text-green-600" />
+        <div className="text-center py-8 space-y-6">
+          {/* Waiting for PIN indicator */}
+          <div className="flex justify-center">
+            <div className="relative w-20 h-20">
+              <div className="absolute inset-0 rounded-full border-4 border-amber-200 border-t-amber-500 animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Phone className="h-10 w-10 text-amber-600" />
+              </div>
+            </div>
           </div>
-          <h3 className="text-lg font-semibold mb-2">Check Your Phone</h3>
-          <p className="text-muted-foreground mb-4">An STK push has been sent to <span className="font-medium text-foreground">{phone}</span></p>
-          <div className="bg-muted/50 rounded-lg p-4 mb-4">
-            <p className="text-sm">Enter your M-Pesa PIN to complete payment of</p>
-            <p className="text-2xl font-bold text-green-600">KES {parseFloat(amount).toLocaleString()}</p>
+
+          {/* Status text */}
+          <div>
+            <h3 className="text-xl font-bold text-foreground mb-1">Awaiting Your PIN</h3>
+            <p className="text-muted-foreground">Please complete the transaction on your phone</p>
           </div>
-          <p className="text-xs text-muted-foreground">Transaction ID: {transactionId}</p>
-          <div className="flex gap-2 mt-4">
-            <Button variant="outline" className="flex-1 bg-transparent" onClick={resetForm}>
-              <ArrowLeft className="h-4 w-4 mr-2" />Try Again
+
+          {/* Payment details reminder */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 space-y-3 text-left">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Amount</p>
+                <p className="text-lg font-bold text-amber-600 mt-1">KES {parseFloat(amount).toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Phone</p>
+                <p className="text-lg font-semibold text-foreground mt-1">{phone}</p>
+              </div>
+            </div>
+            
+            <div className="pt-3 border-t border-amber-200">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold mb-2">Transaction Reference</p>
+              <p className="font-mono text-sm font-semibold text-amber-700 break-all bg-white rounded px-2 py-2">{transactionId}</p>
+            </div>
+          </div>
+
+          {/* Instructions */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-2">
+            <p className="text-sm font-semibold text-blue-900">M-Pesa Prompt on Your Phone:</p>
+            <ol className="text-xs text-blue-800 space-y-1.5 text-left list-decimal list-inside">
+              <li>You should see a popup asking for M-Pesa PIN</li>
+              <li>Enter your 4-digit PIN to confirm</li>
+              <li>Wait for confirmation SMS</li>
+              <li>We'll update your payment status automatically</li>
+            </ol>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              className="flex-1 bg-transparent"
+              onClick={() => {
+                setPaymentStatus("error")
+                setErrorMessage("Payment cancelled. The M-Pesa prompt expired. Please try again.")
+                setProcessStartTime(null)
+              }}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Cancel Transaction
             </Button>
-            <Button className="flex-1 bg-green-600 hover:bg-green-700" onClick={() => setPaymentStatus("success")}>
-              I've Paid
+            <Button 
+              className="flex-1 bg-green-600 hover:bg-green-700"
+              onClick={() => setPaymentStatus("success")}
+            >
+              Confirm Payment
             </Button>
           </div>
+          
+          <p className="text-xs text-muted-foreground">This page will automatically update when payment is confirmed</p>
         </div>
       )
     }
@@ -929,9 +1104,69 @@ export function PaymentMethodsSection() {
         <p className="text-center text-sm text-muted-foreground mt-4">Contact us via WhatsApp for immediate payment assistance.</p>
       </>
     )
-  }
+    }
 
-  return (
+    if (paymentStatus === "error") {
+      return (
+        <div className="text-center py-8 space-y-6">
+          {/* Error icon */}
+          <div className="flex justify-center">
+            <div className="rounded-full bg-red-100 p-4">
+              <AlertCircle className="h-12 w-12 text-red-600" />
+            </div>
+          </div>
+
+          {/* Error message */}
+          <div>
+            <h3 className="text-xl font-bold text-foreground mb-2">Payment Failed</h3>
+            <p className="text-muted-foreground max-w-sm mx-auto">{errorMessage}</p>
+          </div>
+
+          {/* Error details card if transaction was initiated */}
+          {transactionId && transactionId !== "PENDING" && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-left space-y-3">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">Transaction Reference</p>
+                <p className="font-mono text-sm font-semibold text-red-700 mt-1 break-all">{transactionId}</p>
+                <p className="text-xs text-muted-foreground mt-2">Keep this for your records</p>
+              </div>
+            </div>
+          )}
+
+          {/* Troubleshooting info */}
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-2">
+            <p className="text-sm font-semibold text-amber-900">What you can do:</p>
+            <ul className="text-xs text-amber-800 space-y-1.5 text-left list-disc list-inside">
+              <li>Check your internet connection</li>
+              <li>Ensure your M-Pesa account has sufficient balance</li>
+              <li>Try again with a different amount</li>
+              <li>Wait a few minutes and retry</li>
+              <li>Contact support if the issue persists</li>
+            </ul>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-3">
+            <Button 
+              variant="outline"
+              className="flex-1 bg-transparent"
+              onClick={resetForm}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Try Again
+            </Button>
+            <Button 
+              className="flex-1 bg-green-600 hover:bg-green-700"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )
+    }
+
+    return (
     <section className="bg-muted/30 py-12 sm:py-16">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8 text-center">
