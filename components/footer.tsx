@@ -23,9 +23,9 @@ export function Footer() {
               <Image
                 src="/images/logo1.png"
                 alt="The Oxic International Group"
-                width={280}
-                height={80}
-                className="h-20 w-auto object-contain"
+                width={380}
+                height={110}
+                className="h-24 w-auto object-contain"
                 quality={100}
               />
             </div>
@@ -108,8 +108,8 @@ export function Footer() {
               <li className="flex items-start gap-2">
                 <Mail className="mt-0.5 h-4 w-4 flex-shrink-0" />
                 <div className="flex flex-col gap-1">
-                  <a href="mailto:oxicgroupltd@group.com" className="transition-colors hover:text-foreground">
-                    {"oxicgroupltd@group.com"}
+                  <a href="mailto:oxicgroupltd@gmail.com" className="transition-colors hover:text-foreground">
+                    {"oxicgroupltd@gmail.com"}
                   </a>
                   <a href="mailto:Info@oxicinternational.co.ke" className="transition-colors hover:text-foreground">
                     {"Info@oxicinternational.co.ke"}

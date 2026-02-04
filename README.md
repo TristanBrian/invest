@@ -29,7 +29,9 @@ Positioned as a trusted on-the-ground partner, we bridge global capital with ban
 - **Styling**: Tailwind CSS v4
 - **UI Components**: shadcn/ui
 - **Language**: TypeScript
-- **Deployment**: Vercel
+- **Deployment**: Netlify
+- **Email Service**: Resend
+- **Payment Gateway**: M-Pesa Daraja API + Stripe
 
 ## Features
 
@@ -37,17 +39,53 @@ Positioned as a trusted on-the-ground partner, we bridge global capital with ban
 - Professional landing page with company overview
 - Services showcase with detailed offerings
 - Founder profile section
-- Contact form with WhatsApp integration
-- Payment methods information (Coming Soon)
+- Contact form with Resend email integration
+- M-Pesa STK push payment integration
+- Payment callbacks with email notifications
+- Production-ready security and error handling
 
-## Contact
+## Integrations
 
-- **WhatsApp**: +254 704 527 743
-- **Website**: [theoxicinternational.com](https://theoxicinternational.com)
+### Email Service (Resend)
+- Automated contact form notifications
+- Payment confirmation emails
+- Delivery tracking and monitoring
+
+### Payment Processing
+- **M-Pesa**: STK push for mobile payments (Kenya)
+- **Stripe**: Credit/debit card processing (Optional)
+
+### Contact & Support
+
+- **Email**: oxicgroupltd@gmail.com
+- **Alternate Email**: Info@oxicinternational.co.ke
+- **WhatsApp**: +254 748 992 777
+- **Phone**: +254 748 992 777
+- **Location**: Nairobi, Kenya
 
 ## Deployment
 
-Deployed on Vercel: [https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform](https://vercel.com/tristanbrians-projects/v0-investor-liaison-platform)
+### Development
+```bash
+npm run dev
+```
+
+### Production (Netlify)
+
+See [QUICK_START.md](./QUICK_START.md) for deployment instructions.
+
+## Configuration
+
+All API integrations require environment variables. See `.env.example` for the complete list.
+
+### Required Variables
+- `RESEND_API_KEY` - Email service
+- `MPESA_CONSUMER_KEY` - M-Pesa Daraja API
+- `MPESA_CONSUMER_SECRET` - M-Pesa Daraja API
+- `MPESA_PASSKEY` - M-Pesa STK push
+- `MPESA_SHORTCODE` - Business M-Pesa account
+
+For detailed setup instructions, see [INTEGRATION_SETUP.md](./INTEGRATION_SETUP.md).
 
 ---
 

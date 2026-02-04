@@ -1,8 +1,7 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect } from "react"
 
-import { useState } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -117,10 +116,17 @@ export function PaymentMethodsSection() {
 
   const handleMpesaSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!validatePhone(phone)) {
-      setErrorMessage("Enter a valid Kenyan phone number (07XX or 01XX)")
+    
+    if (!phone || !amount) {
+      setErrorMessage("Please enter phone number and amount")
       return
     }
+
+    if (!validatePhone(phone)) {
+      setErrorMessage("Invalid Kenyan phone number. Use format: 07XXXXXXXX or 01XXXXXXXX")
+      return
+    }
+
     if (!amount || parseFloat(amount) < 1 || parseFloat(amount) > 150000) {
       setErrorMessage("Amount must be between KES 1 and 150,000")
       return
@@ -140,16 +146,38 @@ export function PaymentMethodsSection() {
           transactionDesc: "Investment Payment",
         }),
       })
+
       const data = await response.json()
+
+      if (data.development) {
+        // Development mode - show helpful message
+        setErrorMessage(
+          "Development Mode: M-Pesa credentials not configured. When deployed to production with credentials, real payments will work. " +
+          `See NETLIFY_ENV_SETUP.md for setup instructions.`
+        )
+        setPaymentStatus("error")
+        return
+      }
+
       if (data.success) {
-        setTransactionId(data.checkoutRequestId || "TXN" + Date.now())
+        setTransactionId(data.checkoutRequestID || data.merchantRequestID || "PENDING")
         setPaymentStatus("waiting")
       } else {
-        setErrorMessage(data.error || "Failed to initiate payment")
+        // Handle various error scenarios
+        if (response.status === 503 || data.setupGuide) {
+          setErrorMessage(
+            "M-Pesa service unavailable. Please contact support or see deployment guide for setup instructions."
+          )
+        } else if (response.status === 400) {
+          setErrorMessage(data.error || "Please check your phone number and amount")
+        } else {
+          setErrorMessage(data.error || "Payment failed. Please try again.")
+        }
         setPaymentStatus("error")
       }
-    } catch {
-      setErrorMessage("Network error. Please check your connection.")
+    } catch (error) {
+      console.error("[v0] M-Pesa submission error:", error)
+      setErrorMessage("Network error. Please check your connection and try again.")
       setPaymentStatus("error")
     }
   }
@@ -180,15 +208,22 @@ export function PaymentMethodsSection() {
           customerName: name,
         }),
       })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       if (data.success && data.url) {
         window.location.href = data.url
       } else {
-        setErrorMessage(data.error || "Failed to create checkout session")
+        setErrorMessage(data.error || "Failed to create checkout session. Please try again.")
         setPaymentStatus("error")
       }
-    } catch {
-      setErrorMessage("Network error. Please check your connection.")
+    } catch (error) {
+      console.error("[v0] Stripe payment error:", error)
+      const errorMsg = error instanceof Error ? error.message : "Network error"
+      setErrorMessage(`Payment error: ${errorMsg}. Please check your connection and try again.`)
       setPaymentStatus("error")
     }
   }
@@ -683,7 +718,7 @@ export function PaymentMethodsSection() {
                 <div className="text-center space-y-2">
                   <div className="text-sm text-muted-foreground font-medium">QR Code</div>
                   <svg className="w-32 h-32 mx-auto text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm13-2v8h8V3h-8zm2 2h4v4h-4V5zM3 16v8h8v-8H3zm2 2h4v4H5v-4zm10-2h2v2h-2v-2zm2 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
+                    <path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm13-2v8h8V3h-8zm2 2h4v4h-4v-2zm2 0h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
                   </svg>
                 </div>
               </div>
