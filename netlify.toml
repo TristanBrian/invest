@@ -10,14 +10,9 @@
   NODE_ENV = "production"
 
 # Netlify Next.js Plugin v5 Configuration
+# Forms are handled via standard API routes - no Netlify Forms integration needed
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Netlify Forms with proper Next.js Runtime v5 migration
-[[forms]]
-  name = "investment-enquiry"
-  honeypot = "bot-field"
-  action = "/api/forms/investment-enquiry"
 
 # Security headers
 [[headers]]
