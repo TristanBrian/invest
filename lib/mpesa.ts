@@ -384,7 +384,7 @@ export async function initiateMpesaStkPush(
       return { success: false, error: callbackValidation.error }
     }
 
-    finalCallbackUrl = callbackValidation.formatted
+    finalCallbackUrl = callbackValidation.formatted!
 
     console.log("[v0] M-Pesa STK Push: Getting access token...")
     // Get access token
