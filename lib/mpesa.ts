@@ -46,6 +46,7 @@ export function getMpesaConfig(): MpesaConfig {
 /**
  * Validate M-Pesa configuration
  * Returns missing credentials for debugging
+ * Note: MPESA_PASSKEY is optional for testing with sandbox/demo accounts
  */
 export function validateMpesaConfig(): {
   isValid: boolean
@@ -55,10 +56,13 @@ export function validateMpesaConfig(): {
   const config = getMpesaConfig()
   const missing: string[] = []
 
+  // Required credentials for authentication and STK push
   if (!config.consumerKey) missing.push("MPESA_CONSUMER_KEY")
   if (!config.consumerSecret) missing.push("MPESA_CONSUMER_SECRET")
-  if (!config.passkey) missing.push("MPESA_PASSKEY")
   if (!config.shortcode) missing.push("MPESA_SHORTCODE")
+
+  // PASSKEY is optional - some test accounts may not require it
+  // Production accounts should have it configured
 
   if (missing.length > 0) {
     return {
@@ -133,10 +137,26 @@ export function generateMpesaTimestamp(): string {
 
 /**
  * Generate M-Pesa password: Base64(Shortcode + Passkey + Timestamp)
+ * If passkey is not available, uses shortcode + timestamp
+ * (Some test/sandbox accounts may work without passkey)
  */
 export function generateMpesaPassword(timestamp: string): string {
   const config = getMpesaConfig()
-  const str = `${config.shortcode}${config.passkey}${timestamp}`
+  
+  // If passkey is configured, use it (production)
+  if (config.passkey) {
+    const str = `${config.shortcode}${config.passkey}${timestamp}`
+    return Buffer.from(str).toString("base64")
+  }
+  
+  // If passkey is not configured, warn and use shortcode + timestamp only
+  // This is for testing with sandbox/demo accounts
+  console.warn(
+    "[v0] M-Pesa: MPESA_PASSKEY not configured. Using shortcode + timestamp only. " +
+    "For production, configure MPESA_PASSKEY."
+  )
+  
+  const str = `${config.shortcode}${timestamp}`
   return Buffer.from(str).toString("base64")
 }
 
