@@ -26,22 +26,38 @@ export interface MpesaResponse {
  * Called at request time to ensure Netlify env vars are available
  */
 export function getMpesaConfig(): MpesaConfig {
-  const consumerKey = process.env.MPESA_CONSUMER_KEY?.trim() || ""
-  const consumerSecret = process.env.MPESA_CONSUMER_SECRET?.trim() || ""
-  const passkey = process.env.MPESA_PASSKEY?.trim() || ""
-  const shortcode = process.env.MPESA_SHORTCODE?.trim() || ""
+  // Carefully extract and clean credentials - remove ALL whitespace including newlines
+  const consumerKey = (process.env.MPESA_CONSUMER_KEY || "")
+    .trim()
+    .replace(/[\n\r\t]/g, "")
+  const consumerSecret = (process.env.MPESA_CONSUMER_SECRET || "")
+    .trim()
+    .replace(/[\n\r\t]/g, "")
+  const passkey = (process.env.MPESA_PASSKEY || "")
+    .trim()
+    .replace(/[\n\r\t]/g, "")
+  const shortcode = (process.env.MPESA_SHORTCODE || "")
+    .trim()
+    .replace(/[\n\r\t]/g, "")
   const env = (process.env.MPESA_ENV || "production") as "sandbox" | "production"
-  const callbackUrl = process.env.MPESA_CALLBACK_URL?.trim() || ""
+  const callbackUrl = (process.env.MPESA_CALLBACK_URL || "")
+    .trim()
+    .replace(/[\n\r\t]/g, "")
 
-  // Log config status (without exposing secrets)
-  console.log("[v0] M-Pesa Config Status:", {
+  // Debug: Log first and last few characters of credentials (safe for debugging)
+  const debugConfig = {
     consumerKeyLength: consumerKey.length,
+    consumerKeyStart: consumerKey.substring(0, 4),
+    consumerKeyEnd: consumerKey.substring(Math.max(0, consumerKey.length - 4)),
     consumerSecretLength: consumerSecret.length,
-    passkeyLength: passkey.length,
-    shortcodeLength: shortcode.length,
+    consumerSecretStart: consumerSecret.substring(0, 4),
+    consumerSecretEnd: consumerSecret.substring(Math.max(0, consumerSecret.length - 4)),
+    shortcode,
     env,
     callbackUrlPresent: !!callbackUrl,
-  })
+  }
+
+  console.log("[v0] M-Pesa Config Debug:", debugConfig)
 
   return {
     consumerKey,
@@ -115,17 +131,39 @@ export function getMpesaBaseUrl(): string {
 export async function getMpesaAccessToken(): Promise<string> {
   const config = getMpesaConfig()
 
+  // Validate credentials exist
+  if (!config.consumerKey || !config.consumerSecret) {
+    console.error("[v0] M-Pesa: Missing credentials for access token", {
+      hasConsumerKey: !!config.consumerKey,
+      hasConsumerSecret: !!config.consumerSecret,
+    })
+    throw new Error("M-Pesa credentials (consumer key and secret) are required")
+  }
+
   // Create Basic auth header
   const credentials = `${config.consumerKey}:${config.consumerSecret}`
+  
+  // Debug log the credentials format (safe - just showing structure)
+  console.log("[v0] M-Pesa Credentials String Format:", {
+    format: "KEY:SECRET",
+    keyLength: config.consumerKey.length,
+    secretLength: config.consumerSecret.length,
+    totalLength: credentials.length,
+    keyStartsWith: config.consumerKey.substring(0, 2),
+    secretStartsWith: config.consumerSecret.substring(0, 2),
+  })
+
   const base64Credentials = Buffer.from(credentials).toString("base64")
 
-  console.log("[v0] M-Pesa Access Token Request:", {
-    env: config.env,
-    consumerKeyLength: config.consumerKey.length,
+  console.log("[v0] M-Pesa Base64 Encoding:", {
+    originalLength: credentials.length,
     base64Length: base64Credentials.length,
+    base64Starts: base64Credentials.substring(0, 8),
   })
 
   const url = `${getMpesaBaseUrl()}/oauth/v1/generate?grant_type=client_credentials`
+
+  console.log("[v0] M-Pesa: Requesting access token from:", url)
 
   try {
     const response = await fetch(url, {
@@ -143,21 +181,27 @@ export async function getMpesaAccessToken(): Promise<string> {
       console.error("[v0] M-Pesa Access Token Error Response:", {
         status: response.status,
         statusText: response.statusText,
-        body: errorText,
+        bodyLength: errorText.length,
+        bodyContent: errorText.substring(0, 200),
       })
       throw new Error(
-        `Access token request failed with status ${response.status}: ${response.statusText}`
+        `Access token request failed with status ${response.status}: ${response.statusText}. Response: ${errorText}`
       )
     }
 
     const data = await response.json()
 
     if (!data.access_token) {
-      console.error("[v0] M-Pesa: No access_token in response")
+      console.error("[v0] M-Pesa: No access_token in response", {
+        responseKeys: Object.keys(data),
+        response: data,
+      })
       throw new Error("No access_token in M-Pesa response")
     }
 
-    console.log("[v0] M-Pesa: Access token obtained successfully")
+    console.log("[v0] M-Pesa: Access token obtained successfully", {
+      tokenLength: data.access_token.length,
+    })
     return data.access_token
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error)
@@ -390,6 +434,16 @@ export async function initiateMpesaStkPush(
     // Get access token
     const accessToken = await getMpesaAccessToken()
 
+    if (!accessToken || accessToken.length === 0) {
+      console.error("[v0] M-Pesa: Access token is empty or invalid")
+      return {
+        success: false,
+        error: "Failed to obtain M-Pesa access token. Please check your credentials.",
+      }
+    }
+
+    console.log("[v0] M-Pesa: Access token received, length:", accessToken.length)
+
     // Prepare request
     const requestBody = {
       BusinessShortCode: config.shortcode,
@@ -405,13 +459,14 @@ export async function initiateMpesaStkPush(
       TransactionDesc: transactionDesc,
     }
 
-    console.log("[v0] M-Pesa STK Push Request Body:", {
-      BusinessShortCode: requestBody.BusinessShortCode,
-      Amount: requestBody.Amount,
-      PartyA: requestBody.PartyA,
-      Timestamp: requestBody.Timestamp,
-      TransactionType: requestBody.TransactionType,
-      CallBackURL: requestBody.CallBackURL,
+    console.log("[v0] M-Pesa STK Push Request:", {
+      endpoint: `${getMpesaBaseUrl()}/mpesa/stkpush/v1/processrequest`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken.substring(0, 10)}...`,
+        "Content-Type": "application/json",
+      },
+      body: requestBody,
     })
 
     // Send STK Push
@@ -431,10 +486,7 @@ export async function initiateMpesaStkPush(
     console.log("[v0] M-Pesa STK Push Response Status:", response.status)
 
     const data = await response.json()
-    console.log("[v0] M-Pesa STK Push Response Data:", {
-      ResponseCode: data.ResponseCode,
-      ResponseDescription: data.ResponseDescription,
-    })
+    console.log("[v0] M-Pesa STK Push Response:", data)
 
     // Check for success
     if (data.ResponseCode === "0") {
