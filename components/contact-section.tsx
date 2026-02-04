@@ -111,14 +111,11 @@ export function ContactSection() {
     setSubmitStatus("idle")
 
     try {
-      // Submit to Netlify Forms
-      const formElement = e.currentTarget
-      const formData = new FormData(formElement)
-      
-      const response = await fetch("/", {
+      // Submit to our form API handler
+      const response = await fetch("/api/forms/investment-enquiry", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       })
 
       if (response.ok) {
@@ -179,13 +176,7 @@ export function ContactSection() {
               onSubmit={handleSubmit} 
               className="space-y-6" 
               noValidate
-              name="investment-enquiry"
-              method="POST"
-              netlify-honeypot="bot-field"
-              data-netlify="true"
             >
-              <input type="hidden" name="form-name" value="investment-enquiry" />
-              <input type="hidden" name="bot-field" style={{ display: "none" }} />
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">
