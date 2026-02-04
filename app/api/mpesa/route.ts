@@ -147,7 +147,10 @@ export async function POST(request: NextRequest) {
         merchantRequestID: result.merchantRequestID,
       })
     } else {
-      console.error("[v0] M-Pesa API Route: STK Push failed:", result.error)
+      console.error("[v0] M-Pesa API Route: STK Push failed:", {
+        error: result.error,
+        responseCode: result.responseCode,
+      })
 
       return NextResponse.json(
         {
@@ -161,7 +164,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const errorMsg =
       error instanceof Error ? error.message : "Unknown error"
-    console.error("[v0] M-Pesa API Route: Unexpected error:", errorMsg, error)
+    console.error("[v0] M-Pesa API Route: Caught exception:", {
+      message: errorMsg,
+      errorType: error instanceof Error ? error.constructor.name : typeof error,
+      stack: error instanceof Error ? error.stack : undefined,
+    })
 
     return NextResponse.json(
       {
