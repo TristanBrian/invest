@@ -149,30 +149,29 @@ export function PaymentMethodsSection() {
 
       const data = await response.json()
 
-      if (data.development) {
-        // Development mode - show helpful message
-        setErrorMessage(
-          "Development Mode: M-Pesa credentials not configured. When deployed to production with credentials, real payments will work. " +
-          `See NETLIFY_ENV_SETUP.md for setup instructions.`
-        )
-        setPaymentStatus("error")
-        return
-      }
-
       if (data.success) {
+        // Payment initiated successfully - waiting for user to enter PIN
         setTransactionId(data.checkoutRequestID || data.merchantRequestID || "PENDING")
         setPaymentStatus("waiting")
       } else {
-        // Handle various error scenarios
-        if (response.status === 503 || data.setupGuide) {
-          setErrorMessage(
-            "M-Pesa service unavailable. Please contact support or see deployment guide for setup instructions."
-          )
+        // Handle errors based on status code and response
+        let errorMsg = data.error || "Payment initiation failed"
+
+        if (response.status === 503) {
+          // Credentials missing
+          errorMsg =
+            "M-Pesa is not configured. Missing credentials: " +
+            (data.missingCredentials?.join(", ") || "Unknown") +
+            ". Please contact support."
         } else if (response.status === 400) {
-          setErrorMessage(data.error || "Please check your phone number and amount")
-        } else {
-          setErrorMessage(data.error || "Payment failed. Please try again.")
+          // Validation or M-Pesa API error
+          errorMsg = data.error || "Invalid payment details. Please check and try again."
+        } else if (response.status === 500) {
+          // Server error
+          errorMsg = "Server error. Please try again later."
         }
+
+        setErrorMessage(errorMsg)
         setPaymentStatus("error")
       }
     } catch (error) {
