@@ -140,9 +140,30 @@ export async function getMpesaAccessToken(): Promise<string> {
     throw new Error("M-Pesa credentials (consumer key and secret) are required")
   }
 
+  // Validate credentials look correct (basic sanity checks)
+  if (config.consumerKey.length < 20) {
+    console.error("[v0] M-Pesa: Consumer key appears too short", {
+      length: config.consumerKey.length,
+      expected: "60+ characters",
+    })
+    throw new Error(
+      `Invalid consumer key format. Expected 60+ characters, got ${config.consumerKey.length}. Check Netlify environment variables.`
+    )
+  }
+
+  if (config.consumerSecret.length < 20) {
+    console.error("[v0] M-Pesa: Consumer secret appears too short", {
+      length: config.consumerSecret.length,
+      expected: "60+ characters",
+    })
+    throw new Error(
+      `Invalid consumer secret format. Expected 60+ characters, got ${config.consumerSecret.length}. Check Netlify environment variables.`
+    )
+  }
+
   // Create Basic auth header
   const credentials = `${config.consumerKey}:${config.consumerSecret}`
-  
+
   // Debug log the credentials format (safe - just showing structure)
   console.log("[v0] M-Pesa Credentials String Format:", {
     format: "KEY:SECRET",
@@ -182,7 +203,7 @@ export async function getMpesaAccessToken(): Promise<string> {
         status: response.status,
         statusText: response.statusText,
         bodyLength: errorText.length,
-        bodyContent: errorText.substring(0, 200),
+        bodyContent: errorText.substring(0, 500),
       })
       throw new Error(
         `Access token request failed with status ${response.status}: ${response.statusText}. Response: ${errorText}`
