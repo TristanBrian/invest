@@ -136,6 +136,11 @@ export function PaymentMethodsSection() {
     setErrorMessage("")
 
     try {
+      console.log("[v0] Sending M-Pesa payment request:", {
+        phoneNumber: phone,
+        amount: parseFloat(amount),
+      })
+
       const response = await fetch("/api/mpesa", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,15 +152,26 @@ export function PaymentMethodsSection() {
         }),
       })
 
+      console.log("[v0] M-Pesa response status:", response.status)
+
       const data = await response.json()
+
+      console.log("[v0] M-Pesa response data:", {
+        success: data.success,
+        error: data.error,
+        responseCode: data.responseCode,
+      })
 
       if (data.success) {
         // Payment initiated successfully - waiting for user to enter PIN
+        console.log("[v0] M-Pesa payment successful, awaiting user PIN")
         setTransactionId(data.checkoutRequestID || data.merchantRequestID || "PENDING")
         setPaymentStatus("waiting")
       } else {
         // Handle errors based on status code and response
         let errorMsg = data.error || "Payment initiation failed"
+
+        console.error("[v0] M-Pesa payment failed with status:", response.status)
 
         if (response.status === 503) {
           // Credentials missing
