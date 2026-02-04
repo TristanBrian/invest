@@ -29,11 +29,15 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("[v0] M-Pesa API Route: Received POST request")
+
     // Parse request body
     let body
     try {
       body = await request.json()
-    } catch {
+      console.log("[v0] M-Pesa API Route: Request parsed successfully")
+    } catch (error) {
+      console.error("[v0] M-Pesa API Route: Failed to parse JSON", error)
       return NextResponse.json(
         { success: false, error: "Invalid JSON in request body" },
         { status: 400 }
@@ -42,8 +46,16 @@ export async function POST(request: NextRequest) {
 
     const { phoneNumber, amount, accountReference, transactionDesc } = body
 
+    console.log("[v0] M-Pesa API Route: Request parameters:", {
+      phoneNumber,
+      amount,
+      accountReference: accountReference || "OXIC",
+      transactionDesc: transactionDesc || "Payment",
+    })
+
     // Validate request fields
     if (!phoneNumber) {
+      console.warn("[v0] M-Pesa API Route: Phone number is missing")
       return NextResponse.json(
         { success: false, error: "Phone number is required" },
         { status: 400 }
@@ -51,6 +63,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (amount === undefined || amount === null) {
+      console.warn("[v0] M-Pesa API Route: Amount is missing")
       return NextResponse.json(
         { success: false, error: "Amount is required" },
         { status: 400 }
@@ -58,9 +71,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate M-Pesa configuration
+    console.log("[v0] M-Pesa API Route: Validating M-Pesa configuration...")
     const configCheck = validateMpesaConfig()
     if (!configCheck.isValid) {
-      console.error("[v0] M-Pesa Configuration Missing:", configCheck.missing)
+      console.error(
+        "[v0] M-Pesa API Route: Configuration validation failed:",
+        configCheck.missing
+      )
       return NextResponse.json(
         {
           success: false,
@@ -72,15 +89,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log("[v0] M-Pesa API Route: Configuration validated successfully")
+
     // Get config to determine callback URL
     const config = getMpesaConfig()
     const callbackUrl =
       config.callbackUrl || `${request.nextUrl.origin}/api/mpesa/callback`
 
-    console.log("[v0] M-Pesa STK Push Request:", {
+    console.log("[v0] M-Pesa API Route: Initiating STK Push with:", {
       phone: phoneNumber,
       amount,
       env: config.env,
+      callbackUrl,
     })
 
     // Initiate STK Push
@@ -93,7 +113,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (result.success) {
-      console.log("[v0] M-Pesa STK Push Success:", {
+      console.log("[v0] M-Pesa API Route: STK Push successful", {
         checkoutRequestID: result.checkoutRequestID,
       })
 
@@ -105,7 +125,7 @@ export async function POST(request: NextRequest) {
         merchantRequestID: result.merchantRequestID,
       })
     } else {
-      console.error("[v0] M-Pesa STK Push Failed:", result.error)
+      console.error("[v0] M-Pesa API Route: STK Push failed:", result.error)
 
       return NextResponse.json(
         {
@@ -119,7 +139,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const errorMsg =
       error instanceof Error ? error.message : "Unknown error"
-    console.error("[v0] M-Pesa API Error:", errorMsg, error)
+    console.error("[v0] M-Pesa API Route: Unexpected error:", errorMsg, error)
 
     return NextResponse.json(
       {

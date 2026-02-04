@@ -26,12 +26,22 @@ export interface MpesaResponse {
  * Called at request time to ensure Netlify env vars are available
  */
 export function getMpesaConfig(): MpesaConfig {
-  const consumerKey = process.env.MPESA_CONSUMER_KEY || ""
-  const consumerSecret = process.env.MPESA_CONSUMER_SECRET || ""
-  const passkey = process.env.MPESA_PASSKEY || ""
-  const shortcode = process.env.MPESA_SHORTCODE || ""
+  const consumerKey = process.env.MPESA_CONSUMER_KEY?.trim() || ""
+  const consumerSecret = process.env.MPESA_CONSUMER_SECRET?.trim() || ""
+  const passkey = process.env.MPESA_PASSKEY?.trim() || ""
+  const shortcode = process.env.MPESA_SHORTCODE?.trim() || ""
   const env = (process.env.MPESA_ENV || "production") as "sandbox" | "production"
-  const callbackUrl = process.env.MPESA_CALLBACK_URL || ""
+  const callbackUrl = process.env.MPESA_CALLBACK_URL?.trim() || ""
+
+  // Log config status (without exposing secrets)
+  console.log("[v0] M-Pesa Config Status:", {
+    consumerKeyLength: consumerKey.length,
+    consumerSecretLength: consumerSecret.length,
+    passkeyLength: passkey.length,
+    shortcodeLength: shortcode.length,
+    env,
+    callbackUrlPresent: !!callbackUrl,
+  })
 
   return {
     consumerKey,
@@ -57,14 +67,24 @@ export function validateMpesaConfig(): {
   const missing: string[] = []
 
   // Required credentials for authentication and STK push
-  if (!config.consumerKey) missing.push("MPESA_CONSUMER_KEY")
-  if (!config.consumerSecret) missing.push("MPESA_CONSUMER_SECRET")
-  if (!config.shortcode) missing.push("MPESA_SHORTCODE")
+  if (!config.consumerKey || config.consumerKey.length === 0) {
+    missing.push("MPESA_CONSUMER_KEY")
+  }
+  if (!config.consumerSecret || config.consumerSecret.length === 0) {
+    missing.push("MPESA_CONSUMER_SECRET")
+  }
+  if (!config.shortcode || config.shortcode.length === 0) {
+    missing.push("MPESA_SHORTCODE")
+  }
 
   // PASSKEY is optional - some test accounts may not require it
   // Production accounts should have it configured
 
   if (missing.length > 0) {
+    console.error(
+      "[v0] M-Pesa Configuration Validation Failed:",
+      missing
+    )
     return {
       isValid: false,
       missing,
@@ -72,6 +92,7 @@ export function validateMpesaConfig(): {
     }
   }
 
+  console.log("[v0] M-Pesa Configuration Validation: PASSED")
   return { isValid: true, missing: [] }
 }
 
@@ -80,9 +101,11 @@ export function validateMpesaConfig(): {
  */
 export function getMpesaBaseUrl(): string {
   const config = getMpesaConfig()
-  return config.env === "production"
+  const baseUrl = config.env === "production"
     ? "https://api.safaricom.co.ke"
     : "https://sandbox.safaricom.co.ke"
+  console.log("[v0] M-Pesa Base URL:", baseUrl)
+  return baseUrl
 }
 
 /**
@@ -91,33 +114,56 @@ export function getMpesaBaseUrl(): string {
  */
 export async function getMpesaAccessToken(): Promise<string> {
   const config = getMpesaConfig()
-  const auth = Buffer.from(
-    `${config.consumerKey}:${config.consumerSecret}`
-  ).toString("base64")
 
-  const response = await fetch(
-    `${getMpesaBaseUrl()}/oauth/v1/generate?grant_type=client_credentials`,
-    {
+  // Create Basic auth header
+  const credentials = `${config.consumerKey}:${config.consumerSecret}`
+  const base64Credentials = Buffer.from(credentials).toString("base64")
+
+  console.log("[v0] M-Pesa Access Token Request:", {
+    env: config.env,
+    consumerKeyLength: config.consumerKey.length,
+    base64Length: base64Credentials.length,
+  })
+
+  const url = `${getMpesaBaseUrl()}/oauth/v1/generate?grant_type=client_credentials`
+
+  try {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
-        Authorization: `Basic ${auth}`,
+        Authorization: `Basic ${base64Credentials}`,
+        "Content-Type": "application/json",
       },
+    })
+
+    console.log("[v0] M-Pesa Access Token Response Status:", response.status)
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error("[v0] M-Pesa Access Token Error Response:", {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      })
+      throw new Error(
+        `Access token request failed with status ${response.status}: ${response.statusText}`
+      )
     }
-  )
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(
-      `Failed to get access token: ${response.statusText} - ${JSON.stringify(errorData)}`
-    )
+    const data = await response.json()
+
+    if (!data.access_token) {
+      console.error("[v0] M-Pesa: No access_token in response")
+      throw new Error("No access_token in M-Pesa response")
+    }
+
+    console.log("[v0] M-Pesa: Access token obtained successfully")
+    return data.access_token
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error("[v0] M-Pesa Access Token Error:", errorMsg)
+    throw error
   }
-
-  const data = await response.json()
-  if (!data.access_token) {
-    throw new Error("No access token in response")
-  }
-
-  return data.access_token
 }
 
 /**
@@ -132,7 +178,9 @@ export function generateMpesaTimestamp(): string {
   const minutes = String(date.getMinutes()).padStart(2, "0")
   const seconds = String(date.getSeconds()).padStart(2, "0")
 
-  return `${year}${month}${day}${hours}${minutes}${seconds}`
+  const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}`
+  console.log("[v0] M-Pesa Timestamp Generated:", timestamp)
+  return timestamp
 }
 
 /**
@@ -142,22 +190,25 @@ export function generateMpesaTimestamp(): string {
  */
 export function generateMpesaPassword(timestamp: string): string {
   const config = getMpesaConfig()
-  
+
   // If passkey is configured, use it (production)
-  if (config.passkey) {
+  if (config.passkey && config.passkey.length > 0) {
     const str = `${config.shortcode}${config.passkey}${timestamp}`
-    return Buffer.from(str).toString("base64")
+    const password = Buffer.from(str).toString("base64")
+    console.log("[v0] M-Pesa Password: Generated with passkey")
+    return password
   }
-  
+
   // If passkey is not configured, warn and use shortcode + timestamp only
   // This is for testing with sandbox/demo accounts
   console.warn(
-    "[v0] M-Pesa: MPESA_PASSKEY not configured. Using shortcode + timestamp only. " +
-    "For production, configure MPESA_PASSKEY."
+    "[v0] M-Pesa: MPESA_PASSKEY not configured. Using shortcode + timestamp only for password generation."
   )
-  
+
   const str = `${config.shortcode}${timestamp}`
-  return Buffer.from(str).toString("base64")
+  const password = Buffer.from(str).toString("base64")
+  console.log("[v0] M-Pesa Password: Generated without passkey (test mode)")
+  return password
 }
 
 /**
@@ -190,12 +241,14 @@ export function formatKenyanPhoneNumber(phone: string): {
 
   // Validate format: 254 followed by 1 or 7, then 8 more digits = 12 total
   if (!/^254[17]\d{8}$/.test(cleaned)) {
+    console.warn("[v0] Invalid phone format:", phone)
     return {
       isValid: false,
       error: "Invalid phone number. Use format 07XXXXXXXX or 01XXXXXXXX",
     }
   }
 
+  console.log("[v0] Phone number formatted:", cleaned)
   return {
     isValid: true,
     formatted: cleaned,
@@ -223,6 +276,7 @@ export function validateMpesaAmount(amount: number): {
     return { isValid: false, error: "Amount cannot exceed KES 150,000" }
   }
 
+  console.log("[v0] Amount validated:", numAmount)
   return { isValid: true }
 }
 
@@ -236,6 +290,8 @@ export async function initiateMpesaStkPush(
   transactionDesc: string = "Payment",
   callbackUrl?: string
 ): Promise<MpesaResponse> {
+  console.log("[v0] M-Pesa STK Push: Initiating payment process...")
+
   // Validate inputs
   const amountValidation = validateMpesaAmount(amount)
   if (!amountValidation.isValid) {
@@ -259,6 +315,7 @@ export async function initiateMpesaStkPush(
     const password = generateMpesaPassword(timestamp)
     const finalCallbackUrl = callbackUrl || config.callbackUrl
 
+    console.log("[v0] M-Pesa STK Push: Getting access token...")
     // Get access token
     const accessToken = await getMpesaAccessToken()
 
@@ -277,7 +334,16 @@ export async function initiateMpesaStkPush(
       TransactionDesc: transactionDesc,
     }
 
+    console.log("[v0] M-Pesa STK Push Request Body:", {
+      BusinessShortCode: requestBody.BusinessShortCode,
+      Amount: requestBody.Amount,
+      PartyA: requestBody.PartyA,
+      Timestamp: requestBody.Timestamp,
+      TransactionType: requestBody.TransactionType,
+    })
+
     // Send STK Push
+    console.log("[v0] M-Pesa: Sending STK Push request...")
     const response = await fetch(
       `${getMpesaBaseUrl()}/mpesa/stkpush/v1/processrequest`,
       {
@@ -290,10 +356,17 @@ export async function initiateMpesaStkPush(
       }
     )
 
+    console.log("[v0] M-Pesa STK Push Response Status:", response.status)
+
     const data = await response.json()
+    console.log("[v0] M-Pesa STK Push Response Data:", {
+      ResponseCode: data.ResponseCode,
+      ResponseDescription: data.ResponseDescription,
+    })
 
     // Check for success
     if (data.ResponseCode === "0") {
+      console.log("[v0] M-Pesa: STK Push successful")
       return {
         success: true,
         message: "STK Push sent successfully",
@@ -302,11 +375,12 @@ export async function initiateMpesaStkPush(
       }
     }
 
-    // Handle M-Pesa errors
+    // Handle errors
     const errorMsg =
       data.errorMessage ||
       data.ResponseDescription ||
-      "STK Push failed without specific error"
+      "M-Pesa request failed"
+    console.error("[v0] M-Pesa STK Push Error:", errorMsg)
 
     return {
       success: false,
@@ -314,13 +388,11 @@ export async function initiateMpesaStkPush(
       responseCode: data.ResponseCode,
     }
   } catch (error) {
-    const errorMsg =
-      error instanceof Error ? error.message : "Unknown error occurred"
-    console.error("[v0] M-Pesa STK Push Error:", errorMsg)
-
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error("[v0] M-Pesa STK Push Exception:", errorMsg)
     return {
       success: false,
-      error: errorMsg,
+      error: `Payment processing failed: ${errorMsg}`,
     }
   }
 }
