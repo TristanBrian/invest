@@ -480,6 +480,20 @@ export async function initiateMpesaStkPush(
       TransactionDesc: transactionDesc,
     }
 
+    console.log("[v0] M-Pesa STK Push Request Details:", {
+      BusinessShortCode: requestBody.BusinessShortCode,
+      Password: requestBody.Password.substring(0, 20) + "...",
+      Timestamp: requestBody.Timestamp,
+      TransactionType: requestBody.TransactionType,
+      Amount: requestBody.Amount,
+      PartyA: requestBody.PartyA,
+      PartyB: requestBody.PartyB,
+      PhoneNumber: requestBody.PhoneNumber,
+      CallBackURL: requestBody.CallBackURL,
+      AccountReference: requestBody.AccountReference,
+      TransactionDesc: requestBody.TransactionDesc,
+    })
+
     console.log("[v0] M-Pesa STK Push Request:", {
       endpoint: `${getMpesaBaseUrl()}/mpesa/stkpush/v1/processrequest`,
       method: "POST",
@@ -507,9 +521,9 @@ export async function initiateMpesaStkPush(
     console.log("[v0] M-Pesa STK Push Response Status:", response.status)
 
     const data = await response.json()
-    console.log("[v0] M-Pesa STK Push Response:", data)
+    console.log("[v0] M-Pesa STK Push Response:", JSON.stringify(data, null, 2))
 
-    // Check for success
+    // Check for success - M-Pesa returns ResponseCode 0 for success
     if (data.ResponseCode === "0") {
       console.log("[v0] M-Pesa: STK Push successful")
       return {
@@ -520,12 +534,23 @@ export async function initiateMpesaStkPush(
       }
     }
 
-    // Handle errors
-    const errorMsg =
-      data.errorMessage ||
-      data.ResponseDescription ||
-      "M-Pesa request failed"
-    console.error("[v0] M-Pesa STK Push Error:", errorMsg)
+    // Handle errors - M-Pesa can return errors in different formats
+    let errorMsg = "M-Pesa request failed"
+    
+    // Check for standard error response
+    if (data.errorMessage) {
+      errorMsg = data.errorMessage
+    } else if (data.ResponseDescription) {
+      errorMsg = data.ResponseDescription
+    } else if (data.error) {
+      errorMsg = data.error
+    }
+
+    console.error("[v0] M-Pesa STK Push Error:", {
+      errorMessage: errorMsg,
+      responseCode: data.ResponseCode,
+      fullResponse: data,
+    })
 
     return {
       success: false,
