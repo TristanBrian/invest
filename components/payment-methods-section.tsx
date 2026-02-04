@@ -122,6 +122,11 @@ export function PaymentMethodsSection() {
       return
     }
 
+    if (!validatePhone(phone)) {
+      setErrorMessage("Invalid Kenyan phone number. Use format: 07XXXXXXXX or 01XXXXXXXX")
+      return
+    }
+
     if (!amount || parseFloat(amount) < 1 || parseFloat(amount) > 150000) {
       setErrorMessage("Amount must be between KES 1 and 150,000")
       return
@@ -144,17 +149,12 @@ export function PaymentMethodsSection() {
 
       const data = await response.json()
 
-      if (!response.ok) {
-        // Provide detailed error messages
-        if (response.status === 503) {
-          setErrorMessage(
-            "M-Pesa is not configured. Please contact support to complete setup with API credentials."
-          )
-        } else if (response.status === 400) {
-          setErrorMessage(data.error || "Please check your phone number and amount")
-        } else {
-          setErrorMessage(data.error || "Payment failed. Please try again.")
-        }
+      if (data.development) {
+        // Development mode - show helpful message
+        setErrorMessage(
+          "Development Mode: M-Pesa credentials not configured. When deployed to production with credentials, real payments will work. " +
+          `See NETLIFY_ENV_SETUP.md for setup instructions.`
+        )
         setPaymentStatus("error")
         return
       }
@@ -163,7 +163,16 @@ export function PaymentMethodsSection() {
         setTransactionId(data.checkoutRequestID || data.merchantRequestID || "PENDING")
         setPaymentStatus("waiting")
       } else {
-        setErrorMessage(data.error || "Failed to initiate payment")
+        // Handle various error scenarios
+        if (response.status === 503 || data.setupGuide) {
+          setErrorMessage(
+            "M-Pesa service unavailable. Please contact support or see deployment guide for setup instructions."
+          )
+        } else if (response.status === 400) {
+          setErrorMessage(data.error || "Please check your phone number and amount")
+        } else {
+          setErrorMessage(data.error || "Payment failed. Please try again.")
+        }
         setPaymentStatus("error")
       }
     } catch (error) {
@@ -709,7 +718,7 @@ export function PaymentMethodsSection() {
                 <div className="text-center space-y-2">
                   <div className="text-sm text-muted-foreground font-medium">QR Code</div>
                   <svg className="w-32 h-32 mx-auto text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm13-2v8h8V3h-8zm2 2h4v4h-4v-2zm2 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
+                    <path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm13-2v8h8V3h-8zm2 2h4v4h-4v-2zm2 0h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
                   </svg>
                 </div>
               </div>

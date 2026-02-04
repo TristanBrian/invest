@@ -77,17 +77,6 @@ function generatePassword(timestamp: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Validate configuration first
-    const configCheck = validateConfig()
-    if (!configCheck.valid) {
-      console.error("[v0] M-Pesa Configuration Error:", configCheck.error)
-      console.error("[v0] Missing credentials:", configCheck.missing)
-      return NextResponse.json(
-        { success: false, error: configCheck.error, missing: configCheck.missing },
-        { status: 503 }
-      )
-    }
-
     const { phoneNumber, amount, accountReference, transactionDesc } = await request.json()
 
     // Validate required fields
@@ -121,58 +110,104 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get access token
-    const accessToken = await getAccessToken()
-    const timestamp = generateTimestamp()
-    const password = generatePassword(timestamp)
-
-    // Get callback URL from environment or construct from request
-    const callbackUrl = process.env.MPESA_CALLBACK_URL || `${request.nextUrl.origin}/api/mpesa/callback`
-
-    // STK Push request
-    const stkPushResponse = await fetch(`${getBaseUrl()}/mpesa/stkpush/v1/processrequest`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        BusinessShortCode: MPESA_SHORTCODE,
-        Password: password,
-        Timestamp: timestamp,
-        TransactionType: "CustomerPayBillOnline",
-        Amount: Math.round(amount),
-        PartyA: formattedPhone,
-        PartyB: MPESA_SHORTCODE,
-        PhoneNumber: formattedPhone,
-        CallBackURL: callbackUrl,
-        AccountReference: accountReference || "TheOxicGroup",
-        TransactionDesc: transactionDesc || "Investment Payment",
-      }),
-    })
-
-    const stkPushData = await stkPushResponse.json()
-
-    if (stkPushData.ResponseCode === "0") {
-      return NextResponse.json({
-        success: true,
-        message: "STK push sent successfully. Please check your phone to complete the payment.",
-        checkoutRequestID: stkPushData.CheckoutRequestID,
-        merchantRequestID: stkPushData.MerchantRequestID,
-      })
-    } else {
+    // Check configuration - this is crucial for production
+    const configCheck = validateConfig()
+    if (!configCheck.valid) {
+      // In development, provide helpful message
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[v0] M-Pesa Development Mode: Credentials not configured")
+        console.warn("[v0] Missing credentials:", configCheck.missing)
+        
+        // Return mock response for development/testing
+        return NextResponse.json({
+          success: true,
+          message: "DEV MODE: M-Pesa payment simulation. In production, add credentials to Netlify environment variables.",
+          checkoutRequestID: `DEV_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          merchantRequestID: `DEV_MERCHANT_${Date.now()}`,
+          development: true,
+          missingCredentials: configCheck.missing,
+          setupGuide: "See NETLIFY_ENV_SETUP.md for deployment instructions",
+        })
+      }
+      
+      // In production, return proper error
+      console.error("[v0] M-Pesa Configuration Error: Production deployment missing credentials")
+      console.error("[v0] Missing credentials:", configCheck.missing)
       return NextResponse.json(
-        {
-          success: false,
-          error: stkPushData.errorMessage || stkPushData.ResponseDescription || "Failed to initiate payment",
+        { 
+          success: false, 
+          error: "M-Pesa is not configured. Contact administrator to set up credentials.",
+          setupGuide: "Credentials must be added to Netlify environment variables for production"
         },
-        { status: 400 }
+        { status: 503 }
+      )
+    }
+
+    // Production mode - make actual M-Pesa API call
+    try {
+      // Get access token
+      const accessToken = await getAccessToken()
+      const timestamp = generateTimestamp()
+      const password = generatePassword(timestamp)
+
+      // Get callback URL from environment or construct from request
+      const callbackUrl = process.env.MPESA_CALLBACK_URL || `${request.nextUrl.origin}/api/mpesa/callback`
+
+      // STK Push request
+      const stkPushResponse = await fetch(`${getBaseUrl()}/mpesa/stkpush/v1/processrequest`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          BusinessShortCode: MPESA_SHORTCODE,
+          Password: password,
+          Timestamp: timestamp,
+          TransactionType: "CustomerPayBillOnline",
+          Amount: Math.round(amount),
+          PartyA: formattedPhone,
+          PartyB: MPESA_SHORTCODE,
+          PhoneNumber: formattedPhone,
+          CallBackURL: callbackUrl,
+          AccountReference: accountReference || "TheOxicGroup",
+          TransactionDesc: transactionDesc || "Investment Payment",
+        }),
+      })
+
+      const stkPushData = await stkPushResponse.json()
+
+      if (stkPushData.ResponseCode === "0") {
+        return NextResponse.json({
+          success: true,
+          message: "STK push sent successfully. Please check your phone to complete the payment.",
+          checkoutRequestID: stkPushData.CheckoutRequestID,
+          merchantRequestID: stkPushData.MerchantRequestID,
+        })
+      } else {
+        return NextResponse.json(
+          {
+            success: false,
+            error: stkPushData.errorMessage || stkPushData.ResponseDescription || "Failed to initiate payment",
+          },
+          { status: 400 }
+        )
+      }
+    } catch (apiError) {
+      console.error("[v0] M-Pesa API Error:", apiError)
+      return NextResponse.json(
+        { 
+          success: false,
+          error: "Failed to contact M-Pesa service. Please try again.",
+          details: apiError instanceof Error ? apiError.message : "Unknown error"
+        },
+        { status: 500 }
       )
     }
   } catch (error) {
-    console.error("M-Pesa STK Push Error:", error)
+    console.error("[v0] M-Pesa Request Error:", error)
     return NextResponse.json(
-      { error: "Failed to process payment request" },
+      { success: false, error: "Failed to process payment request" },
       { status: 500 }
     )
   }
