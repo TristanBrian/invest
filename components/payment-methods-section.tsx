@@ -769,7 +769,7 @@ export function PaymentMethodsSection() {
             <div className="bg-[#1e3a5f] text-white p-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <Image src="/images/logo1.png" alt="Oxic Logo" width={140} height={40} className="h-8 w-auto brightness-0 invert mb-1" />
+                  <Image src="/images/oxic-logo.png" alt="Oxic Logo" width={180} height={54} className="h-12 w-auto mb-2" />
                   <p className="text-xs text-white/70">Investment Advisory Services</p>
                 </div>
                 <div className="text-right">
