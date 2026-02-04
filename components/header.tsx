@@ -40,15 +40,15 @@ export function Header() {
 
   return (
     <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolledStyles ? "bg-background/98 shadow-lg border-b border-border" : "bg-background border-b border-border/50"} backdrop-blur-md`}>
-      <div className="container mx-auto flex h-18 lg:h-22 items-center justify-between px-4 lg:px-6">
+      <div className="container mx-auto flex h-24 lg:h-28 items-center justify-between px-4 lg:px-6">
         <a href="#" onClick={scrollToTop} className="flex items-center cursor-pointer group">
-          {!logoLoaded && <div className="h-14 sm:h-16 lg:h-20 w-32 sm:w-40 bg-muted/20 animate-pulse rounded" />}
+          {!logoLoaded && <div className="h-16 sm:h-20 lg:h-24 w-48 sm:w-56 bg-muted/20 animate-pulse rounded" />}
           <Image
             src="/images/logo1.png"
             alt="The Oxic International Group"
-            width={280}
-            height={80}
-            className={`h-14 sm:h-16 lg:h-20 w-auto object-contain transition-all duration-300 group-hover:opacity-80 ${scrolledStyles ? "scale-95" : "scale-100"} ${logoLoaded ? "opacity-100" : "opacity-0"}`}
+            width={400}
+            height={120}
+            className={`h-16 sm:h-20 lg:h-24 w-auto object-contain transition-all duration-300 group-hover:opacity-80 ${scrolledStyles ? "scale-95" : "scale-100"} ${logoLoaded ? "opacity-100" : "opacity-0"}`}
             priority
             quality={100}
             onLoad={() => setLogoLoaded(true)}

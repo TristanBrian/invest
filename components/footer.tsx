@@ -23,9 +23,9 @@ export function Footer() {
               <Image
                 src="/images/logo1.png"
                 alt="The Oxic International Group"
-                width={280}
-                height={80}
-                className="h-20 w-auto object-contain"
+                width={380}
+                height={110}
+                className="h-24 w-auto object-contain"
                 quality={100}
               />
             </div>
