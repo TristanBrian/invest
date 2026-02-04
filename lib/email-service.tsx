@@ -1,7 +1,7 @@
 /**
  * Email Service for Invoice & Payment Notifications
- * Uses SendGrid REST API for sending professional invoices and payment confirmations
- * No external dependencies - uses native fetch API
+ * Uses Resend Email API for professional invoices and payment confirmations
+ * Optimized for Next.js and Vercel deployments
  */
 
 export interface InvoiceData {
@@ -18,13 +18,15 @@ export interface InvoiceData {
 }
 
 class EmailService {
-  private sendgridApiKey: string | null = null
+  private resendApiKey: string | null = null
+  private fromEmail = "invoices@oxicinternational.co.ke"
+  private fromName = "Oxic International Group"
 
   constructor() {
-    this.sendgridApiKey = process.env.SENDGRID_API_KEY || null
-    
-    if (!this.sendgridApiKey) {
-      console.warn("[v0] Email Service: SENDGRID_API_KEY not configured. Email notifications disabled.")
+    this.resendApiKey = process.env.RESEND_API_KEY || null
+
+    if (!this.resendApiKey) {
+      console.warn("[v0] Email Service: RESEND_API_KEY not configured. Email notifications disabled.")
     }
   }
 
@@ -32,7 +34,7 @@ class EmailService {
    * Check if email service is configured
    */
   isConfigured(): boolean {
-    return this.sendgridApiKey !== null
+    return this.resendApiKey !== null
   }
 
   /**
@@ -94,8 +96,8 @@ class EmailService {
       border-bottom: 2px solid #f0f0f0;
       padding-bottom: 20px;
     }
-    .invoice-info h3 { margin: 0 0 10px 0; font-size: 14px; color: #666; text-transform: uppercase; }
-    .invoice-info p { margin: 5px 0; font-size: 14px; }
+    .invoice-info h3 { margin: 0 0 10px 0; font-size: 14px; color: #666; text-transform: uppercase; font-weight: 600; }
+    .invoice-info p { margin: 5px 0; font-size: 14px; font-weight: 500; }
     .details-table {
       width: 100%;
       border-collapse: collapse;
@@ -104,6 +106,7 @@ class EmailService {
     .details-table td {
       padding: 12px 0;
       border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
     }
     .details-table .label {
       color: #666;
@@ -135,6 +138,16 @@ class EmailService {
       font-weight: 700;
       color: #667eea;
     }
+    .verification-box {
+      background-color: #f0fdf4;
+      border: 1px solid #dcfce7;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: #166534;
+      line-height: 1.5;
+    }
     .footer {
       background-color: #f9fafb;
       padding: 20px 30px;
@@ -144,26 +157,6 @@ class EmailService {
       color: #666;
     }
     .footer p { margin: 5px 0; }
-    .verification-box {
-      background-color: #f0fdf4;
-      border: 1px solid #dcfce7;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 20px 0;
-      font-size: 13px;
-      color: #166534;
-    }
-    .button {
-      display: inline-block;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      margin-top: 20px;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
@@ -218,7 +211,7 @@ class EmailService {
       
       <div class="amount-total">
         <span class="label">Total Amount Paid:</span>
-        <span class="amount">KES ${invoice.amount.toLocaleString('en-KE')}</span>
+        <span class="amount">KES ${invoice.amount.toLocaleString("en-KE")}</span>
       </div>
       
       <div class="verification-box">
@@ -244,15 +237,15 @@ class EmailService {
   }
 
   /**
-   * Send invoice via SendGrid REST API
+   * Send invoice via Resend Email API
    */
   async sendInvoiceEmail(invoice: InvoiceData): Promise<{
     success: boolean
     messageId?: string
     error?: string
   }> {
-    if (!this.sendgridApiKey) {
-      console.warn("[v0] Email: SENDGRID_API_KEY not configured. Email not sent.")
+    if (!this.resendApiKey) {
+      console.warn("[v0] Email: RESEND_API_KEY not configured. Email not sent.")
       return {
         success: false,
         error: "Email service not configured",
@@ -263,61 +256,41 @@ class EmailService {
       const htmlContent = this.generateInvoiceHTML(invoice)
       const invoiceNumber = `INV-${invoice.transactionId.substring(0, 12)}`
 
-      const payload = {
-        personalizations: [
-          {
-            to: [
-              {
-                email: invoice.customerEmail,
-                name: invoice.customerName,
-              },
-            ],
-            subject: `Invoice ${invoiceNumber} - Oxic International`,
-          },
-        ],
-        from: {
-          email: "invoices@oxicinternational.co.ke",
-          name: "Oxic International Group",
-        },
-        content: [
-          {
-            type: "text/html",
-            value: htmlContent,
-          },
-        ],
-        reply_to: {
-          email: "support@oxicinternational.co.ke",
-          name: "Support Team",
-        },
-      }
-
       console.log("[v0] Email: Sending invoice to", invoice.customerEmail)
 
-      const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
+      const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${this.sendgridApiKey}`,
+          Authorization: `Bearer ${this.resendApiKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          from: `${this.fromName} <${this.fromEmail}>`,
+          to: invoice.customerEmail,
+          subject: `Invoice ${invoiceNumber} - Oxic International`,
+          html: htmlContent,
+          reply_to: "support@oxicinternational.co.ke",
+        }),
       })
 
       if (!response.ok) {
         const error = await response.text()
-        console.error("[v0] Email: SendGrid API error", {
+        console.error("[v0] Email: Resend API error", {
           status: response.status,
           error: error,
         })
         return {
           success: false,
-          error: `SendGrid error: ${response.status}`,
+          error: `Resend error: ${response.status}`,
         }
       }
 
+      const data = (await response.json()) as { id?: string }
       console.log("[v0] Email: Invoice sent successfully to", invoice.customerEmail)
+
       return {
         success: true,
-        messageId: `sendgrid-${Date.now()}`,
+        messageId: data.id || `resend-${Date.now()}`,
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error)
@@ -341,44 +314,33 @@ class EmailService {
     success: boolean
     error?: string
   }> {
-    if (!this.sendgridApiKey) {
-      console.warn("[v0] Email: SENDGRID_API_KEY not configured.")
+    if (!this.resendApiKey) {
+      console.warn("[v0] Email: RESEND_API_KEY not configured.")
       return { success: false, error: "Email service not configured" }
     }
 
     try {
-      const payload = {
-        personalizations: [
-          {
-            to: [{ email, name }],
-            subject: `Payment Received - Transaction ${transactionId}`,
-          },
-        ],
-        from: {
-          email: "noreply@oxicinternational.co.ke",
-          name: "Oxic International",
-        },
-        content: [
-          {
-            type: "text/html",
-            value: `
+      const htmlContent = `
 <p>Dear ${name},</p>
-<p>Your payment of <strong>KES ${amount.toLocaleString("en-KE")}</strong> has been received.</p>
+<p>Your payment of <strong>KES ${amount.toLocaleString("en-KE")}</strong> has been received and confirmed.</p>
 <p><strong>Transaction ID:</strong> ${transactionId}</p>
-<p>Thank you for choosing Oxic International Group.</p>
-<p>Best regards,<br>Oxic International Group</p>
-            `,
-          },
-        ],
-      }
+<p>A detailed invoice has been sent to your email. Thank you for choosing Oxic International Group.</p>
+<p>Best regards,<br>Oxic International Group Support Team</p>
+      `
 
-      const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
+      const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${this.sendgridApiKey}`,
+          Authorization: `Bearer ${this.resendApiKey}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          from: `${this.fromName} <noreply@oxicinternational.co.ke>`,
+          to: email,
+          subject: `Payment Received - Transaction ${transactionId}`,
+          html: htmlContent,
+          reply_to: "support@oxicinternational.co.ke",
+        }),
       })
 
       if (!response.ok) {
@@ -386,6 +348,7 @@ class EmailService {
         return { success: false, error: "Failed to send email" }
       }
 
+      console.log("[v0] Email: Payment notification sent to", email)
       return { success: true }
     } catch (error) {
       console.error("[v0] Email: Payment notification error", error)
@@ -395,206 +358,4 @@ class EmailService {
 }
 
 const emailService = new EmailService()
-export default emailService\
-    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }\
-    .header h1 { margin: 0; font-size: 28px; }\
-    .header p { margin: 5px 0 0 0; opacity: 0.9; }\
-    .body { background: #f9f9f9; padding: 20px; border: 1px solid #e0e0e0; }\
-    .invoice-details { background: white; padding: 15px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #667eea; }\
-    .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }\
-    .detail-row:last-child { border-bottom: none; }\
-    .detail-label { font-weight: bold; color: #555; }\
-    .detail-value { color: #333; }\
-    .amount { font-size: 24px; font-weight: bold; color: #667eea; }\
-    .status { background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; text-align: center; margin: 15px 0; font-weight: bold; }\
-    .footer { background: #f9f9f9; padding: 20px; text-align: center; font-size: 12px; color: #999; border-top: 1px solid #e0e0e0; }\
-    .footer a { color: #667eea; text-decoration: none; }
-  </style>
-</head>
-<body>\
-  <div class=\"container">\
-    <div class="header">
-      <h1>Payment Receipt</h1>\
-      <p>Oxic International Group</p>\
-    </div>\
-\
-    <div class="body">
-      <div class="status">
-        Payment Confirmed Successfully
-      </div>
-\
-      <div class="invoice-details">
-        <div class="detail-row">
-          <span class="detail-label">Invoice Number:</span>
-          <span class="detail-value">${invoiceNumber}</span>
-        </div>\
-        <div class="detail-row">
-          <span class="detail-label">Date:</span>\
-          <span class=\"detail-value\">${formattedDate}</span>\
-        </div>\
-        <div class=\"detail-row\">\
-          <span class="detail-label">Transaction ID:</span>
-          <span class="detail-value">${invoice.transactionId}</span>
-        </div>
-      </div>
-
-      <div class="invoice-details">
-        <div class="detail-row">
-          <span class="detail-label">Customer Name:</span>
-          <span class="detail-value">${invoice.customerName}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Phone:</span>
-          <span class="detail-value">${invoice.customerPhone}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Email:</span>
-          <span class="detail-value">${invoice.customerEmail}</span>
-        </div>
-      </div>
-
-      <div class="invoice-details">
-        <div class="detail-row">
-          <span class="detail-label">Description:</span>
-          <span class="detail-value">${invoice.description}</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Payment Method:</span>
-          <span class="detail-value">${invoice.paymentMethod}</span>
-        </div>
-        ${
-          invoice.mpesaReceiptNumber
-            ? `
-        <div class="detail-row">
-          <span class="detail-label">M-Pesa Receipt:</span>
-          <span class="detail-value">${invoice.mpesaReceiptNumber}</span>
-        </div>
-        `
-            : ""
-        }
-        <div class="detail-row" style="border-top: 2px solid #667eea; margin-top: 10px; padding-top: 10px;">
-          <span class="detail-label">Amount Paid:</span>
-          <span class="amount">KES ${invoice.amount.toLocaleString("en-KE")}</span>
-        </div>
-      </div>
-
-      <p style="margin-top: 20px; font-style: italic; color: #666;">
-        Thank you for your payment. This is an automated receipt. Please keep this for your records.
-      </p>
-    </div>
-
-    <div class="footer">
-      <p>Oxic International Group Limited</p>
-      <p>Email: <a href="mailto:support@oxicinternational.co.ke">support@oxicinternational.co.ke</a></p>
-      <p style="margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px;">
-        © 2026 Oxic International Group. All rights reserved.
-      </p>
-    </div>
-  </div>
-</body>
-</html>
-    `
-  }
-
-  /**
-   * Send invoice via email
-   */
-  async sendInvoice(invoice: InvoiceData): Promise<boolean> {
-    if (!this.transporter) {
-      console.warn("[v0] Email service not configured. Skipping invoice sending.")
-      return false
-    }
-
-    const fromEmail = process.env.INVOICE_EMAIL_FROM || "invoices@oxicinternational.co.ke"
-    const htmlContent = this.generateInvoiceHTML(invoice)
-
-    try {
-      console.log("[v0] Sending invoice email to:", invoice.customerEmail)
-
-      const result = await this.transporter.sendMail({
-        from: fromEmail,
-        to: invoice.customerEmail,
-        subject: `Payment Receipt - Invoice ${invoice.transactionId.substring(0, 12)}`,
-        html: htmlContent,
-        replyTo: process.env.INVOICE_EMAIL_REPLY_TO || "support@oxicinternational.co.ke",
-      })
-
-      console.log("[v0] Invoice email sent successfully:", result.messageId)
-      return true
-    } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error)
-      console.error("[v0] Failed to send invoice email:", errorMsg)
-      return false
-    }
-  }
-
-  /**
-   * Send payment confirmation SMS-style email (optional)
-   */
-  async sendPaymentConfirmation(
-    customerEmail: string,
-    customerName: string,
-    amount: number,
-    transactionId: string
-  ): Promise<boolean> {
-    if (!this.transporter) {
-      console.warn("[v0] Email service not configured. Skipping confirmation.")
-      return false
-    }
-
-    const fromEmail = process.env.INVOICE_EMAIL_FROM || "invoices@oxicinternational.co.ke"
-
-    const htmlContent = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <style>
-    body { font-family: Arial, sans-serif; color: #333; }
-    .container { max-width: 400px; margin: 20px auto; padding: 20px; background: #f0f0f0; border-radius: 8px; }
-    .message { background: white; padding: 20px; border-left: 4px solid #28a745; border-radius: 5px; }
-    .amount { font-size: 32px; font-weight: bold; color: #28a745; margin: 15px 0; }
-    .tx-id { font-size: 12px; color: #999; margin-top: 15px; word-break: break-all; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="message">
-      <h2 style="margin-top: 0;">Payment Confirmed</h2>
-      <p>Hi ${customerName},</p>
-      <p>Your payment has been received successfully.</p>
-      <div class="amount">KES ${amount.toLocaleString("en-KE")}</div>
-      <p style="font-size: 14px; color: #666;">
-        A detailed receipt has been sent to your email. If you have any questions, please contact support.
-      </p>
-      <div class="tx-id">
-        Reference: ${transactionId}
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-    `
-
-    try {
-      await this.transporter.sendMail({
-        from: fromEmail,
-        to: customerEmail,
-        subject: "Payment Received",
-        html: htmlContent,
-        replyTo: process.env.INVOICE_EMAIL_REPLY_TO || "support@oxicinternational.co.ke",
-      })
-
-      return true
-    } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error)
-      console.error("[v0] Failed to send confirmation:", errorMsg)
-      return false
-    }
-  }
-}
-
-// Singleton instance
-const emailService = new EmailService()
-
 export default emailService
