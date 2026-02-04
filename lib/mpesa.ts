@@ -256,6 +256,60 @@ export function formatKenyanPhoneNumber(phone: string): {
 }
 
 /**
+ * Validate and format callback URL for M-Pesa
+ * M-Pesa requires: https://, valid domain, no trailing slash
+ */
+export function validateMpesaCallbackUrl(url: string): {
+  isValid: boolean
+  formatted?: string
+  error?: string
+} {
+  if (!url || url.trim().length === 0) {
+    return {
+      isValid: false,
+      error: "Callback URL is required. Set MPESA_CALLBACK_URL in Netlify environment variables.",
+    }
+  }
+
+  // Trim whitespace
+  let formatted = url.trim()
+
+  // Must start with https://
+  if (!formatted.startsWith("https://")) {
+    return {
+      isValid: false,
+      error: "Callback URL must use HTTPS. Example: https://yourdomain.com/api/mpesa/callback",
+    }
+  }
+
+  // Remove trailing slash if present
+  if (formatted.endsWith("/")) {
+    formatted = formatted.slice(0, -1)
+  }
+
+  // Ensure it ends with /api/mpesa/callback
+  if (!formatted.includes("/api/mpesa/callback")) {
+    formatted = `${formatted}/api/mpesa/callback`
+  }
+
+  // Basic URL validation: must have a domain
+  try {
+    new URL(formatted)
+  } catch {
+    return {
+      isValid: false,
+      error: `Invalid callback URL format: ${formatted}`,
+    }
+  }
+
+  console.log("[v0] M-Pesa Callback URL validated:", formatted)
+  return {
+    isValid: true,
+    formatted,
+  }
+}
+
+/**
  * Validate payment amount
  */
 export function validateMpesaAmount(amount: number): {
@@ -313,7 +367,24 @@ export async function initiateMpesaStkPush(
     const config = getMpesaConfig()
     const timestamp = generateMpesaTimestamp()
     const password = generateMpesaPassword(timestamp)
-    const finalCallbackUrl = callbackUrl || config.callbackUrl
+    
+    // Handle callback URL: parameter takes priority, then env var
+    let finalCallbackUrl = callbackUrl || config.callbackUrl
+    
+    // Validate callback URL
+    if (!finalCallbackUrl) {
+      return {
+        success: false,
+        error: "Callback URL is required. Set MPESA_CALLBACK_URL in Netlify environment variables. Example: https://oxicinternational.co.ke/api/mpesa/callback",
+      }
+    }
+
+    const callbackValidation = validateMpesaCallbackUrl(finalCallbackUrl)
+    if (!callbackValidation.isValid) {
+      return { success: false, error: callbackValidation.error }
+    }
+
+    finalCallbackUrl = callbackValidation.formatted
 
     console.log("[v0] M-Pesa STK Push: Getting access token...")
     // Get access token
@@ -340,6 +411,7 @@ export async function initiateMpesaStkPush(
       PartyA: requestBody.PartyA,
       Timestamp: requestBody.Timestamp,
       TransactionType: requestBody.TransactionType,
+      CallBackURL: requestBody.CallBackURL,
     })
 
     // Send STK Push
