@@ -19,20 +19,89 @@ async function sendPaymentNotification(
   errorMessage?: string
 ) {
   try {
-    // Log payment notification for processing
-    const notificationData = {
-      timestamp: new Date().toISOString(),
-      status: isSuccess ? "success" : "failed",
-      paymentDetails,
-      errorMessage,
+    const resendApiKey = process.env.RESEND_API_KEY
+    if (!resendApiKey) {
+      console.warn("[v0] Resend API key not configured - payment notification not sent via email")
+      return { success: false }
     }
 
-    console.log("[v0] M-Pesa Payment Notification:", JSON.stringify(notificationData, null, 2))
+    const contactEmail = process.env.CONTACT_EMAIL_TO || "oxicgroupltd@gmail.com"
 
-    // TODO: Integrate with email service (SendGrid, Mailgun, or Netlify Forms submission)
-    // For now, payment data is logged and can be processed via webhooks or background jobs
+    if (isSuccess) {
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #1a5f3f; border-bottom: 2px solid #d4a574; padding-bottom: 10px;">Payment Received Successfully</h2>
+          
+          <div style="background-color: #f0f9f6; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1a5f3f;">
+            <p><strong>Payment Amount:</strong> KES ${paymentDetails.amount.toLocaleString()}</p>
+            <p><strong>M-Pesa Receipt:</strong> ${paymentDetails.mpesaReceiptNumber}</p>
+            <p><strong>Phone Number:</strong> ${paymentDetails.phoneNumber}</p>
+            <p><strong>Transaction Date:</strong> ${new Date(paymentDetails.transactionDate).toLocaleString()}</p>
+          </div>
+
+          <p style="color: #666; margin-top: 20px;">
+            The payment has been received and is being processed. You will receive a confirmation SMS shortly.
+          </p>
+        </div>
+      `
+
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: "noreply@oxicinternational.co.ke",
+          to: contactEmail.split(",").map(e => e.trim()),
+          subject: `Payment Received - KES ${paymentDetails.amount.toLocaleString()} from ${paymentDetails.phoneNumber}`,
+          html: emailHtml,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to send success notification")
+      }
+    } else {
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #c41e3a; border-bottom: 2px solid #c41e3a; padding-bottom: 10px;">Payment Failed</h2>
+          
+          <div style="background-color: #fef0f0; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #c41e3a;">
+            <p><strong>Phone Number:</strong> ${paymentDetails.phoneNumber}</p>
+            <p><strong>Error:</strong> ${errorMessage}</p>
+            <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
+          </div>
+
+          <p style="color: #666; margin-top: 20px;">
+            The payment attempt was unsuccessful. Please verify the details and try again.
+          </p>
+        </div>
+      `
+
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: "noreply@oxicinternational.co.ke",
+          to: contactEmail.split(",").map(e => e.trim()),
+          subject: `Payment Failed - ${paymentDetails.phoneNumber}`,
+          html: emailHtml,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to send failure notification")
+      }
+    }
+
+    return { success: true }
   } catch (error) {
-    console.error("[v0] Failed to log payment notification:", error)
+    console.error("[v0] Failed to send payment notification:", error)
+    return { success: false }
   }
 }
 
@@ -72,15 +141,17 @@ export async function POST(request: NextRequest) {
 
         console.log("[v0] Payment successful:", paymentDetails)
 
-        // Send success notification
+        // Send success notification via email
         await sendPaymentNotification(paymentDetails, true)
 
-        // TODO: Implement additional business logic:
-        // 1. Save payment record to database
-        // 2. Update investment application status
-        // 3. Trigger account activation/services
-        // 4. Send SMS confirmation to customer
-        // 5. Create invoice or receipt
+        // TODO: Production business logic:
+        // 1. Save payment record to database with status "completed"
+        // 2. Match payment to investment application by phone number
+        // 3. Update investment application status to "paid"
+        // 4. Trigger account activation/services provisioning
+        // 5. Send SMS confirmation to customer via M-Pesa API
+        // 6. Generate and send invoice/receipt PDF
+        // 7. Create transaction record for accounting
       } catch (error) {
         console.error("[v0] Error processing successful payment:", error)
       }
@@ -88,7 +159,6 @@ export async function POST(request: NextRequest) {
       // Payment failed or cancelled
       console.log("[v0] Payment failed:", resultDesc)
 
-      // Create minimal details for failed transaction
       const failedPaymentDetails: MpesaPaymentDetails = {
         amount: 0,
         mpesaReceiptNumber: "N/A",
@@ -99,7 +169,7 @@ export async function POST(request: NextRequest) {
       // Send failure notification
       await sendPaymentNotification(failedPaymentDetails, false, resultDesc)
 
-      // TODO: Log failed transaction attempt for analysis
+      // TODO: Log failed transaction attempt for analysis and retry logic
     }
 
     // Always return success to M-Pesa to acknowledge receipt
