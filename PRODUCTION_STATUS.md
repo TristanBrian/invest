@@ -84,7 +84,7 @@ All routes tested and production-ready:
 ## Configuration
 
 ### Environment Variables Required
-```
+\`\`\`
 RESEND_API_KEY=xxx_xxx_xxx
 MPESA_CONSUMER_KEY=xxx
 MPESA_CONSUMER_SECRET=xxx
@@ -93,7 +93,7 @@ MPESA_SHORTCODE=xxx
 STRIPE_SECRET_KEY=sk_xxx (optional)
 STRIPE_PUBLISHABLE_KEY=pk_xxx (optional)
 CONTACT_EMAIL_TO=oxicgroupltd@gmail.com,Info@oxicinternational.co.ke
-```
+\`\`\`
 
 ### Configuration Files
 - netlify.toml: ✅ OPTIMIZED (removed problematic forms config)

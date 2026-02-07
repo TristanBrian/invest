@@ -126,14 +126,14 @@ The payment system now features a sophisticated 5-stage payment flow designed fo
 
 - **Action Buttons:**
   - **Download Receipt:** Downloads JSON file named `receipt-{transactionId}.txt` containing:
-    ```json
+    \`\`\`json
     {
       "transactionId": "...",
       "amount": 10000,
       "phone": "0712046110",
       "date": "2026-02-04T14:09:24.453Z"
     }
-    ```
+    \`\`\`
   - **Close:** Closes modal and resets
 
 **Professional Features:**
@@ -182,7 +182,7 @@ The payment system now features a sophisticated 5-stage payment flow designed fo
 
 ## State Transitions Diagram
 
-```
+\`\`\`
          ┌─────────┐
          │  FORM   │
          └────┬────┘
@@ -215,14 +215,14 @@ User can navigate:
 - FORM → PROCESSING → WAITING → SUCCESS (happy path)
 - FORM → PROCESSING → WAITING → ERROR (user cancels)
 - FORM → PROCESSING → WAITING (timeout auto-advances)
-```
+\`\`\`
 
 ---
 
 ## Visual Animations & Effects
 
 ### Processing State Animations
-```css
+\`\`\`css
 /* Outer spinning ring */
 border-4 border-transparent border-t-green-500 border-r-green-500
 animation: spin 2s linear infinite;
@@ -234,14 +234,14 @@ animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 /* Inner bouncing icon */
 animation: bounce 1s infinite;
 animation-delay: 0s;
-```
+\`\`\`
 
 ### Waiting State Animations
-```css
+\`\`\`css
 /* Amber rotating ring */
 border-4 border-amber-200 border-t-amber-500
 animation: spin 2s linear infinite;
-```
+\`\`\`
 
 ### Progress Bar
 - Smooth transition: `transition-all duration-300`
@@ -252,7 +252,7 @@ animation: spin 2s linear infinite;
 
 ## Component State Management
 
-```typescript
+\`\`\`typescript
 // Payment flow state
 const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("idle" | "form" | "processing" | "waiting" | "success" | "error")
 
@@ -265,7 +265,7 @@ const [transactionId, setTransactionId] = useState("")
 const [phone, setPhone] = useState("")
 const [amount, setAmount] = useState("")
 const [errorMessage, setErrorMessage] = useState("")
-```
+\`\`\`
 
 ---
 
@@ -285,16 +285,16 @@ const [errorMessage, setErrorMessage] = useState("")
 ## Integration Points for Backend
 
 ### Success Confirmation via Webhook
-```typescript
+\`\`\`typescript
 // Currently manual, but ready for:
 // M-Pesa sends callback → /api/mpesa/callback
 // → Updates transaction status in DB
 // → Sends email invoice
 // → Auto-advances to SUCCESS state
-```
+\`\`\`
 
 ### Email Invoice Service
-```typescript
+\`\`\`typescript
 // On SUCCESS state, trigger:
 emailService.sendPaymentConfirmation({
   email: customerEmail,
@@ -303,10 +303,10 @@ emailService.sendPaymentConfirmation({
   phone,
   timestamp
 })
-```
+\`\`\`
 
 ### Database Transaction Log
-```typescript
+\`\`\`typescript
 // Record all states:
 transactionManager.createTransaction({
   transactionId,
@@ -316,7 +316,7 @@ transactionManager.createTransaction({
   timestamp,
   metadata: { ... }
 })
-```
+\`\`\`
 
 ---
 

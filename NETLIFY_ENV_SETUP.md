@@ -16,61 +16,61 @@ This guide helps you add all required environment variables to Netlify so your p
 Add each variable from `.env.example`:
 
 #### Resend Email Service
-```
+\`\`\`
 Key: RESEND_API_KEY
 Value: re_YOUR_ACTUAL_API_KEY
-```
+\`\`\`
 Get from: https://resend.com/api-keys
 
-```
+\`\`\`
 Key: CONTACT_EMAIL_TO
 Value: oxicgroupltd@gmail.com,Info@oxicinternational.co.ke
-```
+\`\`\`
 
 #### M-Pesa Configuration
-```
+\`\`\`
 Key: MPESA_CONSUMER_KEY
 Value: AT3v8w7wmzz43hpZnLUC1WKk1gV8FmjQAJBaWzAUX4XFJ4kE
-```
+\`\`\`
 
-```
+\`\`\`
 Key: MPESA_CONSUMER_SECRET
 Value: THSlclQfdy8zsHM7GbtXzRaGSOCP6RiYLSRlTlFTaiVjz318qz2MMlxtMldrWGQG
-```
+\`\`\`
 
-```
+\`\`\`
 Key: MPESA_SHORTCODE
 Value: 174379
-```
+\`\`\`
 
-```
+\`\`\`
 Key: MPESA_PASSKEY
 Value: YOUR_LIPA_NA_MPESA_PASSKEY
-```
+\`\`\`
 Get from: https://developer.safaricom.co.ke → Lipa Na M-Pesa Online
 
-```
+\`\`\`
 Key: MPESA_ENV
 Value: sandbox
-```
+\`\`\`
 Change to `production` when going live
 
-```
+\`\`\`
 Key: MPESA_CALLBACK_URL
 Value: https://yourdomain.com/api/mpesa/callback
-```
+\`\`\`
 Replace `yourdomain.com` with your actual domain
 
 #### Site Configuration
-```
+\`\`\`
 Key: NEXT_PUBLIC_SITE_URL
 Value: https://yourdomain.com
-```
+\`\`\`
 
-```
+\`\`\`
 Key: NODE_ENV
 Value: production
-```
+\`\`\`
 
 ### 3. Verify Configuration
 

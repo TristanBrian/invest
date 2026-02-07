@@ -50,13 +50,13 @@ The "Wrong credentials" error was caused by:
 
 ### Step 3: Verify Netlify Environment Variables
 Ensure these are configured (must match EXACTLY):
-```
+\`\`\`
 MPESA_CONSUMER_KEY=AT3v8w7wmzz43hpZnLUC1WKk1gV8FmjQAJBaWzAUX4XFJ4kE
 MPESA_CONSUMER_SECRET=THSlclQfdy8zsHM7GbtXzRaGSOCP6RiYLSRlTlFTaiVjz318qz2MMlxtMldrWGQG
 MPESA_SHORTCODE=174379
 MPESA_ENV=sandbox
 MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
-```
+\`\`\`
 
 ## If Still Getting "Wrong credentials" (400)
 

@@ -39,7 +39,7 @@ You need to store:
 
 #### Database Schema
 
-```sql
+\`\`\`sql
 CREATE TABLE transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   merchant_request_id VARCHAR(255) UNIQUE,
@@ -88,13 +88,13 @@ CREATE TABLE invoices (
   INDEX (transaction_id),
   INDEX (customer_email)
 );
-```
+\`\`\`
 
 ### 5. Netlify Environment Variables (Production)
 
 Set these in Netlify → Site Settings → Build & Deploy → Environment:
 
-```
+\`\`\`
 MPESA_ENV=production
 MPESA_CONSUMER_KEY=your_production_consumer_key
 MPESA_CONSUMER_SECRET=your_production_consumer_secret
@@ -106,7 +106,7 @@ DATABASE_URL=your_database_connection_string
 SENDGRID_API_KEY=your_sendgrid_key_for_emails
 INVOICE_EMAIL_FROM=invoices@oxicinternational.co.ke
 INVOICE_EMAIL_REPLY_TO=support@oxicinternational.co.ke
-```
+\`\`\`
 
 ### 6. Email Configuration
 

@@ -19,10 +19,10 @@ When you use the M-Pesa payment form WITHOUT credentials configured:
 4. Frontend displays helpful message about setting up production credentials
 
 **What You See:**
-```
+\`\`\`
 "Development Mode: M-Pesa credentials not configured. When deployed to production 
 with credentials, real payments will work. See NETLIFY_ENV_SETUP.md for setup instructions."
-```
+\`\`\`
 
 **Phone Number Format:** 
 - Use any Kenyan format: `07XXXXXXXX`, `01XXXXXXXX`, `+254712345678`, or `2547XXXXXXXX`
@@ -124,13 +124,13 @@ See `NETLIFY_ENV_SETUP.md` for step-by-step instructions on adding these variabl
 To test with real M-Pesa calls locally:
 
 1. Create `.env.local` file in project root:
-   ```
+   \`\`\`
    MPESA_CONSUMER_KEY=your_key
    MPESA_CONSUMER_SECRET=your_secret
    MPESA_SHORTCODE=your_shortcode
    MPESA_PASSKEY=your_passkey
    MPESA_ENV=sandbox
-   ```
+   \`\`\`
 
 2. Run `npm run dev`
 3. Test M-Pesa payments with sandbox credentials

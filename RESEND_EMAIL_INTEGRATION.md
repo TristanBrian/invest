@@ -17,15 +17,15 @@ The email service uses **Resend** for professional invoice and payment notificat
 
 Add to your Netlify environment variables:
 
-```
+\`\`\`
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
-```
+\`\`\`
 
 Or to `.env.local` for local development:
 
-```
+\`\`\`
 RESEND_API_KEY=re_your_api_key_here
-```
+\`\`\`
 
 ### 3. Verify Sender Domain (Production)
 
@@ -59,7 +59,7 @@ Quick confirmation emails when payment is received:
 
 ## Code Usage
 
-```typescript
+\`\`\`typescript
 import emailService from "@/lib/email-service"
 
 // Send invoice
@@ -82,7 +82,7 @@ const notif = await emailService.sendPaymentNotification(
   50000,
   "OXIC-20260204-ABC123XY"
 )
-```
+\`\`\`
 
 ## Error Handling
 

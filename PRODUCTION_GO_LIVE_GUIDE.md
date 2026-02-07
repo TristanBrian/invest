@@ -12,7 +12,7 @@
 - Configure logging (application + server)
 
 ### Environment Variables
-```
+\`\`\`
 NEXT_PUBLIC_API_URL=https://oxicinternational.co.ke
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 MPESA_CONSUMER_KEY=xxxxxxxxxxxxx
@@ -23,7 +23,7 @@ STRIPE_PUBLISHABLE_KEY=pk_live_xxxxx
 STRIPE_SECRET_KEY=sk_live_xxxxx
 DATABASE_URL=postgresql://user:pass@host/db
 NODE_ENV=production
-```
+\`\`\`
 
 ### Third-Party Integrations
 - [ ] Resend email account active with domain verified
@@ -37,7 +37,7 @@ NODE_ENV=production
 ## Deployment Process
 
 ### Step 1: Final Verification (24 Hours Before)
-```bash
+\`\`\`bash
 # Run full test suite
 npm run build
 npm run test
@@ -50,7 +50,7 @@ node scripts/verify-env.js
 
 # Performance check
 npm run lighthouse
-```
+\`\`\`
 
 ### Step 2: Staging Deployment
 - Deploy to staging environment first
@@ -61,7 +61,7 @@ npm run lighthouse
 - Monitor for 2-4 hours
 
 ### Step 3: Production Deployment to Vercel
-```bash
+\`\`\`bash
 # Push to production branch
 git checkout main
 git pull origin main
@@ -69,10 +69,10 @@ git push origin main
 
 # Vercel auto-deploys or trigger manually:
 # https://vercel.com/dashboard/deployments
-```
+\`\`\`
 
 ### Step 4: Post-Deployment Verification
-```
+\`\`\`
 ✓ Site loads without errors
 ✓ All pages accessible
 ✓ Payment forms display
@@ -83,7 +83,7 @@ git push origin main
 ✓ Mobile responsive
 ✓ No console errors
 ✓ Analytics tracking
-```
+\`\`\`
 
 ## Monitoring Checklist
 
@@ -118,44 +118,44 @@ git push origin main
 ### Common Issues & Fixes
 
 **Issue**: Site not loading
-```
+\`\`\`
 → Check Vercel deployment status
 → Verify DNS records propagated
 → Clear browser cache (Ctrl+Shift+Del)
 → Check SSL certificate validity
-```
+\`\`\`
 
 **Issue**: Emails not sending
-```
+\`\`\`
 → Verify RESEND_API_KEY in environment
 → Check Resend domain verification
 → Review Resend logs for bounces
 → Test with test email first
-```
+\`\`\`
 
 **Issue**: M-Pesa not working
-```
+\`\`\`
 → Verify MPESA_CONSUMER_KEY/SECRET
 → Check callback URL accessible
 → Test STK push manually
 → Review M-Pesa logs for errors
-```
+\`\`\`
 
 **Issue**: Forms not submitting
-```
+\`\`\`
 → Check browser console errors
 → Verify form validation
 → Check backend API response
 → Test CORS configuration
-```
+\`\`\`
 
 **Issue**: Database connection failing
-```
+\`\`\`
 → Verify DATABASE_URL
 → Check database credentials
 → Test connection from server
 → Verify SSL/TLS certificates
-```
+\`\`\`
 
 ## Database Management
 
@@ -185,7 +185,7 @@ git push origin main
 - **RTO**: 4 hours (recovery time objective)
 
 ### Restore Procedure
-```
+\`\`\`
 1. Identify the point in time needed
 2. Download backup from storage
 3. Stop production application
@@ -193,7 +193,7 @@ git push origin main
 5. Verify data integrity
 6. Restart application
 7. Monitor for issues
-```
+\`\`\`
 
 ## Security After Launch
 
@@ -309,23 +309,23 @@ git push origin main
 - [ ] Communications ready
 
 ### Decision Matrix
-```
+\`\`\`
 PASS (8-10/10): LAUNCH
 CAUTION (6-8/10): PROCEED WITH CAUTION
 STOP (< 6/10): DELAY LAUNCH
-```
+\`\`\`
 
 ## Rollback Procedure (If Needed)
 
 ### Quick Rollback (< 30 minutes)
-```
+\`\`\`
 1. Revert DNS to previous IP
 2. Revert code to previous commit on Vercel
 3. Restore database from backup
 4. Clear all caches
 5. Verify all systems operational
 6. Send status update
-```
+\`\`\`
 
 ### Full Rollback (30+ minutes)
 - Contact Vercel support if needed

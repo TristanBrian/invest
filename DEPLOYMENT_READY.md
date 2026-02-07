@@ -114,14 +114,14 @@ This document confirms that all changes have been implemented and the codebase i
 ---
 
 ## Build Command
-```bash
+\`\`\`bash
 npm run build
-```
+\`\`\`
 
 ## Start Command
-```bash
+\`\`\`bash
 npm run start
-```
+\`\`\`
 
 ## Preview
 Netlify will automatically preview the site before merging to production.

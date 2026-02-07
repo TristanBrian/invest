@@ -122,7 +122,7 @@ The Oxic International Group payment and investment advisory platform is profess
 
 ## Environment Variables Required
 
-```
+\`\`\`
 NEXT_PUBLIC_API_URL=https://oxicinternational.co.ke
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 MPESA_CONSUMER_KEY=xxxxxxxxxxxxx
@@ -133,7 +133,7 @@ STRIPE_PUBLISHABLE_KEY=pk_live_xxxxx
 STRIPE_SECRET_KEY=sk_live_xxxxx
 DATABASE_URL=postgresql://user:pass@host/db
 NODE_ENV=production
-```
+\`\`\`
 
 ## Pre-Launch Checklist
 
@@ -157,9 +157,9 @@ NODE_ENV=production
 ## Build & Deploy
 
 ### Build Command
-```bash
+\`\`\`bash
 npm run build
-```
+\`\`\`
 
 ### Deploy to Production
 Push to main branch on Vercel, or manually trigger deployment from dashboard.

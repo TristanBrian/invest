@@ -23,11 +23,11 @@
 - Consistent image and messaging
 
 #### Robots Configuration
-```
+\`\`\`
 index: true           → Pages are indexed
 follow: true          → Links are followed
 max-snippet: -1       → Full snippets allowed
-```
+\`\`\`
 
 ### 2. Performance Optimization (Core Web Vitals)
 
@@ -81,18 +81,18 @@ Primary: "Oxic International | Investment Advisory & Payment Solutions"
 "Secure M-Pesa payment gateway and investment advisory platform for Kenya and East Africa"
 
 #### URL Structure
-```
+\`\`\`
 / → Homepage (main conversion point)
 /api/mpesa → Payment processing (hidden from SEO)
 /about → Company information
 /services → Service offerings
 /contact → Contact form
-```
+\`\`\`
 
 ### 5. Structured Data (Schema.org)
 
 Recommended additions to layout.tsx:
-```json
+\`\`\`json
 {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -110,7 +110,7 @@ Recommended additions to layout.tsx:
     "addressLocality": "Nairobi"
   }
 }
-```
+\`\`\`
 
 ### 6. Mobile Optimization
 
@@ -161,7 +161,7 @@ Recommended additions to layout.tsx:
 - Address: [Add Nairobi office address]
 
 #### Local Schema Markup
-```json
+\`\`\`json
 {
   "@type": "LocalBusiness",
   "address": {
@@ -170,7 +170,7 @@ Recommended additions to layout.tsx:
     "addressLocality": "Nairobi"
   }
 }
-```
+\`\`\`
 
 ### 9. Content Marketing Plan
 

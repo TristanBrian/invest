@@ -41,7 +41,7 @@ Oxic International is a secure M-Pesa payment gateway and investment advisory pl
 
 ## File Structure
 
-```
+\`\`\`
 /
 ├── app/
 │   ├── layout.tsx                 # Root layout with SEO metadata
@@ -72,14 +72,14 @@ Oxic International is a secure M-Pesa payment gateway and investment advisory pl
 ├── SEO_OPTIMIZATION_GUIDE.md      # SEO implementation
 ├── MPESA_PASSKEY_REQUIRED_FIX.md  # Passkey debugging guide
 └── IMPLEMENTATION_GUIDE.md        # This file
-```
+\`\`\`
 
 ## Step-by-Step Implementation
 
 ### Phase 1: Sandbox Testing (Current)
 
 #### 1.1 Get Sandbox Credentials
-```bash
+\`\`\`bash
 # From https://developer.safaricom.co.ke
 MPESA_CONSUMER_KEY=your_sandbox_consumer_key
 MPESA_CONSUMER_SECRET=your_sandbox_consumer_secret
@@ -87,7 +87,7 @@ MPESA_SHORTCODE=174379
 MPESA_PASSKEY=bfb279f9ba9b9d4777000d3839bc10d0
 MPESA_ENV=sandbox
 MPESA_CALLBACK_URL=https://YOUR_NETLIFY_DOMAIN/api/mpesa/callback
-```
+\`\`\`
 
 #### 1.2 Configure Environment
 1. Go to Netlify → Site Settings → Build & Deploy → Environment
@@ -95,7 +95,7 @@ MPESA_CALLBACK_URL=https://YOUR_NETLIFY_DOMAIN/api/mpesa/callback
 3. Trigger redeploy
 
 #### 1.3 Test Payment Flow
-```bash
+\`\`\`bash
 curl -X POST https://YOUR_SITE/api/mpesa \
   -H "Content-Type: application/json" \
   -d '{
@@ -112,7 +112,7 @@ curl -X POST https://YOUR_SITE/api/mpesa \
   "transactionId": "OXIC-20260204-a7f2b3c1-5d8e",
   "checkoutRequestID": "..."
 }
-```
+\`\`\`
 
 #### 1.4 Verify Callback
 1. Check browser console for logs
@@ -133,7 +133,7 @@ Contact Safaricom:
 #### 2.2 Database Setup
 See `/MPESA_PRODUCTION_SETUP.md` for schema
 
-```sql
+\`\`\`sql
 -- Create transactions table
 CREATE TABLE transactions (
   id UUID PRIMARY KEY,
@@ -164,7 +164,7 @@ CREATE TABLE invoices (
   invoice_number VARCHAR(50)
   -- ... see schema in MPESA_PRODUCTION_SETUP.md
 );
-```
+\`\`\`
 
 #### 2.3 Email Configuration
 1. Set up SendGrid account: https://sendgrid.com
@@ -183,7 +183,7 @@ See `/MPESA_PRODUCTION_SETUP.md` section 12 for complete checklist
 ### Phase 3: Production Deployment
 
 #### 3.1 Update Environment Variables (Netlify)
-```
+\`\`\`
 MPESA_ENV=production
 MPESA_CONSUMER_KEY=production_consumer_key
 MPESA_CONSUMER_SECRET=production_consumer_secret
@@ -195,10 +195,10 @@ DATABASE_URL=production_database_url
 SENDGRID_API_KEY=sendgrid_api_key
 INVOICE_EMAIL_FROM=invoices@oxicinternational.co.ke
 INVOICE_EMAIL_REPLY_TO=support@oxicinternational.co.ke
-```
+\`\`\`
 
 #### 3.2 Deploy Code
-```bash
+\`\`\`bash
 # Push to GitHub/Netlify
 git add .
 git commit -m "Production deployment: M-Pesa, security, SEO"
@@ -206,10 +206,10 @@ git push origin main
 
 # Or deploy directly from Netlify UI
 # Site → Deploys → Trigger deploy
-```
+\`\`\`
 
 #### 3.3 Post-Deployment Testing
-```bash
+\`\`\`bash
 # Test 1: Small transaction (KES 10)
 curl -X POST https://oxicinternational.co.ke/api/mpesa \
   -H "Content-Type: application/json" \
@@ -235,7 +235,7 @@ curl -X POST https://oxicinternational.co.ke/api/mpesa \
 # Check daily transaction volume
 # Monitor error rates
 # Verify email delivery
-```
+\`\`\`
 
 #### 3.4 Monitor & Alert
 Set up monitoring:
@@ -279,13 +279,13 @@ Set up monitoring:
 ### 1. M-Pesa API Endpoints
 
 #### OAuth Token Generation
-```
+\`\`\`
 POST https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials
 Authorization: Basic [base64(consumer_key:consumer_secret)]
-```
+\`\`\`
 
 #### STK Push Request
-```
+\`\`\`
 POST https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest
 Authorization: Bearer [access_token]
 {
@@ -301,10 +301,10 @@ Authorization: Bearer [access_token]
   "AccountReference": "OXIC",
   "TransactionDesc": "Payment"
 }
-```
+\`\`\`
 
 #### M-Pesa Callback (to your server)
-```
+\`\`\`
 POST https://oxicinternational.co.ke/api/mpesa/callback
 {
   "Body": {
@@ -323,11 +323,11 @@ POST https://oxicinternational.co.ke/api/mpesa/callback
     }
   }
 }
-```
+\`\`\`
 
 ### 2. SendGrid Email Integration
 
-```typescript
+\`\`\`typescript
 import emailService from "@/lib/email-service"
 
 const sent = await emailService.sendInvoice({
@@ -342,11 +342,11 @@ const sent = await emailService.sendInvoice({
   paymentMethod: "M-Pesa",
   mpesaReceiptNumber: "PJL41...",
 })
-```
+\`\`\`
 
 ### 3. Transaction Manager Integration
 
-```typescript
+\`\`\`typescript
 import transactionManager from "@/lib/transaction-manager"
 
 // Create transaction
@@ -372,11 +372,11 @@ const transaction = transactionManager.getTransaction("OXIC-20260204-a7f2b3c1-5d
 
 // Export for invoice
 const invoice = transactionManager.exportTransactionForInvoice(tx.transactionId)
-```
+\`\`\`
 
 ### 4. Security Validation
 
-```typescript
+\`\`\`typescript
 import {
   rateLimiter,
   getClientIp,
@@ -400,14 +400,14 @@ const suspicion = detectSuspiciousActivity(phoneNumber, amount, clientIp)
 if (suspicion.isSuspicious) {
   // Log and potentially block
 }
-```
+\`\`\`
 
 ## API Reference
 
 ### Payment Endpoint: POST /api/mpesa
 
 **Request:**
-```json
+\`\`\`json
 {
   "phoneNumber": "0712046110",
   "amount": 50000,
@@ -416,10 +416,10 @@ if (suspicion.isSuspicious) {
   "customerEmail": "user@example.com",
   "customerName": "John Doe"
 }
-```
+\`\`\`
 
 **Success Response (200):**
-```json
+\`\`\`json
 {
   "success": true,
   "message": "STK push sent...",
@@ -427,7 +427,7 @@ if (suspicion.isSuspicious) {
   "checkoutRequestID": "...",
   "merchantRequestID": "..."
 }
-```
+\`\`\`
 
 **Error Responses:**
 - 400: Invalid request parameters
@@ -447,24 +447,24 @@ Handles M-Pesa payment confirmations. Automatically:
 
 ### Log Levels
 
-```
+\`\`\`
 [v0] DEBUG: Detailed debugging information
 [v0] INFO: General information (normal operations)
 [v0] WARN: Warning messages (non-critical issues)
 [v0] ERROR: Error messages (failures)
 [v0] SECURITY: Security-related events
-```
+\`\`\`
 
 ### Key Logs to Monitor
 
-```
+\`\`\`
 [v0] M-Pesa: OAuth token obtained
 [v0] M-Pesa: STK Push successful
 [v0] Transaction created: OXIC-20260204-...
 [v0] SECURITY: RATE_LIMIT_EXCEEDED
 [v0] SECURITY: INVALID_ORIGIN
 [v0] Invoice email sent successfully
-```
+\`\`\`
 
 ### Performance Metrics
 

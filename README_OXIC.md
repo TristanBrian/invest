@@ -39,12 +39,12 @@
 ## Quick Start: Sandbox Testing
 
 ### 1. Current Setup (Already Done)
-```
+\`\`\`
 Credentials in Netlify:
 ✓ MPESA_ENV=sandbox
 ✓ MPESA_SHORTCODE=174379
 ✓ MPESA_PASSKEY=bfb279f9ba9b9d4777000d3839bc10d0
-```
+\`\`\`
 
 ### 2. Test Payment
 Visit your site and:
@@ -59,10 +59,10 @@ Visit your site and:
 
 ### 3. View Logs
 Browser console shows:
-```
+\`\`\`
 [v0] M-Pesa payment successful
 [v0] Transaction created: OXIC-20260204-...
-```
+\`\`\`
 
 ## Moving to Production
 
@@ -118,14 +118,14 @@ Browser console shows:
 ## Transaction ID Format
 
 Each successful payment gets a unique ID:
-```
+\`\`\`
 OXIC-20260204-a7f2b3c1-5d8e
 │    │        │         │
 │    │        │         └─ 4-char SHA256 checksum
 │    │        └──────────── 8-char random hex
 │    └───────────────────── YYYYMMDD date
 └──────────────────────────── Company prefix
-```
+\`\`\`
 
 Benefits:
 - ✅ Unique and verifiable
@@ -286,17 +286,17 @@ For questions or issues:
 ## Quick Reference: Environment Variables
 
 ### Sandbox (Current)
-```
+\`\`\`
 MPESA_ENV=sandbox
 MPESA_CONSUMER_KEY=YOUR_SANDBOX_KEY
 MPESA_CONSUMER_SECRET=YOUR_SANDBOX_SECRET
 MPESA_SHORTCODE=174379
 MPESA_PASSKEY=bfb279f9ba9b9d4777000d3839bc10d0
 MPESA_CALLBACK_URL=https://YOUR_SITE/api/mpesa/callback
-```
+\`\`\`
 
 ### Production (When Ready)
-```
+\`\`\`
 MPESA_ENV=production
 MPESA_CONSUMER_KEY=YOUR_PRODUCTION_KEY
 MPESA_CONSUMER_SECRET=YOUR_PRODUCTION_SECRET
@@ -307,11 +307,11 @@ DATABASE_URL=your_database_connection
 SENDGRID_API_KEY=your_sendgrid_key
 INVOICE_EMAIL_FROM=invoices@oxicinternational.co.ke
 INVOICE_EMAIL_REPLY_TO=support@oxicinternational.co.ke
-```
+\`\`\`
 
 ## Architecture Diagram
 
-```
+\`\`\`
 ┌─────────────────┐
 │   User Phone    │
 │  (M-Pesa STK)   │
@@ -362,7 +362,7 @@ INVOICE_EMAIL_REPLY_TO=support@oxicinternational.co.ke
 │Database│ │ Email  │ │Analytics │
 │        │ │Service │ │          │
 └────────┘ └────────┘ └──────────┘
-```
+\`\`\`
 
 ## Next Steps
 

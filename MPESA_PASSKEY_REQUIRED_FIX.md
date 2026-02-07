@@ -9,9 +9,9 @@ You were getting "Wrong credentials" error on STK Push even though OAuth credent
 According to [Safaricom STK Push API Documentation](https://developer.safaricom.co.ke):
 
 The password field MUST be generated as:
-```
+\`\`\`
 Password = Base64(BusinessShortCode + MPESA_PASSKEY + Timestamp)
-```
+\`\`\`
 
 - **BusinessShortCode**: Your merchant code (174379 for sandbox)
 - **MPESA_PASSKEY**: Required from Lipa Na M-Pesa Online (was missing/optional in your setup)
@@ -21,7 +21,7 @@ M-Pesa REJECTS the request with "Wrong credentials" if the password is invalid, 
 
 ## WHAT WAS WRONG IN YOUR CODE
 
-```javascript
+\`\`\`javascript
 // WRONG - Your old code:
 if (config.passkey && config.passkey.length > 0) {
   // use passkey
@@ -31,7 +31,7 @@ if (config.passkey && config.passkey.length > 0) {
 
 // This generated: Base64(174379 + timestamp) - WRONG!
 // M-Pesa expected: Base64(174379 + passkey + timestamp) - CORRECT!
-```
+\`\`\`
 
 ## WHAT'S FIXED NOW
 
@@ -70,10 +70,10 @@ All code updated to:
 
 With passkey added, your STK Push will now correctly include:
 
-```
+\`\`\`
 Password: Base64(174379 + [32-char-passkey] + 20260204140924)
          = [correct 152-char Base64 string]
-```
+\`\`\`
 
 And M-Pesa will accept it.
 

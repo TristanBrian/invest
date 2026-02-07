@@ -106,13 +106,13 @@ A fully-functional, professionally-designed payment and investment advisory plat
 4. **Launch**: Announce to market
 
 ### What You Need
-```
+\`\`\`
 - Domain: oxicinternational.co.ke
 - Email API Key: Resend
 - Payment Keys: M-Pesa & Stripe
 - Database: Configured
 - SSL: Configured
-```
+\`\`\`
 
 ---
 

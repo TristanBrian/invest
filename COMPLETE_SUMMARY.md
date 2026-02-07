@@ -51,7 +51,7 @@
 ## Files Created/Modified
 
 ### New Files Created
-```
+\`\`\`
 /lib/transaction-manager.ts        - Transaction ID generation & audit trail
 /lib/email-service.ts              - HTML email templates & SendGrid integration
 /lib/security.ts                   - Rate limiting, validation, suspicious activity detection
@@ -62,14 +62,14 @@
 /SECURITY_BEST_PRACTICES.md        - 285-line security guidelines
 /SEO_OPTIMIZATION_GUIDE.md         - 303-line SEO optimization
 /README_OXIC.md                    - 376-line master reference
-```
+\`\`\`
 
 ### Files Enhanced
-```
+\`\`\`
 /app/layout.tsx                    - Enhanced SEO metadata, viewport, Open Graph
 /app/api/mpesa/route.ts            - Added security, transaction management, logging
 /components/payment-methods-section.tsx - Professional success screen with receipt
-```
+\`\`\`
 
 ## Current Status
 
@@ -84,7 +84,7 @@
 ## Key Features by Component
 
 ### Transaction Manager
-```typescript
+\`\`\`typescript
 // Generates: OXIC-20260204-a7f2b3c1-5d8e
 transactionManager.generateTransactionId()
 
@@ -93,10 +93,10 @@ transactionManager.createTransaction(...)
 transactionManager.updateTransactionStatus(...)
 transactionManager.logAction(...)
 transactionManager.getTransactionLogs(...)
-```
+\`\`\`
 
 ### Email Service
-```typescript
+\`\`\`typescript
 // Sends professional HTML emails
 emailService.sendInvoice({
   transactionId,
@@ -106,10 +106,10 @@ emailService.sendInvoice({
   date,
   // ... other details
 })
-```
+\`\`\`
 
 ### Security
-```typescript
+\`\`\`typescript
 // Rate limiting
 if (rateLimiter.isLimited(clientIp)) {
   return 429 // Too Many Requests
@@ -120,7 +120,7 @@ const validation = validatePaymentRequest(body)
 
 // Detection
 const suspicion = detectSuspiciousActivity(phone, amount, ip)
-```
+\`\`\`
 
 ## Production Deployment Roadmap
 
