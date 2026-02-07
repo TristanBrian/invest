@@ -37,17 +37,18 @@ export async function GET(request: NextRequest) {
     console.log("[v0] Fetching account status for:", accountId)
 
     // Retrieve account with all requirements and configuration details
-    const account = await stripe.v2.core.accounts.retrieve(accountId, {
+    const account = (await stripe.v2.core.accounts.retrieve(accountId, {
       include: ["configuration.recipient", "requirements"],
-    } as Parameters<typeof stripe.v2.core.accounts.retrieve>[1])
+    } as any)) as any
 
-    // Determine onboarding status
+    // Determine onboarding status from requirements summary
     const requirementsSummary = account.requirements?.summary
     const requirementsStatus = requirementsSummary?.minimum_deadline?.status
 
-    const currentlyDue = account.requirements?.currently_due || []
-    const pastDue = account.requirements?.past_due || []
-    const eventuallyDue = account.requirements?.eventually_due || []
+    // Extract requirements lists - these may be on the summary object or the requirements object directly
+    const currentlyDue = requirementsSummary?.currently_due || account.requirements?.currently_due || []
+    const pastDue = requirementsSummary?.past_due || account.requirements?.past_due || []
+    const eventuallyDue = requirementsSummary?.eventually_due || account.requirements?.eventually_due || []
 
     const onboardingComplete = requirementsStatus !== "currently_due" && requirementsStatus !== "past_due"
 
