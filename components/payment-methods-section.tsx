@@ -241,6 +241,7 @@ export function PaymentMethodsSection() {
 
     setPaymentStatus("processing")
     setErrorMessage("")
+    setTransactionId(`STR-${Date.now()}-${Math.random().toString(36).substring(7).toUpperCase()}`)
 
     try {
       const response = await fetch("/api/stripe/checkout", {
@@ -255,11 +256,26 @@ export function PaymentMethodsSection() {
         }),
       })
       
+      const data = await response.json()
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        console.error("[v0] Stripe API error status:", response.status, "Response:", data)
+        
+        let errorMsg = data.error || "Payment system error"
+        
+        if (response.status === 503) {
+          errorMsg = "Stripe payment is currently unavailable. Please try M-Pesa or Bank Transfer instead, or contact support."
+        } else if (response.status === 400) {
+          errorMsg = data.error || "Invalid payment details. Please check your information."
+        } else if (response.status === 500) {
+          errorMsg = "Server error processing payment. Please try again in a moment."
+        }
+        
+        setErrorMessage(errorMsg)
+        setPaymentStatus("error")
+        return
       }
       
-      const data = await response.json()
       if (data.success && data.url) {
         window.location.href = data.url
       } else {
@@ -269,7 +285,7 @@ export function PaymentMethodsSection() {
     } catch (error) {
       console.error("[v0] Stripe payment error:", error)
       const errorMsg = error instanceof Error ? error.message : "Network error"
-      setErrorMessage(`Payment error: ${errorMsg}. Please check your connection and try again.`)
+      setErrorMessage(`Unable to process payment: ${errorMsg}. Please check your connection and try again.`)
       setPaymentStatus("error")
     }
   }
