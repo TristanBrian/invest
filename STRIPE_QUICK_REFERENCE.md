@@ -3,7 +3,7 @@
 ## ⚡ 5-Minute Setup
 
 ### 1. Get Keys (5 min)
-```
+\`\`\`
 https://dashboard.stripe.com/apikeys
 Copy: Secret Key (sk_test_...)
 Copy: Publishable Key (pk_test_...)
@@ -13,28 +13,28 @@ Click: + Add endpoint
 URL: https://yourdomain.com/api/webhooks/stripe
 Events: checkout.session.completed, payment_intent.succeeded, account.updated, account.external_account.created
 Copy: Signing secret (whsec_...)
-```
+\`\`\`
 
 ### 2. Add to Netlify (2 min)
-```
+\`\`\`
 Site Settings → Build & Deploy → Environment → Edit variables
 
 STRIPE_SECRET_KEY = sk_test_...
 STRIPE_PUBLISHABLE_KEY = pk_test_...
 STRIPE_WEBHOOK_SECRET = whsec_...
 NEXT_PUBLIC_APP_URL = https://yourdomain.com
-```
+\`\`\`
 
 ### 3. Redeploy (1 min)
 - Push to git or manually redeploy on Netlify
 - Wait for build to complete
 
 ### 4. Test (2 min)
-```
+\`\`\`
 Use card: 4242 4242 4242 4242
 Any future date, any 3-digit CVC
 Should see success in Stripe dashboard
-```
+\`\`\`
 
 ---
 
@@ -54,7 +54,7 @@ Should see success in Stripe dashboard
 
 ## 💰 Test Cards
 
-```
+\`\`\`
 Visa Success:     4242 4242 4242 4242
 Visa Decline:     4000 0000 0000 0002
 Mastercard:       5555 5555 5555 4444
@@ -63,14 +63,14 @@ Amex:             3782 822463 10005
 Expiry: Any future date (e.g., 12/25)
 CVC: Any 3 digits (e.g., 123)
 Postal: Any (e.g., 12345)
-```
+\`\`\`
 
 ---
 
 ## 📝 Common Requests
 
 ### Create Seller Account
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/connect/create-account \
   -H "Content-Type: application/json" \
   -d '{
@@ -78,17 +78,17 @@ curl -X POST https://yourdomain.com/api/stripe/connect/create-account \
     "contactEmail": "owner@coffee.com",
     "country": "us"
   }'
-```
+\`\`\`
 
 ### Get Onboarding Link
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/connect/account-link \
   -H "Content-Type: application/json" \
   -d '{"accountId": "acct_..."}'
-```
+\`\`\`
 
 ### Create Product
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/products \
   -H "Content-Type: application/json" \
   -d '{
@@ -98,18 +98,18 @@ curl -X POST https://yourdomain.com/api/stripe/products \
     "currency": "usd",
     "accountId": "acct_..."
   }'
-```
+\`\`\`
 
 ### Check Seller Status
-```bash
+\`\`\`bash
 curl https://yourdomain.com/api/stripe/connect/account-status?accountId=acct_...
-```
+\`\`\`
 
 ---
 
 ## 🐛 Debug Checklist
 
-```
+\`\`\`
 ❌ 503 Payment system not configured
   ✓ Check STRIPE_SECRET_KEY in Netlify env vars
   ✓ Redeploy after adding vars
@@ -129,7 +129,7 @@ curl https://yourdomain.com/api/stripe/connect/account-status?accountId=acct_...
   ✓ Use 4242 4242 4242 4242 (always succeeds)
   ✓ Use future date (e.g., 12/25)
   ✓ Use any 3-digit CVC
-```
+\`\`\`
 
 ---
 
@@ -146,7 +146,7 @@ curl https://yourdomain.com/api/stripe/connect/account-status?accountId=acct_...
 
 ## 🚀 Go Live Checklist
 
-```
+\`\`\`
 Before switching to LIVE keys:
 
 □ All test payments work
@@ -164,7 +164,7 @@ When ready:
 □ Redeploy site
 □ Test with real payment
 □ Monitor dashboard for issues
-```
+\`\`\`
 
 ---
 
@@ -181,7 +181,7 @@ When ready:
 
 ## 🎯 Payment Flow Diagram
 
-```
+\`\`\`
 Customer                Platform              Stripe              Seller
    │                       │                    │                   │
    ├─ Click Buy ──────────>│                    │                   │
@@ -200,7 +200,7 @@ Customer                Platform              Stripe              Seller
    │<──── Confirmation ─────┤    Email Sent      │   Payout Ready   │
    │      Email             │                    │    (after funds) │
    │                       │                    │                   │
-```
+\`\`\`
 
 ---
 

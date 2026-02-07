@@ -5,26 +5,26 @@
 Add these variables to your Netlify Environment Variables (Site Settings → Build & Deploy → Environment):
 
 ### **Stripe Keys** (Required for all features)
-```
+\`\`\`
 STRIPE_SECRET_KEY=sk_test_YOUR_KEY_HERE
 STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_KEY_HERE
 STRIPE_WEBHOOK_SECRET=whsec_YOUR_WEBHOOK_SECRET_HERE
-```
+\`\`\`
 
 ### **Application URLs**
-```
+\`\`\`
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
 STRIPE_CONNECT_REDIRECT_URL=https://yourdomain.com/stripe/connected
-```
+\`\`\`
 
 ### **Other Integrations** (Already configured)
-```
+\`\`\`
 RESEND_API_KEY=your_resend_key
 MPESA_CONSUMER_KEY=your_mpesa_key
 MPESA_CONSUMER_SECRET=your_mpesa_secret
 MPESA_PASSKEY=your_mpesa_passkey
 MPESA_SHORTCODE=your_shortcode
-```
+\`\`\`
 
 ---
 
@@ -77,7 +77,7 @@ MPESA_SHORTCODE=your_shortcode
 
 ## File Structure
 
-```
+\`\`\`
 app/api/stripe/
 ├── checkout/route.ts          # Basic checkout (existing)
 ├── webhooks/route.ts          # Webhook handling (new)
@@ -92,7 +92,7 @@ components/
 ├── stripe-storefront.tsx       # Marketplace UI (new)
 ├── connect-onboarding.tsx      # Account setup UI (new)
 └── payment-methods-section.tsx # Existing payment UI
-```
+\`\`\`
 
 ---
 

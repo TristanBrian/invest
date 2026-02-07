@@ -49,12 +49,12 @@ Go to https://dashboard.stripe.com
 
 ### **Step 2: Add to Netlify**
 Site Settings → Build & Deploy → Environment → Add:
-```
+\`\`\`
 STRIPE_SECRET_KEY = sk_test_YOUR_KEY
 STRIPE_PUBLISHABLE_KEY = pk_test_YOUR_KEY
 STRIPE_WEBHOOK_SECRET = whsec_YOUR_SECRET
 NEXT_PUBLIC_APP_URL = https://yourdomain.com
-```
+\`\`\`
 
 ### **Step 3: Deploy**
 Commit code and push (or redeploy on Netlify)
@@ -94,13 +94,13 @@ Use card 4242 4242 4242 4242 to process a test payment
 
 ## 🧪 Test Immediately
 
-```bash
+\`\`\`bash
 # Test card for payments
 Card: 4242 4242 4242 4242
 Expiry: 12/25 (or any future date)
 CVC: 123 (or any 3 digits)
 Result: Always succeeds in test mode
-```
+\`\`\`
 
 ---
 
@@ -127,7 +127,7 @@ It will take 5 minutes and walk you through everything.
 
 ## 📊 Files Created/Updated
 
-```
+\`\`\`
 Created:
 ├── lib/stripe-config.ts
 ├── app/api/stripe/products/route.ts
@@ -145,7 +145,7 @@ Created:
 
 Updated:
 └── .env.example
-```
+\`\`\`
 
 ---
 

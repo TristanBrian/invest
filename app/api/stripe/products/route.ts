@@ -103,18 +103,23 @@ export async function GET() {
     })
 
     // Format products for display
-    const formattedProducts = products.data.map((product) => ({
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      metadata: product.metadata,
-      price: product.default_price
+    const formattedProducts = products.data.map((product) => {
+      // Check if default_price is expanded (not just a string ID)
+      const priceData = typeof product.default_price === "object" && product.default_price !== null
         ? {
-            amount: (product.default_price as Record<string, unknown>).unit_amount,
-            currency: (product.default_price as Record<string, unknown>).currency,
+            amount: product.default_price.unit_amount,
+            currency: product.default_price.currency,
           }
-        : null,
-    }))
+        : null
+
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        metadata: product.metadata,
+        price: priceData,
+      }
+    })
 
     console.log("[v0] Found", formattedProducts.length, "products")
 

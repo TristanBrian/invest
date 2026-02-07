@@ -40,7 +40,7 @@
 - [ ] Click "Edit variables"
 - [ ] Add 4 environment variables:
 
-  ```
+  \`\`\`
   Variable 1:
   Key: STRIPE_SECRET_KEY
   Value: sk_test_YOUR_KEY
@@ -60,7 +60,7 @@
   Key: NEXT_PUBLIC_APP_URL
   Value: https://yourdomain.com
   Scope: All scopes
-  ```
+  \`\`\`
 
 - [ ] Verify all 4 variables are correct
 - [ ] No typos in variable names
@@ -111,7 +111,7 @@
 ### **Stripe Connect Test**
 - [ ] Go to API section
 - [ ] Test creating connected account:
-  ```bash
+  \`\`\`bash
   curl -X POST https://yourdomain.com/api/stripe/connect/create-account \
     -H "Content-Type: application/json" \
     -d '{
@@ -119,19 +119,19 @@
       "contactEmail": "test@business.com",
       "country": "us"
     }'
-  ```
+  \`\`\`
 - [ ] Expected response:
-  ```json
+  \`\`\`json
   {
     "success": true,
     "accountId": "acct_1234567890",
     "status": "created"
   }
-  ```
+  \`\`\`
 
 ### **Products Test**
 - [ ] Test creating product:
-  ```bash
+  \`\`\`bash
   curl -X POST https://yourdomain.com/api/stripe/products \
     -H "Content-Type: application/json" \
     -d '{
@@ -141,12 +141,12 @@
       "currency": "usd",
       "accountId": "acct_1234567890"
     }'
-  ```
+  \`\`\`
 - [ ] Should get back: productId, name, price
 - [ ] Test listing products:
-  ```bash
+  \`\`\`bash
   curl https://yourdomain.com/api/stripe/products
-  ```
+  \`\`\`
 - [ ] Should see products in response
 
 ---
@@ -242,11 +242,11 @@
 
 ### **Updating Netlify**
 - [ ] Update 3 env vars with LIVE keys:
-  ```
+  \`\`\`
   STRIPE_SECRET_KEY = sk_live_YOUR_LIVE_KEY
   STRIPE_PUBLISHABLE_KEY = pk_live_YOUR_LIVE_KEY
   STRIPE_WEBHOOK_SECRET = whsec_live_YOUR_LIVE_WEBHOOK
-  ```
+  \`\`\`
 - [ ] Verify values are correct (no copy/paste errors)
 - [ ] DO NOT use old test keys
 - [ ] Redeploy site
@@ -271,7 +271,7 @@
 
 ## 📊 Status Tracking
 
-```
+\`\`\`
 Phase               Status      Checkpoint
 ───────────────────────────────────────────────────
 Stripe Account      ☐ TODO     Created & Verified
@@ -289,7 +289,7 @@ Ready for Review    ☐ TODO     QA Approved
 Live Keys           ☐ TODO     Updated
 Live Test           ☐ TODO     Payment Processed
 Monitoring          ☐ TODO     24hr Review
-```
+\`\`\`
 
 ---
 
@@ -327,7 +327,7 @@ Monitoring          ☐ TODO     24hr Review
 
 ## ⏱️ Timeline
 
-```
+\`\`\`
 Estimate vs Actual:
 ├─ Stripe Setup: 15 min
 ├─ Getting Keys: 5 min
@@ -340,7 +340,7 @@ Estimate vs Actual:
 └─ TOTAL: ~1.5 hours to production ready
 
 Ready to Deploy: YES ✅
-```
+\`\`\`
 
 ---
 

@@ -3,7 +3,7 @@
 ## ✨ What Has Been Built
 
 ### **Backend Infrastructure** (7 endpoints, all production-ready)
-```
+\`\`\`
 ✅ POST   /api/stripe/checkout
 ✅ POST   /api/stripe/connect/create-account
 ✅ POST   /api/stripe/connect/account-link
@@ -11,10 +11,10 @@
 ✅ POST   /api/stripe/products
 ✅ GET    /api/stripe/products
 ✅ POST   /api/webhooks/stripe
-```
+\`\`\`
 
 ### **Documentation Suite** (9 comprehensive guides)
-```
+\`\`\`
 ✅ START_HERE_STRIPE.md                    (Start here!)
 ✅ STRIPE_DOCUMENTATION_INDEX.md            (Navigation guide)
 ✅ STRIPE_QUICK_REFERENCE.md                (5-min setup)
@@ -24,13 +24,13 @@
 ✅ STRIPE_PRODUCTION_READY.md               (Ready status)
 ✅ STRIPE_ARCHITECTURE_DIAGRAMS.md          (Visual flows)
 ✅ STRIPE_DEPLOYMENT_CHECKLIST.md           (Step-by-step)
-```
+\`\`\`
 
 ### **Configuration & Utilities**
-```
+\`\`\`
 ✅ lib/stripe-config.ts                     (Client factory)
 ✅ .env.example                             (Updated template)
-```
+\`\`\`
 
 ---
 
