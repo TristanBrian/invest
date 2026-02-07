@@ -10,7 +10,7 @@ The v0 preview environment has Content Security Policy (CSP) restrictions that p
 
 To test locally before deploying to Netlify:
 
-```bash
+\`\`\`bash
 # Install dependencies
 npm install
 
@@ -18,7 +18,7 @@ npm install
 npm run dev
 
 # Open http://localhost:3000 in your browser
-```
+\`\`\`
 
 ### Local Testing Checklist
 - [ ] Home page loads without errors
@@ -79,7 +79,7 @@ npm run dev
 Once deployed to production, test these endpoints:
 
 ### Contact Form
-```bash
+\`\`\`bash
 curl -X POST https://your-domain.com/api/forms/investment-enquiry \
   -H "Content-Type: application/json" \
   -d '{
@@ -91,10 +91,10 @@ curl -X POST https://your-domain.com/api/forms/investment-enquiry \
     "message": "Interested in investment opportunities",
     "consent": true
   }'
-```
+\`\`\`
 
 ### M-Pesa Payment
-```bash
+\`\`\`bash
 curl -X POST https://your-domain.com/api/mpesa \
   -H "Content-Type: application/json" \
   -d '{
@@ -102,7 +102,7 @@ curl -X POST https://your-domain.com/api/mpesa \
     "amount": 1000,
     "description": "Investment Advisory"
   }'
-```
+\`\`\`
 
 ## Common Issues & Solutions
 

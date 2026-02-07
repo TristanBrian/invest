@@ -18,12 +18,12 @@ This error indicates that your browser extensions (ad blocker, privacy extension
    - Most ad blockers are disabled by default in private browsing
 
 3. **Clear Browser Cache**
-   ```
+   \`\`\`
    Ctrl+Shift+Delete (or Cmd+Shift+Delete on Mac)
    - Clear browsing data
    - Select "All time"
    - Click "Clear data"
-   ```
+   \`\`\`
 
 4. **Use a Different Browser**
    - Try Chrome, Firefox, Safari, or Edge
@@ -78,7 +78,7 @@ The Stripe integration is working correctly. The errors are purely from browser 
 
 Ensure all required environment variables are set:
 
-```bash
+\`\`\`bash
 # In Netlify Vars (or .env for local dev)
 RESEND_API_KEY=xxx
 MPESA_CONSUMER_KEY=xxx
@@ -86,7 +86,7 @@ MPESA_CONSUMER_SECRET=xxx
 MPESA_PASSKEY=xxx
 MPESA_SHORTCODE=xxx
 STRIPE_SECRET_KEY=xxx
-```
+\`\`\`
 
 ## Server-Side Logs
 

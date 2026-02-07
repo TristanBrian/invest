@@ -3,7 +3,7 @@
 ## For Development Team
 
 ### 1. Initial Setup (5 minutes)
-```bash
+\`\`\`bash
 # Clone repository
 git clone <repo-url>
 cd oxic-international-group
@@ -17,7 +17,7 @@ cp .env.example .env.local
 
 # Run development server
 npm run dev
-```
+\`\`\`
 
 Visit `http://localhost:3000` and verify all pages load.
 
@@ -66,24 +66,24 @@ Visit `http://localhost:3000` and verify all pages load.
 ### User Flows
 
 **Payment Flow**:
-```
+\`\`\`
 1. User clicks "Pay with M-Pesa"
 2. Sees processing animation with countdown
 3. Gets instructions for entering PIN
 4. Upon payment, sees success screen
 5. Can download receipt
 6. Receives invoice via email
-```
+\`\`\`
 
 **Contact Flow**:
-```
+\`\`\`
 1. User fills contact form
 2. Selects investment interest
 3. Provides message
 4. Accepts consent
 5. Submits successfully
 6. Receives confirmation
-```
+\`\`\`
 
 ## For Operations Team
 
@@ -202,31 +202,31 @@ Visit `http://localhost:3000` and verify all pages load.
 ## Emergency Procedures
 
 **Critical Bug**
-```
+\`\`\`
 1. Document the issue
 2. Check error logs
 3. Deploy hotfix
 4. Verify resolution
 5. Post-mortem analysis
-```
+\`\`\`
 
 **Performance Issues**
-```
+\`\`\`
 1. Check monitoring dashboard
 2. Identify bottleneck
 3. Implement optimization
 4. Verify improvement
 5. Deploy fix
-```
+\`\`\`
 
 **Security Issue**
-```
+\`\`\`
 1. Isolate affected system
 2. Assess damage
 3. Implement fix
 4. Deploy immediately
 5. Audit for similar issues
-```
+\`\`\`
 
 ## Next Steps
 

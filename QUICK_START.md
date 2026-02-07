@@ -3,20 +3,20 @@
 ## Local Development
 
 ### 1. Clone & Install
-```bash
+\`\`\`bash
 git clone https://github.com/TristanBrian/invest.git
 cd invest
 npm install
-```
+\`\`\`
 
 ### 2. Configure Environment
-```bash
+\`\`\`bash
 # Copy environment template
 cp .env.example .env.local
 
 # Edit and add your API keys
 nano .env.local
-```
+\`\`\`
 
 **Required for local testing:**
 - `RESEND_API_KEY` - From https://resend.com/api-keys
@@ -26,9 +26,9 @@ nano .env.local
 - `MPESA_SHORTCODE` - Your M-Pesa Paybill/Till number
 
 ### 3. Run Development Server
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 Open http://localhost:3000 in your browser.
 
@@ -41,17 +41,17 @@ Open http://localhost:3000 in your browser.
 - Authorize Netlify
 
 ### 2. Configure Build Settings
-```
+\`\`\`
 Build command: npm run build
 Publish directory: .next
 Node version: 20.11.0
-```
+\`\`\`
 
 ### 3. Set Environment Variables
 In Netlify Dashboard → Site Settings → Build & deploy → Environment:
 
 Add all variables from `.env.example`:
-```
+\`\`\`
 RESEND_API_KEY=re_xxxxxxxxxxxx
 CONTACT_EMAIL_TO=oxicgroupltd@gmail.com,Info@oxicinternational.co.ke
 MPESA_CONSUMER_KEY=...
@@ -62,7 +62,7 @@ MPESA_ENV=production
 MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 NODE_ENV=production
-```
+\`\`\`
 
 ### 4. Configure Domain
 - Go to Domain settings
@@ -71,12 +71,12 @@ NODE_ENV=production
 - Enable HTTPS (automatic with Netlify)
 
 ### 5. Deploy
-```bash
+\`\`\`bash
 # Push to GitHub - Netlify automatically deploys
 git add .
 git commit -m "Production deployment"
 git push origin main
-```
+\`\`\`
 
 ## Features Configured
 
@@ -111,17 +111,17 @@ git push origin main
 - Enable domain verification for email
 
 ### M-Pesa Testing
-```json
+\`\`\`json
 {
   "phoneNumber": "254748992777",
   "amount": 10,
   "accountReference": "TEST",
   "transactionDesc": "Test Payment"
 }
-```
+\`\`\`
 
 ### Email Testing
-```json
+\`\`\`json
 {
   "name": "Test User",
   "email": "test@example.com",
@@ -131,7 +131,7 @@ git push origin main
   "message": "Test inquiry",
   "consent": true
 }
-```
+\`\`\`
 
 ## Troubleshooting
 

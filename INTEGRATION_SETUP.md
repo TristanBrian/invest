@@ -40,7 +40,7 @@ Resend is used for sending contact form inquiries and M-Pesa payment notificatio
 
 ### Testing Resend Integration
 
-```bash
+\`\`\`bash
 # Test contact form submission
 curl -X POST http://localhost:3000/api/forms/investment-enquiry \
   -H "Content-Type: application/json" \
@@ -53,7 +53,7 @@ curl -X POST http://localhost:3000/api/forms/investment-enquiry \
     "message": "Test message",
     "consent": true
   }'
-```
+\`\`\`
 
 ---
 
@@ -98,7 +98,7 @@ M-Pesa integration enables STK push payments and automatic callback handling.
 
 ### Environment Configuration
 
-```env
+\`\`\`env
 # Sandbox Testing
 MPESA_CONSUMER_KEY=your_consumer_key_here
 MPESA_CONSUMER_SECRET=your_consumer_secret_here
@@ -106,7 +106,7 @@ MPESA_PASSKEY=your_lipa_na_mpesa_passkey_here
 MPESA_SHORTCODE=your_paybill_or_till_number
 MPESA_ENV=sandbox
 MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
-```
+\`\`\`
 
 ### Callback URL Configuration
 
@@ -123,7 +123,7 @@ MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
 
 ### Testing M-Pesa Integration
 
-```bash
+\`\`\`bash
 # Test STK Push
 curl -X POST http://localhost:3000/api/mpesa \
   -H "Content-Type: application/json" \
@@ -135,7 +135,7 @@ curl -X POST http://localhost:3000/api/mpesa \
   }'
 
 # Response includes CheckoutRequestID for tracking
-```
+\`\`\`
 
 ### Transition to Production
 
@@ -145,12 +145,12 @@ curl -X POST http://localhost:3000/api/mpesa \
    - Receive production Consumer Key and Secret
 
 2. **Update Configuration**
-   ```env
+   \`\`\`env
    MPESA_ENV=production
    MPESA_CONSUMER_KEY=your_production_key
    MPESA_CONSUMER_SECRET=your_production_secret
    MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
-   ```
+   \`\`\`
 
 3. **Domain Verification**
    - Ensure callback domain is properly configured in Daraja
@@ -177,10 +177,10 @@ Stripe is available as an alternative payment method.
      - Secret Key: `sk_test_...`
 
 3. **Configuration**
-   ```env
+   \`\`\`env
    STRIPE_PUBLIC_KEY=pk_test_your_key
    STRIPE_SECRET_KEY=sk_test_your_key
-   ```
+   \`\`\`
 
 ---
 
@@ -189,12 +189,12 @@ Stripe is available as an alternative payment method.
 ### Setup .env.local
 
 1. **Copy template**
-   ```bash
+   \`\`\`bash
    cp .env.example .env.local
-   ```
+   \`\`\`
 
 2. **Fill in your values**
-   ```env
+   \`\`\`env
    RESEND_API_KEY=re_xxxxxxxxxxxx
    CONTACT_EMAIL_TO=oxicgroupltd@gmail.com,Info@oxicinternational.co.ke
    
@@ -206,7 +206,7 @@ Stripe is available as an alternative payment method.
    MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
    
    NEXT_PUBLIC_SITE_URL=https://yourdomain.com
-   ```
+   \`\`\`
 
 3. **Never commit .env.local**
    - Already in .gitignore
@@ -236,13 +236,13 @@ Stripe is available as an alternative payment method.
    - **DO NOT include .env.local in repository**
 
 2. **Sensitive Variables**
-   ```
+   \`\`\`
    RESEND_API_KEY
    MPESA_CONSUMER_KEY
    MPESA_CONSUMER_SECRET
    MPESA_PASSKEY
    STRIPE_SECRET_KEY (if using)
-   ```
+   \`\`\`
 
 ### Monitoring
 

@@ -78,17 +78,17 @@ In Resend dashboard:
 
 ## Build Command
 
-```bash
+\`\`\`bash
 npm run build
-```
+\`\`\`
 
 All dependencies are clean. Build should pass with no errors.
 
 ## Deploy Command
 
-```bash
+\`\`\`bash
 npm run deploy  # or git push to trigger Netlify deploy
-```
+\`\`\`
 
 ## Next Steps
 

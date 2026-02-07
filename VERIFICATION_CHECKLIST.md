@@ -38,13 +38,13 @@
 4. Set domain callback URL in Daraja
 
 ### To Deploy
-```bash
+\`\`\`bash
 # Create PR and merge to main
 git push origin your-branch
 # GitHub → Create Pull Request
 # Review and merge to main
 # Netlify will automatically deploy
-```
+\`\`\`
 
 ### Services Configured
 - ✅ Resend for contact form and payment emails

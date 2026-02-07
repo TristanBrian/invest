@@ -8,13 +8,13 @@ All payment endpoints implement rate limiting:
 - Returns 429 (Too Many Requests) when limit exceeded
 
 ### Implementation
-```typescript
+\`\`\`typescript
 // Automatic rate limiting in /lib/security.ts
 const rateLimiter = new RateLimiter()
 if (rateLimiter.isLimited(clientIp)) {
   return 429 Too Many Requests
 }
-```
+\`\`\`
 
 ## 2. Request Validation
 
@@ -45,11 +45,11 @@ The system detects and logs:
 - Failed authentication attempts
 
 ### Security Logging
-```
+\`\`\`
 [v0] SECURITY: 2026-02-04T14:09:24.453Z RATE_LIMIT_EXCEEDED ip: 192.168.1.1
 [v0] SECURITY: 2026-02-04T14:09:25.123Z INVALID_ORIGIN origin: https://malicious.com
 [v0] SECURITY: 2026-02-04T14:09:26.456Z SUSPICIOUS_ACTIVITY reason: Amount exceeds typical
-```
+\`\`\`
 
 ## 4. Environment Variable Security
 
@@ -74,7 +74,7 @@ The system detects and logs:
 
 All responses include:
 
-```
+\`\`\`
 X-Content-Type-Options: nosniff
   → Prevents MIME sniffing attacks
 
@@ -92,16 +92,16 @@ Content-Security-Policy: [restrictive policy]
 
 Permissions-Policy: geolocation=(), microphone=(), camera=()
   → Disables unnecessary APIs
-```
+\`\`\`
 
 ## 6. CORS Configuration
 
 ### Allowed Origins
-```
+\`\`\`
 https://oxicinternational.co.ke
 https://www.oxicinternational.co.ke
 http://localhost:3000 (dev only)
-```
+\`\`\`
 
 ### Allowed Methods
 - GET, POST, PUT, DELETE, OPTIONS
@@ -130,13 +130,13 @@ Located in `/middleware.ts` (or proxy.ts for Next.js 16+)
 ## 8. API Request Security
 
 ### Request Signing (Production)
-```typescript
+\`\`\`typescript
 // All requests include:
 - Valid Origin header
 - Correct Content-Type
 - No suspicious parameters
 - Validated against rate limits
-```
+\`\`\`
 
 ### Timeout Protection
 - 30-second timeout on M-Pesa callbacks
@@ -179,13 +179,13 @@ Located in `/middleware.ts` (or proxy.ts for Next.js 16+)
 - Don't reveal database errors
 
 ### Example
-```typescript
+\`\`\`typescript
 // ❌ Bad - exposes system details
 error: "Database connection failed to 192.168.1.1:5432"
 
 // ✅ Good - generic message
 error: "Payment processing failed. Please try again later."
-```
+\`\`\`
 
 ## 12. Monitoring & Alerts
 

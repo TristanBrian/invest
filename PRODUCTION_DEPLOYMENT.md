@@ -46,7 +46,7 @@
 
 ## File Structure
 
-```
+\`\`\`
 .
 ├── .env.example                              # Configuration template
 ├── README.md                                 # Updated with integrations
@@ -57,22 +57,22 @@
 ├── app/api/mpesa/route.ts                    # M-Pesa STK push (unchanged)
 ├── app/api/mpesa/callback/route.ts           # Resend integration for notifications
 └── public/images/logo-transparent.png        # New transparent logo
-```
+\`\`\`
 
 ## Environment Variables Required
 
 ### For Local Development
-```env
+\`\`\`env
 RESEND_API_KEY=re_xxxxxxxxxxxx
 MPESA_CONSUMER_KEY=your_consumer_key
 MPESA_CONSUMER_SECRET=your_consumer_secret
 MPESA_PASSKEY=your_passkey
 MPESA_SHORTCODE=123456
 MPESA_ENV=sandbox
-```
+\`\`\`
 
 ### For Production Deployment (Netlify)
-```env
+\`\`\`env
 RESEND_API_KEY=re_xxxxxxxxxxxx
 CONTACT_EMAIL_TO=oxicgroupltd@gmail.com,Info@oxicinternational.co.ke
 MPESA_CONSUMER_KEY=production_consumer_key
@@ -82,7 +82,7 @@ MPESA_SHORTCODE=production_shortcode
 MPESA_ENV=production
 MPESA_CALLBACK_URL=https://yourdomain.com/api/mpesa/callback
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
-```
+\`\`\`
 
 ## API Endpoints
 
@@ -121,11 +121,11 @@ Before deploying to production:
 ## Deployment Steps
 
 1. **Prepare GitHub**
-   ```bash
+   \`\`\`bash
    git add .
    git commit -m "Production updates: Resend integration, M-Pesa callbacks, transparent logo"
    git push origin main
-   ```
+   \`\`\`
 
 2. **Configure Netlify**
    - Connect GitHub repository

@@ -107,7 +107,7 @@
 
 ## Environment Variables Needed
 
-```
+\`\`\`
 NEXT_PUBLIC_API_URL=https://oxicinternational.co.ke
 RESEND_API_KEY=re_xxxxxxxxxxxxx
 MPESA_CONSUMER_KEY=xxxxxxxxxxxxx
@@ -118,11 +118,11 @@ STRIPE_PUBLISHABLE_KEY=pk_live_xxxxx
 STRIPE_SECRET_KEY=sk_live_xxxxx
 DATABASE_URL=postgresql://user:pass@host/db
 NODE_ENV=production
-```
+\`\`\`
 
 ## Quick Commands
 
-```bash
+\`\`\`bash
 # Development
 npm run dev          # Start dev server
 npm run build        # Build for production
@@ -134,12 +134,12 @@ npm run type-check   # Check TypeScript
 
 # Deployment
 git push origin main # Deploy to Vercel
-```
+\`\`\`
 
 ## Support Resources
 
 ### Documentation Structure
-```
+\`\`\`
 Root/
 ├── README_OXIC.md                          # Project overview
 ├── QUICK_START_GUIDE.md                    # Get started quickly
@@ -155,7 +155,7 @@ Root/
 ├── MPESA_PRODUCTION_SETUP.md               # M-Pesa setup
 ├── RESEND_EMAIL_INTEGRATION.md             # Email setup
 └── [Other documentation files]
-```
+\`\`\`
 
 ## Critical Files in Codebase
 

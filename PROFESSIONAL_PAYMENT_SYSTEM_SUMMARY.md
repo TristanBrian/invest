@@ -53,7 +53,7 @@
 ### Advanced Features Implemented
 
 **Animations & Visual Design:**
-```
+\`\`\`
 ✓ Rotating outer ring spinner (constant speed)
 ✓ Pulsing middle ring (breathing effect)
 ✓ Bouncing inner icon (dynamic motion)
@@ -61,10 +61,10 @@
 ✓ Color gradients (green/emerald, amber themes)
 ✓ Professional gradient backgrounds
 ✓ Responsive card layouts
-```
+\`\`\`
 
 **Professional UI Elements:**
-```
+\`\`\`
 ✓ Information boxes with bullet points
 ✓ Monospace font for transaction IDs
 ✓ Grid layouts for data display
@@ -72,10 +72,10 @@
 ✓ Clear visual hierarchy
 ✓ Mobile-first responsive design
 ✓ Accessibility-focused (large icons, clear text)
-```
+\`\`\`
 
 **User Experience:**
-```
+\`\`\`
 ✓ 120-second processing timer
 ✓ Auto-timeout to waiting state
 ✓ Manual cancel/confirm options
@@ -83,7 +83,7 @@
 ✓ Receipt download capability
 ✓ Clear error recovery path
 ✓ Troubleshooting guidance
-```
+\`\`\`
 
 ---
 
@@ -186,7 +186,7 @@
 
 ### Typical User Journey:
 
-```
+\`\`\`
 1. User enters phone: 0712046110, amount: 10,000
 2. Clicks "Pay with M-Pesa"
 3. See "Processing Payment" screen with:
@@ -207,11 +207,11 @@
    - Transaction summary
    - Download receipt button
    - Professional confirmation message
-```
+\`\`\`
 
 ### If Cancelled or Failed:
 
-```
+\`\`\`
 1. See "Payment Failed" screen with:
    - Red alert icon
    - Clear error message
@@ -220,7 +220,7 @@
    - "Try Again" button
 2. Click "Try Again" → Back to clean form
 3. Can retry with different amount, phone, etc.
-```
+\`\`\`
 
 ---
 

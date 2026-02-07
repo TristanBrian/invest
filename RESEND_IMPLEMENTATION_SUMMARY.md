@@ -34,7 +34,7 @@ Completely replaced SendGrid with **Resend** for all email functionality.
 ## Code Comparison
 
 ### SendGrid (Old)
-```typescript
+\`\`\`typescript
 // Complex payload structure
 const payload = {
   personalizations: [{ to: [...], subject: "..." }],
@@ -42,10 +42,10 @@ const payload = {
   content: [{ type: "text/html", value: htmlContent }],
   reply_to: { email: "...", name: "..." }
 }
-```
+\`\`\`
 
 ### Resend (New)
-```typescript
+\`\`\`typescript
 // Simple, clean structure
 {
   from: `${name} <${email}>`,
@@ -54,7 +54,7 @@ const payload = {
   html: htmlContent,
   reply_to: "..."
 }
-```
+\`\`\`
 
 ## API Methods
 
@@ -82,9 +82,9 @@ Quick confirmation notification:
    - Copy key
 
 2. **Add to Environment Variables**
-   ```
+   \`\`\`
    RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
-   ```
+   \`\`\`
 
 3. **Deploy to Netlify**
    - Push code
@@ -110,10 +110,10 @@ Quick confirmation notification:
 
 After setup, test with:
 
-```bash
+\`\`\`bash
 # In browser console or via API endpoint
 fetch('/api/test-email', { method: 'POST' })
-```
+\`\`\`
 
 Check email delivery in Resend dashboard:
 - Real-time delivery tracking

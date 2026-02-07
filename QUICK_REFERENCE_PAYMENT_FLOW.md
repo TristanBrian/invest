@@ -4,7 +4,7 @@
 
 ### 1️⃣ FORM
 **Purpose:** Collect payment details
-```
+\`\`\`
 ┌─────────────────────────────┐
 │   M-Pesa Payment Form       │
 ├─────────────────────────────┤
@@ -15,7 +15,7 @@
 │ │ Pay with M-Pesa      │   │
 │ └──────────────────────┘   │
 └─────────────────────────────┘
-```
+\`\`\`
 **User Action:** Submit form
 **Next State:** Processing
 
@@ -23,7 +23,7 @@
 
 ### 2️⃣ PROCESSING ⭐ NEW
 **Purpose:** Show payment is being sent
-```
+\`\`\`
 ┌──────────────────────────────┐
 │  ⟳ ⭳ Processing Payment    │
 │                              │
@@ -44,7 +44,7 @@
 │                              │
 │ [    Cancel    ]            │
 └──────────────────────────────┘
-```
+\`\`\`
 **Duration:** 1-120 seconds (auto or API)
 **User Actions:** Wait or Cancel
 **Next States:** 
@@ -57,7 +57,7 @@
 
 ### 3️⃣ WAITING
 **Purpose:** Waiting for user to enter PIN
-```
+\`\`\`
 ┌──────────────────────────────┐
 │  ⟳ Awaiting Your PIN        │
 │                              │
@@ -82,7 +82,7 @@
 │                              │
 │ [Cancel] [✓ Confirm]       │
 └──────────────────────────────┘
-```
+\`\`\`
 **Duration:** Max 2-3 minutes (M-Pesa timeout)
 **User Actions:** Enter PIN or Cancel
 **Next States:**
@@ -94,7 +94,7 @@
 
 ### 4️⃣ SUCCESS ✅
 **Purpose:** Confirm payment received
-```
+\`\`\`
 ┌──────────────────────────────┐
 │          ✓ ✓ ✓             │
 │                              │
@@ -113,7 +113,7 @@
 │ [Download Receipt]          │
 │ [      Close      ]         │
 └──────────────────────────────┘
-```
+\`\`\`
 **Duration:** User closes or auto-close
 **User Actions:** Download receipt or close
 **Next States:** Back to Home/Form
@@ -122,7 +122,7 @@
 
 ### 5️⃣ ERROR ❌
 **Purpose:** Show what went wrong
-```
+\`\`\`
 ┌──────────────────────────────┐
 │          ⚠ Error            │
 │                              │
@@ -144,7 +144,7 @@
 │                              │
 │ [Try Again] [Close]        │
 └──────────────────────────────┘
-```
+\`\`\`
 **Duration:** User chooses action
 **User Actions:** Try Again or Close
 **Next States:** Form (clean) or Home
@@ -153,7 +153,7 @@
 
 ## Visual Hierarchy Summary
 
-```
+\`\`\`
     FORM
      │
      ↓ Submit
@@ -170,7 +170,7 @@
      │
      ↓
    HOME
-```
+\`\`\`
 
 ---
 
@@ -189,7 +189,7 @@
 ## Animations Explained
 
 ### Processing State Spinner
-```
+\`\`\`
 Layer 1: Outer ring
   - Rotates clockwise continuously
   - Green color (border-t-green-500, border-r-green-500)
@@ -204,14 +204,14 @@ Layer 3: Icon
   - Bounces up/down
   - Phone emoji
   - Speed: 1 second per bounce
-```
+\`\`\`
 
 ### Progress Bar
-```
+\`\`\`
 Width: 0% → 100% over 120 seconds
 Color: Green → Emerald gradient
 Transition: Smooth 300ms updates
-```
+\`\`\`
 
 ---
 

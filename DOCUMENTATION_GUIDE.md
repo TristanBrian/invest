@@ -2,7 +2,7 @@
 
 ## Where to Start
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────┐
 │  START HERE: README_OXIC.md (5 min read)               │
 │  → Overview, status, quick start                        │
@@ -18,7 +18,7 @@
   IMPLEMENTATION  PRODUCTION    SECURITY       SEO_
   _GUIDE.md       _SETUP.md     _BEST_         OPTIMIZATION
                                 PRACTICES.md   _GUIDE.md
-```
+\`\`\`
 
 ## Documentation Map
 
@@ -125,7 +125,7 @@
 
 ## File Dependencies
 
-```
+\`\`\`
 README_OXIC.md ────────────┐
                            ├──→ IMPLEMENTATION_GUIDE.md
 COMPLETE_SUMMARY.md ───────┤
@@ -133,7 +133,7 @@ COMPLETE_SUMMARY.md ───────┤
                            ├──→ SECURITY_BEST_PRACTICES.md
                            ├──→ SEO_OPTIMIZATION_GUIDE.md
                            └──→ MPESA_PASSKEY_REQUIRED_FIX.md
-```
+\`\`\`
 
 All guides reference each other when needed. Start with **README_OXIC.md** and follow links as needed.
 

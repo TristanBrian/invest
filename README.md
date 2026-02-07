@@ -66,9 +66,9 @@ Positioned as a trusted on-the-ground partner, we bridge global capital with ban
 ## Deployment
 
 ### Development
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 ### Production (Netlify)
 
