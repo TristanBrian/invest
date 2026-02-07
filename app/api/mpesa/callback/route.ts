@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 // Types for M-Pesa callback
 interface CallbackItem {
   Name: string
-  Value: any
+  Value: string | number | null
 }
 
 interface MpesaPaymentDetails {
