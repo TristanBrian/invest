@@ -53,12 +53,12 @@ Go to https://dashboard.stripe.com
 3. Click "Edit variables"
 4. Add exactly these 4 variables:
 
-```
+\`\`\`
 STRIPE_SECRET_KEY = sk_test_YOUR_KEY
 STRIPE_PUBLISHABLE_KEY = pk_test_YOUR_KEY
 STRIPE_WEBHOOK_SECRET = whsec_YOUR_SECRET
 NEXT_PUBLIC_APP_URL = https://yourdomain.com
-```
+\`\`\`
 
 ### **Step 3: Redeploy** (1 minute)
 - Commit and push code, or
@@ -73,7 +73,7 @@ NEXT_PUBLIC_APP_URL = https://yourdomain.com
 
 ## 📁 File Structure Created
 
-```
+\`\`\`
 app/api/stripe/
 ├── checkout/route.ts              ✅ Existing - Updated
 ├── webhooks/
@@ -93,7 +93,7 @@ Documentation:
 ├── NETLIFY_ENV_VARIABLES.md       ✅ All variables
 ├── STRIPE_COMPLETE_IMPLEMENTATION.md ✅ Full reference
 └── .env.example                   ✅ Updated
-```
+\`\`\`
 
 ---
 
@@ -137,7 +137,7 @@ Documentation:
 
 ## 🔐 Production Checklist
 
-```
+\`\`\`
 PRE-DEPLOYMENT:
 □ All tests pass locally
 □ Test payments work
@@ -163,13 +163,13 @@ GOING LIVE:
 □ Update Netlify env vars
 □ Test with real payment
 □ Monitor dashboard for 24 hours
-```
+\`\`\`
 
 ---
 
 ## 💡 Key Endpoints Reference
 
-```bash
+\`\`\`bash
 # Create seller account
 POST /api/stripe/connect/create-account
 Body: { displayName, contactEmail, country }
@@ -197,7 +197,7 @@ Returns: { products[], total }
 POST /api/stripe/checkout
 Body: { amount, currency, description, customerEmail, customerName }
 Returns: { url } - Redirect user to checkout
-```
+\`\`\`
 
 ---
 

@@ -57,12 +57,12 @@ Go to your Netlify site:
 1. Site Settings → Build & Deploy → Environment
 2. Add these variables:
 
-```
+\`\`\`
 STRIPE_SECRET_KEY = sk_test_YOUR_KEY
 STRIPE_PUBLISHABLE_KEY = pk_test_YOUR_KEY
 STRIPE_WEBHOOK_SECRET = whsec_YOUR_SECRET
 NEXT_PUBLIC_APP_URL = https://yourdomain.com
-```
+\`\`\`
 
 ### Step 3: Redeploy
 
@@ -79,7 +79,7 @@ Use Stripe test cards:
 
 ### Create Connected Account
 
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/connect/create-account \
   -H "Content-Type: application/json" \
   -d '{
@@ -87,48 +87,48 @@ curl -X POST https://yourdomain.com/api/stripe/connect/create-account \
     "contactEmail": "owner@coffee.com",
     "country": "us"
   }'
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "accountId": "acct_1234567890",
   "displayName": "Amazing Coffee Co",
   "status": "created"
 }
-```
+\`\`\`
 
 ### Generate Onboarding Link
 
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/connect/account-link \
   -H "Content-Type: application/json" \
   -d '{
     "accountId": "acct_1234567890"
   }'
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "url": "https://connect.stripe.com/...",
   "expiresAt": 1234567890,
   "accountId": "acct_1234567890"
 }
-```
+\`\`\`
 
 User visits this URL to complete onboarding.
 
 ### Check Account Status
 
-```bash
+\`\`\`bash
 curl https://yourdomain.com/api/stripe/connect/account-status?accountId=acct_1234567890
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "accountId": "acct_1234567890",
@@ -142,11 +142,11 @@ curl https://yourdomain.com/api/stripe/connect/account-status?accountId=acct_123
     "eventuallyDue": []
   }
 }
-```
+\`\`\`
 
 ### Create Product
 
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/products \
   -H "Content-Type: application/json" \
   -d '{
@@ -156,19 +156,19 @@ curl -X POST https://yourdomain.com/api/stripe/products \
     "currency": "usd",
     "accountId": "acct_1234567890"
   }'
-```
+\`\`\`
 
 ### List Products
 
-```bash
+\`\`\`bash
 curl https://yourdomain.com/api/stripe/products
-```
+\`\`\`
 
 ### Process Payment (Destination Charge)
 
 The existing checkout endpoint automatically routes payments to the connected account:
 
-```bash
+\`\`\`bash
 curl -X POST https://yourdomain.com/api/stripe/checkout \
   -H "Content-Type: application/json" \
   -d '{
@@ -179,7 +179,7 @@ curl -X POST https://yourdomain.com/api/stripe/checkout \
     "customerName": "John Doe",
     "connectedAccountId": "acct_1234567890"
   }'
-```
+\`\`\`
 
 ## 🔐 Security
 
@@ -195,7 +195,7 @@ curl -X POST https://yourdomain.com/api/stripe/checkout \
 
 ### Local Testing with Stripe CLI
 
-```bash
+\`\`\`bash
 # Install Stripe CLI
 brew install stripe/stripe-cli/stripe
 
@@ -209,21 +209,21 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 curl -X POST http://localhost:3000/api/stripe/products \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","priceInCents":1000,"accountId":"acct_test"}'
-```
+\`\`\`
 
 ### Test Webhook Events
 
-```bash
+\`\`\`bash
 # List test events
 stripe events list
 
 # Trigger test events
 stripe trigger checkout.session.completed
-```
+\`\`\`
 
 ## 📊 Payment Flow
 
-```
+\`\`\`
 Customer Visit Store
         ↓
 Browse Products (from Stripe)
@@ -243,7 +243,7 @@ Platform keeps application fee
 Webhook notifies your system
         ↓
 Order updated, email sent
-```
+\`\`\`
 
 ## ⚙️ Webhook Events Handled
 

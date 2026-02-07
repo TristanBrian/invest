@@ -113,11 +113,11 @@ STRIPE_CONNECT_REDIRECT_URL=https://yourdomain.com/stripe/connected
 ## Testing
 
 ### Local Testing
-```bash
+\`\`\`bash
 npm install -g stripe
 stripe login
 stripe listen --forward-to localhost:3000/api/webhooks/stripe
-```
+\`\`\`
 
 ### Test Payment
 1. Use card number: 4242 4242 4242 4242

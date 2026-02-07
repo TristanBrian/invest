@@ -80,28 +80,28 @@
 ## 🗂️ API Endpoints Reference
 
 ### **Checkout API** (Payment Processing)
-```
+\`\`\`
 POST /api/stripe/checkout
 Process one-time payments with multiple currencies
-```
+\`\`\`
 
 ### **Stripe Connect** (Multi-Seller)
-```
+\`\`\`
 POST   /api/stripe/connect/create-account      → Create seller
 POST   /api/stripe/connect/account-link        → Generate onboarding URL
 GET    /api/stripe/connect/account-status      → Check seller progress
-```
+\`\`\`
 
 ### **Products API** (Marketplace)
-```
+\`\`\`
 POST   /api/stripe/products                    → Create product
 GET    /api/stripe/products                    → List all products
-```
+\`\`\`
 
 ### **Webhooks** (Event Handling)
-```
+\`\`\`
 POST   /api/webhooks/stripe                    → Receive Stripe events
-```
+\`\`\`
 
 ---
 
@@ -128,15 +128,15 @@ POST   /api/webhooks/stripe                    → Receive Stripe events
 ## 🚀 Deployment Workflow
 
 ### **Phase 1: Setup** (5 min)
-```
+\`\`\`
 1. Get Stripe account at stripe.com
 2. Generate 3 keys
 3. Create webhook endpoint
 4. Copy all 3 secrets
-```
+\`\`\`
 
 ### **Phase 2: Deploy** (5 min)
-```
+\`\`\`
 1. Add 4 env vars to Netlify:
    - STRIPE_SECRET_KEY
    - STRIPE_PUBLISHABLE_KEY
@@ -144,24 +144,24 @@ POST   /api/webhooks/stripe                    → Receive Stripe events
    - NEXT_PUBLIC_APP_URL
 2. Redeploy site
 3. Wait for build
-```
+\`\`\`
 
 ### **Phase 3: Test** (5 min)
-```
+\`\`\`
 1. Use test card: 4242 4242 4242 4242
 2. Process payment
 3. Check Stripe dashboard
 4. Verify webhook event
-```
+\`\`\`
 
 ### **Phase 4: Go Live** (5 min)
-```
+\`\`\`
 1. Get live keys (sk_live_, pk_live_, whsec_live_)
 2. Update Netlify env vars
 3. Update Stripe webhook
 4. Redeploy
 5. Test with real payment
-```
+\`\`\`
 
 ---
 

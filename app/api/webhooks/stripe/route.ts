@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     // Initialize Stripe client for webhook verification
     const stripe = new Stripe(config.secretKey, {
-      apiVersion: "2026-01-28.clover",
+      apiVersion: "2025-12-15.clover",
     })
 
     let event: Stripe.Event

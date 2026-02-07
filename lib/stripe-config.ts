@@ -8,7 +8,7 @@ const getStripeClient = () => {
   }
 
   return new Stripe(apiKey, {
-    apiVersion: "2026-01-28.clover",
+    apiVersion: "2025-12-15.clover",
   })
 }
 
