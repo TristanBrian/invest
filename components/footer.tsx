@@ -1,9 +1,22 @@
-"use client"
+'use client';
 
 import React from "react"
 
-import Image from "next/image"
 import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Map } from "lucide-react"
+
+// Twitter/X icon component
+function TwitterIcon() {
+  return (
+    <svg
+      className="h-6 w-6"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.514l-5.106-6.681-5.829 6.681h-3.328l7.687-8.876-8.156-10.623h6.57l4.888 6.469L17.56 2.25h.684zm-1.106 17.920h1.828L5.900 4.122H4.009l13.129 16.048z" />
+    </svg>
+  )
+}
 
 export function Footer() {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
@@ -20,61 +33,63 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-4">
           <div className="space-y-6 md:col-span-2">
             <div className="inline-block">
-              <Image
+              <img
                 src="/images/oxic-logo.png"
                 alt="The Oxic International Group"
-                width={450}
-                height={135}
                 className="h-28 w-auto object-contain"
-                quality={100}
               />
             </div>
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                {"East Africa's premier investment advisory group helping businesses and individuals achieve financial growth."}
-              </p>
-              <div className="flex gap-4">
-                <a
-                  href="https://www.facebook.com/profile.php?id=61587849211090"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label="Facebook"
-                  title="Follow us on Facebook"
-                >
-                  <Facebook className="h-6 w-6" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/107881812/admin/dashboard/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label="LinkedIn"
-                  title="Connect on LinkedIn"
-                >
-                  <Linkedin className="h-6 w-6" />
-                </a>
-                <a
-                  href="https://www.google.com/maps/place/The+Beacon/@-1.2949109,35.6562758,178617m/data=!3m1!1e3!4m10!1m2!2m1!1sThe+Beacon+Mall!3m6!1s0x182f110017e5672d:0xd91cca1e1bf61235!8m2!3d-1.2949109!4d36.8098403"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label="Google Maps"
-                  title="Visit us on Google Maps"
-                >
-                  <Map className="h-6 w-6" />
-                </a>
-                <a
-                  href="https://www.instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground transition-colors hover:text-foreground"
-                  aria-label="Instagram"
-                  title="Follow us on Instagram"
-                >
-                  <Instagram className="h-6 w-6" />
-                </a>
-              </div>
+            <div className="flex gap-4">
+              <a
+                href="https://www.facebook.com/profile.php?id=61587849211090"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Facebook"
+                title="Follow us on Facebook"
+              >
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/107881812/admin/dashboard/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="LinkedIn"
+                title="Connect on LinkedIn"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+              <a
+                href="https://x.com/theoxicintgroup"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Twitter/X"
+                title="Follow us on Twitter/X"
+              >
+                <TwitterIcon />
+              </a>
+              <a
+                href="https://www.google.com/maps/place/The+Beacon/@-1.2949109,35.6562758,178617m/data=!3m1!1e3!4m10!1m2!2m1!1sThe+Beacon+Mall!3m6!1s0x182f110017e5672d:0xd91cca1e1bf61235!8m2!3d-1.2949109!4d36.8098403"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Google Maps"
+                title="Visit us on Google Maps"
+              >
+                <Map className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Instagram"
+                title="Follow us on Instagram"
+              >
+                <Instagram className="h-6 w-6" />
+              </a>
             </div>
           </div>
 
@@ -160,9 +175,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground space-y-2">
+        <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
           <p>{"© 2026 The Oxic International Group. All rights reserved."}</p>
-          <p className="text-xs">{"Serving East Africa | Investment Advisory | Strategic Growth"}</p>
         </div>
       </div>
     </footer>
