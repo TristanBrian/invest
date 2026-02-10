@@ -3,7 +3,7 @@
 import React from "react"
 
 import Image from "next/image"
-import { Mail, Phone, MapPin, Instagram, Linkedin, TrendingUp } from "lucide-react"
+import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Map } from "lucide-react"
 
 export function Footer() {
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
@@ -29,34 +29,52 @@ export function Footer() {
                 quality={100}
               />
             </div>
-            <div className="flex gap-6">
-              <a 
-                href="https://www.instagram.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-6 w-6" />
-              </a>
-              <a 
-                href="https://www.tiktok.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="TikTok"
-              >
-                <TrendingUp className="h-6 w-6" />
-              </a>
-              <a 
-                href="https://www.linkedin.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-6 w-6" />
-              </a>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                {"East Africa's premier investment advisory group helping businesses and individuals achieve financial growth."}
+              </p>
+              <div className="flex gap-4">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61587849211090"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label="Facebook"
+                  title="Follow us on Facebook"
+                >
+                  <Facebook className="h-6 w-6" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/107881812/admin/dashboard/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label="LinkedIn"
+                  title="Connect on LinkedIn"
+                >
+                  <Linkedin className="h-6 w-6" />
+                </a>
+                <a
+                  href="https://www.google.com/maps/place/The+Beacon/@-1.2949109,35.6562758,178617m/data=!3m1!1e3!4m10!1m2!2m1!1sThe+Beacon+Mall!3m6!1s0x182f110017e5672d:0xd91cca1e1bf61235!8m2!3d-1.2949109!4d36.8098403"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label="Google Maps"
+                  title="Visit us on Google Maps"
+                >
+                  <Map className="h-6 w-6" />
+                </a>
+                <a
+                  href="https://www.instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label="Instagram"
+                  title="Follow us on Instagram"
+                >
+                  <Instagram className="h-6 w-6" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -99,6 +117,15 @@ export function Footer() {
                   {"Contact"}
                 </a>
               </li>
+              <li>
+                <a
+                  href="#reviews"
+                  onClick={(e) => scrollToSection(e, "reviews")}
+                  className="text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+                >
+                  {"Testimonials"}
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -124,7 +151,10 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <span>{"Nairobi, Kenya"}</span>
+                <div className="flex flex-col gap-1">
+                  <span>{"The Beacon Mall"}</span>
+                  <span className="text-xs">{"Nairobi, Kenya"}</span>
+                </div>
               </li>
             </ul>
           </div>
@@ -132,7 +162,7 @@ export function Footer() {
 
         <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground space-y-2">
           <p>{"© 2026 The Oxic International Group. All rights reserved."}</p>
-         
+          <p className="text-xs">{"Serving East Africa | Investment Advisory | Strategic Growth"}</p>
         </div>
       </div>
     </footer>

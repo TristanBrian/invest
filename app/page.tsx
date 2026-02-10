@@ -5,6 +5,8 @@ import { ValuePropositionSection } from "@/components/value-proposition-section"
 import { ServicesSection } from "@/components/services-section"
 import { FounderSection } from "@/components/founder-section"
 import { ContactSection } from "@/components/contact-section"
+import { LocationMap } from "@/components/location-map"
+import { ReviewsSection } from "@/components/reviews-section"
 import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
 
@@ -48,6 +50,10 @@ export default function Home() {
           <PaymentMethodsSection />
         </Suspense>
         <ContactSection />
+        <div id="reviews">
+          <ReviewsSection />
+        </div>
+        <LocationMap />
       </main>
       <Footer />
       <ScrollToTop />
