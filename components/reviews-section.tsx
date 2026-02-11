@@ -209,6 +209,7 @@ export function ReviewsSection() {
                 </div>
               </div>
 
+            
               {/* Navigation Controls */}
               <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl p-8">
                 <div className="flex items-center justify-between mb-6">
