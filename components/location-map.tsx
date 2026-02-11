@@ -160,7 +160,7 @@ export function LocationMap() {
                       {/* Hover effect line */}
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                     </button>
-
+                    
               
               {/* Decorative Element */}
               <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl shadow-lg transform rotate-12 flex items-center justify-center">
