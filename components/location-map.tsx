@@ -115,7 +115,7 @@ export function LocationMap() {
                       Ready to Visit?
                     </h3>
                     <p className="text-blue-100 mb-8">
-                      Get precise directions to our office at The Beacon Mall. Click below to open Google Maps with our exact location.
+                      Click below to open Google Maps with our exact location.
                     </p>
 
                     {/* Distance Info */}
@@ -166,7 +166,7 @@ export function LocationMap() {
                       <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
                         ℹ
                       </div>
-                      <p>Clicking will open Google Maps with our precise location</p>
+                      <p> Open our precise location</p>
                     </div>
                   </div>
                 </div>
