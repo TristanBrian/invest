@@ -161,17 +161,7 @@ export function LocationMap() {
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                     </button>
 
-                    {/* Info Note */}
-                    <div className="mt-6 flex items-center gap-2 text-sm text-blue-200">
-                      <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                        ℹ
-                      </div>
-                      <p> Open our precise location</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              
               {/* Decorative Element */}
               <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl shadow-lg transform rotate-12 flex items-center justify-center">
                 <span className="text-white font-bold text-sm text-center">Easy<br />Access</span>
