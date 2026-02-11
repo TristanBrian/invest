@@ -25,9 +25,6 @@ export function LocationMap() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Visit Our <span className="text-blue-600">Office</span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Located at The Beacon Mall, one of Nairobi's premier business and shopping destinations
-            </p>
           </div>
 
           {/* Main Card */}
