@@ -28,7 +28,7 @@ export function HeroSection() {
       </div>
 
       {/* Company Story Section - Right After Banner */}
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-10 sm:py-12 md:py-14 lg:py-16">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-10 lg:py-12">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4 text-center">
             <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary text-balance">

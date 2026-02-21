@@ -1184,7 +1184,7 @@ export function PaymentMethodsSection() {
     }
 
     return (
-    <section className="bg-muted/30 py-12 sm:py-16">
+    <section className="bg-muted/30 py-8 sm:py-10">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-8 text-center">
           <h2 className="mb-2 text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-primary">Flexible Payment Options</h2>

@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Map } from "lucide-react"
+import { Mail, Phone, MapPin, Linkedin, Facebook } from "lucide-react"
 
 // Twitter/X icon component
 function TwitterIcon() {
@@ -14,6 +14,20 @@ function TwitterIcon() {
       aria-hidden="true"
     >
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.514l-5.106-6.681-5.829 6.681h-3.328l7.687-8.876-8.156-10.623h6.57l4.888 6.469L17.56 2.25h.684zm-1.106 17.920h1.828L5.900 4.122H4.009l13.129 16.048z" />
+    </svg>
+  )
+}
+
+// YouTube icon component
+function YouTubeIcon() {
+  return (
+    <svg
+      className="h-6 w-6"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
     </svg>
   )
 }
@@ -71,24 +85,14 @@ export function Footer() {
                 <TwitterIcon />
               </a>
               <a
-                href="https://www.google.com/maps/place/The+Beacon/@-1.2949109,35.6562758,178617m/data=!3m1!1e3!4m10!1m2!2m1!1sThe+Beacon+Mall!3m6!1s0x182f110017e5672d:0xd91cca1e1bf61235!8m2!3d-1.2949109!4d36.8098403"
+                href="https://www.youtube.com/channel/UCj5Rr5qxN4by-6Xzt2hnO_A"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Google Maps"
-                title="Visit us on Google Maps"
+                aria-label="YouTube"
+                title="Subscribe on YouTube"
               >
-                <Map className="h-6 w-6" />
-              </a>
-              <a
-                href="https://www.instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Instagram"
-                title="Follow us on Instagram"
-              >
-                <Instagram className="h-6 w-6" />
+                <YouTubeIcon />
               </a>
             </div>
           </div>

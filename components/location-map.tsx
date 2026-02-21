@@ -6,13 +6,13 @@ export function LocationMap() {
   const [showMap, setShowMap] = useState(false)
 
   return (
-    <section className="py-16 md:py-20 bg-background">
+    <section className="py-6 md:py-8 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="space-y-8">
+        <div className="space-y-3">
           {/* Header */}
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-2">{"Our Location"}</h2>
-            <p className="text-muted-foreground mb-8">{"The Beacon Mall, Nairobi, Kenya"}</p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-1">{"Our Location"}</h2>
+            <p className="text-muted-foreground text-sm">{"The Beacon Mall, Nairobi, Kenya"}</p>
           </div>
 
           {/* Map Container */}
