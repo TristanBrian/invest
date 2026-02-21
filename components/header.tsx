@@ -36,10 +36,10 @@ export function Header() {
     setIsMenuOpen(false)
   }
 
-  const scrolledStyles = mounted && isScrolled
+  const scrolledStyles = isScrolled && mounted
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolledStyles ? "bg-background/98 shadow-lg border-b border-border" : "bg-background border-b border-border/50"} backdrop-blur-md`}>
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${mounted && scrolledStyles ? "bg-background/98 shadow-lg border-b border-border" : "bg-background border-b border-border/50"} backdrop-blur-md`}>
       <div className="container mx-auto flex h-28 lg:h-32 items-center justify-between px-4 lg:px-6">
         <a href="#" onClick={scrollToTop} className="flex items-center cursor-pointer group">
           {!logoLoaded && <div className="h-20 sm:h-24 lg:h-28 w-80 sm:w-96 bg-muted/20 animate-pulse rounded" />}

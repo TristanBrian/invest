@@ -160,27 +160,33 @@ export function ReviewsSection() {
   return (
     <section className="py-8 md:py-10 bg-muted/30" id="reviews">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="space-y-4">
-          {/* Header */}
-          <div className="text-center space-y-1">
-            <h2 className="text-2xl md:text-3xl font-bold">{"Client Testimonials"}</h2>
-            
-            {/* Rating Summary */}
-            <div className="flex flex-col items-center justify-center gap-1">
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {"5.0 - "} <span className="font-semibold">{mockReviews.length}</span> {" reviews"}
-              </p>
-            </div>
+        {!mounted ? (
+          <div className="space-y-4">
+            <div className="h-8 bg-muted/40 rounded animate-pulse" />
+            <div className="h-20 bg-muted/40 rounded animate-pulse" />
           </div>
+        ) : (
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="text-center space-y-1">
+              <h2 className="text-2xl md:text-3xl font-bold">{"Client Testimonials"}</h2>
+              
+              {/* Rating Summary */}
+              <div className="flex flex-col items-center justify-center gap-1">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {"5.0 - "} <span className="font-semibold">{mockReviews.length}</span> {" reviews"}
+                </p>
+              </div>
+            </div>
 
-          {/* Main Carousel */}
-          {mounted && currentReview && (
-            <div className="relative">
+            {/* Main Carousel */}
+            {currentReview && (
+              <div className="relative">
               {/* Current Featured Review */}
               <div className="bg-background border border-border rounded-lg p-6 mb-4 min-h-[220px] flex flex-col justify-between">
                 <div className="space-y-4">
@@ -278,9 +284,10 @@ export function ReviewsSection() {
                 {"Get Advice"}
               </a>
             </div>
+              </div>
+            )}
           </div>
-          )}
-        </div>
+        )}
       </div>
     </section>
   )
