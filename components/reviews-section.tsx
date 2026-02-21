@@ -120,16 +120,21 @@ const mockReviews: Review[] = [
 ]
 
 export function ReviewsSection() {
+  const [mounted, setMounted] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [autoPlay, setAutoPlay] = useState(true)
 
   useEffect(() => {
-    if (!autoPlay) return
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!autoPlay || !mounted) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % mockReviews.length)
     }, 5000)
     return () => clearInterval(timer)
-  }, [autoPlay])
+  }, [autoPlay, mounted])
 
   const goToPrevious = () => {
     setAutoPlay(false)
@@ -174,19 +179,20 @@ export function ReviewsSection() {
           </div>
 
           {/* Main Carousel */}
-          <div className="relative">
-            {/* Current Featured Review */}
-            <div className="bg-background border border-border rounded-lg p-6 mb-4 min-h-[220px] flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="flex gap-1">
-                  {Array.from({ length: currentReview.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  ))}
+          {mounted && currentReview && (
+            <div className="relative">
+              {/* Current Featured Review */}
+              <div className="bg-background border border-border rounded-lg p-6 mb-4 min-h-[220px] flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="flex gap-1">
+                    {Array.from({ length: currentReview.rating }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-lg leading-relaxed text-foreground">
+                    {`"${currentReview.text}"`}
+                  </p>
                 </div>
-                <p className="text-lg leading-relaxed text-foreground">
-                  {`"${currentReview.text}"`}
-                </p>
-              </div>
               
               <div className="flex items-center justify-between pt-6 border-t border-border">
                 <div>
@@ -273,6 +279,8 @@ export function ReviewsSection() {
               {"Get Advice"}
             </a>
           </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

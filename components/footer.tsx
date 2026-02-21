@@ -2,6 +2,9 @@
 
 import React from "react"
 
+"use client"
+
+import React, { useState, useEffect, useCallback } from "react"
 import { Mail, Phone, MapPin, Linkedin, Facebook } from "lucide-react"
 
 // Twitter/X icon component
@@ -33,13 +36,21 @@ function YouTubeIcon() {
 }
 
 export function Footer() {
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const scrollToSection = useCallback((e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault()
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+    if (typeof document !== "undefined") {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      }
     }
-  }
+  }, [])
 
   return (
     <footer className="border-t border-border bg-muted/30">
