@@ -268,18 +268,17 @@ export function ReviewsSection() {
                 />
               ))}
             </div>
-          </div>
 
-          {/* CTA */}
-          <div className="text-center">
-            <a
-              href="#contact"
-              className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors text-xs"
-            >
-              {"Get Advice"}
-            </a>
-          </div>
+            {/* CTA */}
+            <div className="text-center">
+              <a
+                href="#contact"
+                className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors text-xs"
+              >
+                {"Get Advice"}
+              </a>
             </div>
+          </div>
           )}
         </div>
       </div>
