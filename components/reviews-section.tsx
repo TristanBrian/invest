@@ -146,189 +146,43 @@ export function ReviewsSection() {
           </p>
         </div>
 
-        <div className="space-y-12">
-          {/* Main Carousel Grid */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Featured Review - Left */}
-            <div 
-              onClick={() => openReviewModal(mockReviews[currentIndex])}
-              className="bg-gradient-to-br from-blue-50 to-white border-2 border-blue-100 rounded-2xl p-8 cursor-pointer group hover:shadow-xl hover:border-blue-200 transition-all duration-300"
+        {/* Reviews Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {mockReviews.map((review) => (
+            <div
+              key={review.id}
+              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md hover:border-blue-300 transition-all duration-300 group cursor-pointer"
+              onClick={() => openReviewModal(review)}
             >
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <Quote className="h-8 w-8 text-blue-200 group-hover:text-blue-300 transition-colors" />
+              {/* Rating */}
+              <div className="flex gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                ))}
               </div>
               
-              <p className="text-lg md:text-xl text-gray-700 leading-relaxed mb-8 line-clamp-4">
-                "{mockReviews[currentIndex].text}"
+              {/* Review Text */}
+              <p className="text-sm text-gray-700 leading-relaxed mb-4 line-clamp-3">
+                "{review.text}"
               </p>
               
-              <div className="flex items-center gap-4 pt-6 border-t border-blue-100">
-                <div className={`w-12 h-12 rounded-xl ${getAvatarColor(mockReviews[currentIndex].avatar?.[0] || 'A')} flex items-center justify-center text-white font-bold`}>
-                  {mockReviews[currentIndex].avatar}
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                <div className={`w-9 h-9 rounded-lg ${getAvatarColor(review.avatar?.[0] || 'A')} flex items-center justify-center text-white text-xs font-bold`}>
+                  {review.avatar}
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-bold text-gray-900">{mockReviews[currentIndex].author}</h4>
-                    {mockReviews[currentIndex].verified && (
-                      <CheckCircle className="h-4 w-4 text-blue-500" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1">
+                    <span className="font-medium text-sm text-gray-900">{review.author}</span>
+                    {review.verified && (
+                      <CheckCircle className="h-3 w-3 text-blue-500 flex-shrink-0" />
                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Globe className="h-3 w-3" />
-                    <span>{mockReviews[currentIndex].location}</span>
-                    <span className="text-gray-400">•</span>
-                    <span>{mockReviews[currentIndex].date}</span>
-                  </div>
+                  <p className="text-xs text-gray-600">{review.location}</p>
                 </div>
               </div>
             </div>
-
-            {/* Stats & Navigation - Right */}
-            <div className="space-y-8">
-              {/* Stats Card */}
-              <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold mb-6">Client Satisfaction</h3>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-blue-50 rounded-xl">
-                    <div className="text-3xl font-bold text-blue-600 mb-2">5.0</div>
-                    <div className="text-sm text-gray-600">Average Rating</div>
-                  </div>
-                  <div className="text-center p-4 bg-emerald-50 rounded-xl">
-                    <div className="text-3xl font-bold text-emerald-600 mb-2">100%</div>
-                    <div className="text-sm text-gray-600">Verified Clients</div>
-                  </div>
-                  <div className="text-center p-4 bg-purple-50 rounded-xl">
-                    <div className="text-3xl font-bold text-purple-600 mb-2">4+</div>
-                    <div className="text-sm text-gray-600">Countries</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Navigation Controls */}
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Browse Reviews</h3>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={goToPrevious}
-                      className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-                      aria-label="Previous review"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={goToNext}
-                      className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-                      aria-label="Next review"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
-                  </div>
-                </div>
-                <p className="text-gray-300 text-sm mb-4">Click on reviews to read more</p>
-                <div className="flex gap-2">
-                  {mockReviews.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentIndex(idx)}
-                      className={`flex-1 h-1.5 rounded-full transition-all ${
-                        idx === currentIndex ? 'bg-white' : 'bg-white/30 hover:bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Review Thumbnails Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {visibleIndices.map((index) => {
-              const review = mockReviews[index]
-              const isCurrent = index === currentIndex
-              return (
-                <button
-                  key={review.id}
-                  onClick={() => openReviewModal(review)}
-                  className={`group relative bg-white border rounded-xl p-5 text-left transition-all duration-300 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${
-                    isCurrent 
-                      ? 'border-blue-300 shadow-md ring-1 ring-blue-100' 
-                      : 'border-gray-200 hover:border-blue-200'
-                  }`}
-                >
-                  {/* Badge for current review */}
-                  {isCurrent && (
-                    <span className="absolute -top-2 -right-2 px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
-                      Current
-                    </span>
-                  )}
-                  
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-10 h-10 rounded-lg ${getAvatarColor(review.avatar?.[0] || 'A')} flex items-center justify-center text-white font-medium text-sm`}>
-                      {review.avatar}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1">
-                        <h4 className="font-bold text-sm">{review.author}</h4>
-                        {review.verified && (
-                          <CheckCircle className="h-3 w-3 text-blue-500" />
-                        )}
-                      </div>
-                      <p className="text-xs text-gray-500">{review.location}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-0.5 mb-3">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  
-                  <p className="text-sm text-gray-600 line-clamp-3 group-hover:text-gray-800 transition-colors">
-                    "{review.text}"
-                  </p>
-                  
-                  <div className="mt-4 pt-4 border-t border-gray-100 group-hover:border-gray-200 transition-colors">
-                    <span className="text-xs text-blue-600 font-medium group-hover:text-blue-700 transition-colors">
-                      Read full review →
-                    </span>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-
-          {/* CTA Section */}
-          <div className="text-center pt-8">
-            <div className="inline-flex flex-col items-center gap-6">
-              <div className="flex items-center gap-3">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className={`w-10 h-10 rounded-full ${getAvatarColor(String.fromCharCode(65 + i))} flex items-center justify-center text-white font-medium`}>
-                    {String.fromCharCode(65 + i)}
-                  </div>
-                ))}
-                <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-white font-medium">
-                  +{mockReviews.length - 4}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-xl font-bold mb-3">Ready to join our satisfied clients?</h3>
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                  <User className="h-5 w-5" />
-                  Start Your Investment Journey
-                </a>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 

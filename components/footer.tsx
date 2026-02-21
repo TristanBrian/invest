@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Map } from "lucide-react"
+import { Mail, Phone, Linkedin, Facebook } from "lucide-react"
 
 // Twitter/X icon component
 function TwitterIcon() {
@@ -93,26 +93,6 @@ export function Footer() {
                 title="Subscribe to our YouTube channel"
               >
                 <YoutubeIcon />
-              </a>
-              <a
-                href="https://www.google.com/maps/place/The+Beacon/@-1.2949109,35.6562758,178617m/data=!3m1!1e3!4m10!1m2!2m1!1sThe+Beacon+Mall!3m6!1s0x182f110017e5672d:0xd91cca1e1bf61235!8m2!3d-1.2949109!4d36.8098403"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Google Maps"
-                title="Visit us on Google Maps"
-              >
-                <Map className="h-6 w-6" />
-              </a>
-              <a
-                href="https://www.instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Instagram"
-                title="Follow us on Instagram"
-              >
-                <Instagram className="h-6 w-6" />
               </a>
             </div>
           </div>
