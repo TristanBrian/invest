@@ -18,7 +18,7 @@ const mockReviews: Review[] = [
     author: "David M.",
     location: "Nairobi, Kenya",
     rating: 5,
-    text: "Exceptional investment advisory services with tailored solutions that delivered excellent returns. Karibu sana!",
+    text: "Working with Oxic transformed our investment approach. Their portfolio analysis was thorough and identified opportunities we'd completely missed. ROI exceeded projections by 35% in the first year.",
     verified: true,
   },
   {
@@ -26,7 +26,7 @@ const mockReviews: Review[] = [
     author: "Sarah K.",
     location: "Dar es Salaam, Tanzania",
     rating: 5,
-    text: "Outstanding guidance on investment opportunities. Their market insights are invaluable. Asante sana for the expertise!",
+    text: "The team provided exceptional market intelligence across East Africa. Their sector expertise and regulatory knowledge saved us from multiple costly mistakes. Highly recommend for any serious investor.",
     verified: true,
   },
   {
@@ -34,7 +34,7 @@ const mockReviews: Review[] = [
     author: "James O.",
     location: "Kampala, Uganda",
     rating: 5,
-    text: "Very impressed with comprehensive analysis and strategic recommendations. Unparalleled regional market knowledge.",
+    text: "Outstanding strategic guidance on expansion into new markets. Their due diligence process is comprehensive and their recommendations are data-driven. Professional, transparent, and results-oriented.",
     verified: true,
   },
   {
@@ -42,7 +42,7 @@ const mockReviews: Review[] = [
     author: "Patricia N.",
     location: "Nairobi, Kenya",
     rating: 5,
-    text: "Professional and results-driven team. They helped me diversify successfully with transparent communication. Pole pole, lakini haraka!",
+    text: "Exceptional diversification strategy that significantly reduced our portfolio risk. The team explained every step clearly and adjusted the approach as market conditions evolved. Outstanding service.",
     verified: true,
   },
   {
@@ -50,7 +50,7 @@ const mockReviews: Review[] = [
     author: "Michael P.",
     location: "Kigali, Rwanda",
     rating: 5,
-    text: "Best investment advisory firm. Their commitment to client success is evident in every interaction. Rafiki wa biashara!",
+    text: "Top-tier advisory firm with deep understanding of regional dynamics. They helped us structure a successful investment that generated consistent returns and opened doors for future growth.",
     verified: true,
   },
   {
@@ -58,7 +58,7 @@ const mockReviews: Review[] = [
     author: "Angela T.",
     location: "Nairobi, Kenya",
     rating: 5,
-    text: "Oxic identified high-potential opportunities I wouldn't have found alone. Expertise spans multiple sectors across East Africa.",
+    text: "Identified high-growth opportunities in sectors we didn't fully understand. Their analytical approach and business acumen delivered measurable value. Invaluable partner for strategic planning.",
     verified: true,
   },
   {
@@ -66,7 +66,7 @@ const mockReviews: Review[] = [
     author: "Robert K.",
     location: "Kigali, Rwanda",
     rating: 5,
-    text: "Absolutely phenomenal service! They navigated complex regulatory landscapes with ease. Tupo pamoja na mafanikio!",
+    text: "Expert navigation of complex regulatory environments across East Africa. Their knowledge of local market nuances and international best practices proved critical to our success.",
     verified: true,
   },
   {
@@ -74,7 +74,7 @@ const mockReviews: Review[] = [
     author: "Grace M.",
     location: "Dar es Salaam, Tanzania",
     rating: 5,
-    text: "Their strategic vision helped us achieve 300% growth in two years. Amina sana for believing in our vision.",
+    text: "Our business achieved 300% growth within two years following their strategic recommendations. Their vision-setting and execution support were instrumental in scaling operations efficiently.",
     verified: true,
   },
   {
@@ -82,7 +82,7 @@ const mockReviews: Review[] = [
     author: "Charles W.",
     location: "Nairobi, Kenya",
     rating: 5,
-    text: "Trusted partner for international expansion across East Africa. Walimwengu kwa ajili ya ustawi wa biashara yako.",
+    text: "Reliable partner for international expansion strategy. Their on-the-ground knowledge combined with global perspective made navigating new markets significantly less risky.",
     verified: true,
   },
   {
@@ -90,7 +90,7 @@ const mockReviews: Review[] = [
     author: "Linda N.",
     location: "Kampala, Uganda",
     rating: 5,
-    text: "Consistently delivers results that exceed expectations. Their team understands our market deeply. Sana sana matangazo!",
+    text: "Consistently delivers results that exceed expectations. The team's deep understanding of our market and industry dynamics provided critical competitive advantage.",
     verified: true,
   },
   {
@@ -98,7 +98,7 @@ const mockReviews: Review[] = [
     author: "Andrew Z.",
     location: "Mombasa, Kenya",
     rating: 5,
-    text: "Excellent risk management and due diligence protocols. Transformed how we approach investments. Imani na ujinga?",
+    text: "Industry-leading risk management protocols and thorough due diligence. They transformed how we evaluate and structure investments. Professional and highly competent team.",
     verified: true,
   },
   {
@@ -106,7 +106,7 @@ const mockReviews: Review[] = [
     author: "Fatima H.",
     location: "Dar es Salaam, Tanzania",
     rating: 5,
-    text: "Their investment thesis proved spot-on. Generated substantial returns while minimizing exposure. Mjumbe mwaminifu sana!",
+    text: "Their investment recommendations proved accurate and profitable. Solid analytical framework minimized downside risk while capturing upside opportunities effectively.",
     verified: true,
   },
   {
@@ -114,7 +114,7 @@ const mockReviews: Review[] = [
     author: "Vincent M.",
     location: "Kigali, Rwanda",
     rating: 5,
-    text: "Game-changer in our investment strategy. Combines global expertise with deep local knowledge. Jaribu na utajua!",
+    text: "Game-changing partnership that strengthened our investment strategy. Perfect blend of global expertise and deep local market knowledge. Essential advisor for ambitious businesses.",
     verified: true,
   },
 ]
