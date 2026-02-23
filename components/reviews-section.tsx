@@ -146,54 +146,98 @@ export function ReviewsSection() {
           </p>
         </div>
 
-        {/* Reviews Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {mockReviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md hover:border-blue-300 transition-all duration-300 group cursor-pointer"
-              onClick={() => openReviewModal(review)}
+        {/* Reviews Carousel */}
+        <div className="space-y-6">
+          {/* Carousel Container */}
+          <div className="relative overflow-hidden">
+            <div 
+              className="flex gap-6 transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / 3)}%)`,
+              }}
             >
-              {/* Rating */}
-              <div className="flex gap-0.5 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              
-              {/* Review Text */}
-              <p className="text-sm text-gray-700 leading-relaxed mb-4 line-clamp-3">
-                "{review.text}"
-              </p>
-              
-              {/* Author */}
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                <div className={`w-9 h-9 rounded-lg ${getAvatarColor(review.avatar?.[0] || 'A')} flex items-center justify-center text-white text-xs font-bold`}>
-                  {review.avatar}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium text-sm text-gray-900">{review.author}</span>
-                    {review.verified && (
-                      <CheckCircle className="h-3 w-3 text-blue-500 flex-shrink-0" />
-                    )}
+              {mockReviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="flex-shrink-0 w-full md:w-1/3 bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md hover:border-blue-300 transition-all duration-300 cursor-pointer"
+                  onClick={() => openReviewModal(review)}
+                >
+                  {/* Rating */}
+                  <div className="flex gap-0.5 mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                    ))}
                   </div>
-                  <p className="text-xs text-gray-600">{review.location}</p>
+                  
+                  {/* Review Text */}
+                  <p className="text-sm text-gray-700 leading-relaxed mb-4 line-clamp-2">
+                    "{review.text}"
+                  </p>
+                  
+                  {/* Author */}
+                  <div className="flex items-center gap-2 pt-3 border-t border-gray-100">
+                    <div className={`w-8 h-8 rounded ${getAvatarColor(review.avatar?.[0] || 'A')} flex items-center justify-center text-white text-xs font-bold`}>
+                      {review.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium text-xs text-gray-900">{review.author}</span>
+                        {review.verified && (
+                          <CheckCircle className="h-2.5 w-2.5 text-blue-500 flex-shrink-0" />
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600">{review.location}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Navigation & Indicators */}
+          <div className="flex items-center justify-between">
+            <button
+              onClick={goToPrevious}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Previous reviews"
+            >
+              <ChevronLeft className="h-5 w-5 text-gray-700" />
+            </button>
+            
+            <div className="flex gap-2">
+              {Array.from({ length: Math.ceil(mockReviews.length / 3) }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentIndex(idx * 3)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    idx === Math.floor(currentIndex / 3) 
+                      ? 'w-6 bg-blue-600' 
+                      : 'w-1.5 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  aria-label={`Go to review group ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={goToNext}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Next reviews"
+            >
+              <ChevronRight className="h-5 w-5 text-gray-700" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Review Detail Modal */}
+      {/* Review Detail Modal - Sliding */}
       {isModalOpen && selectedReview && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300"
           onClick={closeModal}
         >
           <div 
-            className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden animate-in slide-in-from-bottom-4 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
