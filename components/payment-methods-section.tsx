@@ -76,6 +76,7 @@ export function PaymentMethodsSection() {
   const [cryptoPaymentStep, setCryptoPaymentStep] = useState<CryptoPaymentStep>("method")
   const [selectedCrypto, setSelectedCrypto] = useState<CryptoCurrency | "">("")
   const [showWalletAddresses, setShowWalletAddresses] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(false)
   
   // Processing timeout tracking
   const [processingTimeRemaining, setProcessingTimeRemaining] = useState(0)
@@ -943,7 +944,9 @@ export function PaymentMethodsSection() {
   }
 
   const handleBinanceScanQR = () => {
-    window.open("https://www.binance.com/en/pay", "_blank")
+    setShowQRCode(true)
+    setSelectedCrypto("BTC")
+    setIsFlipped(true)
   }
 
   const handleWhatsAppConfirm = () => {
@@ -975,9 +978,24 @@ export function PaymentMethodsSection() {
           </DialogHeader>
 
           <div className="space-y-4 py-6 flex flex-col items-center">
-            {/* QR Code Display */}
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 border-2 border-[#F0B90B]/30 shadow-lg">
-              <div className="bg-white rounded-xl p-4 inline-block">
+            {/* Flip Card Container */}
+            <div className="h-80 w-80 relative" style={{ perspective: "1000px" }}>
+              <div 
+                className="relative w-full h-full transition-transform duration-700 ease-out"
+                style={{
+                  transformStyle: "preserve-3d",
+                  transform: isFlipped ? "rotateY(0deg)" : "rotateY(90deg)",
+                }}
+              >
+                {/* QR Code Front */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 border-2 border-[#F0B90B]/30 shadow-lg flex items-center justify-center"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
+                >
+                  <div className="bg-white rounded-xl p-4 inline-block">
                 <svg 
                   className="w-52 h-52" 
                   viewBox="0 0 256 256" 
@@ -999,6 +1017,34 @@ export function PaymentMethodsSection() {
                   <rect x="100" y="100" width="56" height="56" fill="#F0B90B" opacity="0.3"/>
                   <rect x="110" y="110" width="36" height="36" fill="black" opacity="0.8"/>
                 </svg>
+                  </div>
+                </div>
+
+                {/* Wallet Address Back */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-300/50 shadow-lg flex flex-col items-center justify-center"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    transform: "rotateY(180deg)",
+                  }}
+                >
+                  <div className="space-y-4 w-full text-center">
+                    <p className="text-xs font-medium text-blue-600 uppercase tracking-wide">Wallet Address</p>
+                    <div className="bg-white rounded-lg p-3 border border-blue-200/50 break-all">
+                      <p className="text-xs font-mono text-gray-900">{cryptoWallets[selectedCrypto as CryptoCurrency] || "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy"}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="w-full h-8 bg-blue-600 hover:bg-blue-700 text-xs"
+                      onClick={() => {
+                        navigator.clipboard.writeText(cryptoWallets[selectedCrypto as CryptoCurrency] || "")
+                      }}
+                    >
+                      Copy Address
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1026,7 +1072,10 @@ export function PaymentMethodsSection() {
               <Button 
                 variant="outline"
                 className="w-full bg-transparent"
-                onClick={() => setShowQRCode(false)}
+                onClick={() => {
+                  setIsFlipped(false)
+                  setTimeout(() => setShowQRCode(false), 350)
+                }}
               >
                 Back
               </Button>

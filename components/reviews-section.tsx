@@ -87,18 +87,20 @@ export function ReviewsSection() {
     if (!autoPlay || isModalOpen) return
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % mockReviews.length)
-    }, 4000)
+    }, 3000)
     return () => clearInterval(timer)
   }, [autoPlay, isModalOpen])
 
   const goToPrevious = () => {
     setAutoPlay(false)
     setCurrentIndex((prev) => (prev - 1 + mockReviews.length) % mockReviews.length)
+    setTimeout(() => setAutoPlay(true), 8000)
   }
 
   const goToNext = () => {
     setAutoPlay(false)
     setCurrentIndex((prev) => (prev + 1) % mockReviews.length)
+    setTimeout(() => setAutoPlay(true), 8000)
   }
 
   const openReviewModal = (review: Review) => {
