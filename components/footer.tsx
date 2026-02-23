@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { Mail, Phone, Linkedin, Facebook } from "lucide-react"
+import { Mail, Phone, MapPin, Linkedin, Facebook } from "lucide-react"
 
 // Twitter/X icon component
 function TwitterIcon() {
@@ -43,7 +43,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border bg-muted/30">
-      <div className="container mx-auto px-4 py-12 md:px-6 md:py-16">
+      <div className="container mx-auto px-4 py-8 md:px-6 md:py-10">
         <div className="grid gap-8 md:grid-cols-4">
           <div className="space-y-6 md:col-span-2">
             <div className="inline-block">

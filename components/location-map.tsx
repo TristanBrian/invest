@@ -21,7 +21,7 @@ export function LocationMap() {
   }
 
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-b from-white to-blue-50/30">
+    <section className="py-8 md:py-12 bg-gradient-to-b from-white to-blue-50/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-5xl mx-auto">
           {/* Header */}

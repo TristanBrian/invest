@@ -28,7 +28,7 @@ export function HeroSection() {
       </div>
 
       {/* Company Story Section - Right After Banner */}
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-10 sm:py-12 md:py-14 lg:py-16">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           <div className="space-y-4 text-center">
             <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-primary text-balance">
@@ -53,7 +53,7 @@ export function HeroSection() {
 
       {/* Main CTA Section - After Story */}
       <div className="container mx-auto px-4 md:px-6 lg:px-8 mb-8 sm:mb-10 md:mb-12 lg:mb-14">
-        <div className="bg-secondary rounded-xl sm:rounded-2xl shadow-2xl border border-secondary-foreground/10 py-8 sm:py-10 md:py-14 lg:py-16 mx-2 sm:mx-4 md:mx-8 lg:mx-auto lg:max-w-5xl">
+        <div className="bg-secondary rounded-xl sm:rounded-2xl shadow-2xl border border-secondary-foreground/10 py-6 md:py-10 mx-2 sm:mx-4 md:mx-8 lg:mx-auto lg:max-w-5xl">
           <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-5 px-4 sm:px-6 md:px-8">
             <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold text-secondary bg-primary rounded-full shadow-md">
               Your Trusted Partner in East Africa
