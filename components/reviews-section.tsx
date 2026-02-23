@@ -159,8 +159,7 @@ export function ReviewsSection() {
               {mockReviews.map((review) => (
                 <div
                   key={review.id}
-                  className="flex-shrink-0 w-full md:w-1/3 bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md hover:border-blue-300 transition-all duration-300 cursor-pointer"
-                  onClick={() => openReviewModal(review)}
+                  className="flex-shrink-0 w-full md:w-1/3 bg-white border border-gray-200 rounded-lg p-5 hover:shadow-md hover:border-blue-300 transition-all duration-300"
                 >
                   {/* Rating */}
                   <div className="flex gap-0.5 mb-3">

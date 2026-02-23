@@ -975,21 +975,42 @@ export function PaymentMethodsSection() {
           </DialogHeader>
 
           <div className="space-y-4 py-6 flex flex-col items-center">
-            {/* QR Code Placeholder */}
-            <div className="bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg p-6 border-2 border-primary/20">
-              <div className="w-48 h-48 bg-white rounded-lg flex items-center justify-center border border-gray-200">
-                <div className="text-center space-y-2">
-                  <div className="text-sm text-muted-foreground font-medium">QR Code</div>
-                  <svg className="w-32 h-32 mx-auto text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3 3v8h8V3H3zm2 2h4v4H5V5zm13-2v8h8V3h-8zm2 2h4v4h-4v-2zm2 0h2v2h-2v-2zm2 0h2v2h-2v-2z"/>
-                  </svg>
-                </div>
+            {/* QR Code Display */}
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 border-2 border-[#F0B90B]/30 shadow-lg">
+              <div className="bg-white rounded-xl p-4 inline-block">
+                <svg 
+                  className="w-52 h-52" 
+                  viewBox="0 0 256 256" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Simplified Binance-style QR pattern */}
+                  <rect width="256" height="256" fill="white"/>
+                  <rect x="0" y="0" width="64" height="64" fill="black"/>
+                  <rect x="10" y="10" width="44" height="44" fill="white"/>
+                  <rect x="20" y="20" width="24" height="24" fill="black"/>
+                  <rect x="192" y="0" width="64" height="64" fill="black"/>
+                  <rect x="202" y="10" width="44" height="44" fill="white"/>
+                  <rect x="212" y="20" width="24" height="24" fill="black"/>
+                  <rect x="0" y="192" width="64" height="64" fill="black"/>
+                  <rect x="10" y="202" width="44" height="44" fill="white"/>
+                  <rect x="20" y="212" width="24" height="24" fill="black"/>
+                  {/* Data pattern - Binance yellow accent */}
+                  <rect x="80" y="80" width="96" height="96" fill="#F0B90B" opacity="0.15"/>
+                  <rect x="100" y="100" width="56" height="56" fill="#F0B90B" opacity="0.3"/>
+                  <rect x="110" y="110" width="36" height="36" fill="black" opacity="0.8"/>
+                </svg>
               </div>
             </div>
 
-            <p className="text-sm text-center text-muted-foreground max-w-xs">
-              Open Binance Pay app and scan this QR code to complete your cryptocurrency payment securely
-            </p>
+            <div className="space-y-3 w-full text-center">
+              <div className="bg-[#F0B90B]/10 border border-[#F0B90B]/30 rounded-lg p-3">
+                <p className="text-sm font-semibold text-gray-900">Send to Binance Pay</p>
+                <p className="text-xs text-gray-600 mt-1">Scan QR with Binance app to send payment</p>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Payment secured via blockchain • Instant settlement • No intermediaries
+              </p>
+            </div>
 
             <div className="w-full space-y-2 pt-2">
               <Button 
