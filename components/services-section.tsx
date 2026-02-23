@@ -41,7 +41,7 @@ const stats = [
 
 export function ServicesSection() {
   return (
-    <section id="services" className="bg-muted/30 py-12 sm:py-14 md:py-16 lg:py-20">
+    <section id="services" className="bg-muted/30 py-8 md:py-12">
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="mb-8 sm:mb-10 md:mb-10 text-center">

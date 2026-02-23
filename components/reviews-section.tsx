@@ -130,7 +130,7 @@ export function ReviewsSection() {
   }
 
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-b from-white to-gray-50" id="reviews">
+    <section className="py-8 md:py-12 bg-gradient-to-b from-white to-gray-50" id="reviews">
       <div className="container mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
