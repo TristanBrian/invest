@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { Mail, Phone, Linkedin, Facebook, MapPin } from "lucide-react"
+import { Mail, Phone, MapPin, Linkedin, Facebook } from "lucide-react"
 
 // Twitter/X icon component
 function TwitterIcon() {
