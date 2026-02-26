@@ -1,0 +1,127 @@
+OXIC INTERNATIONAL - EMAIL SYSTEM VERIFICATION CHECKLIST
+
+Before Testing Enquiries, Complete These Steps:
+
+=== STEP 1: RESEND API KEY ===
+
+[ ] 1. Have you signed up at https://resend.com?
+[ ] 2. Have you created an API key? (https://resend.com/api-keys)
+[ ] 3. Do you have a key that starts with "re_"?
+[ ] 4. Copy the API key (you'll need it in next step)
+
+=== STEP 2: NETLIFY ENVIRONMENT VARIABLE ===
+
+[ ] 1. Go to https://app.netlify.com
+[ ] 2. Select your OXIC project
+[ ] 3. Click "Site Settings"
+[ ] 4. Click "Build & Deploy" on the left
+[ ] 5. Click "Environment" section
+[ ] 6. Click "Add environment variable"
+[ ] 7. Name: RESEND_API_KEY
+[ ] 8. Value: (paste your API key from Step 1)
+[ ] 9. Click "Save"
+[ ] 10. You should see the variable listed with value partially hidden
+
+=== STEP 3: VERIFY EMAIL ADDRESSES IN RESEND ===
+
+[ ] 1. Go to https://resend.com/emails
+[ ] 2. Add "inquiries@oxicinternational.co.ke" as sender email
+[ ] 3. Verify the email (check your email inbox for verification link)
+[ ] 4. Verify "Info@oxicinternational.co.ke" exists (it should already be verified)
+
+=== STEP 4: REDEPLOY YOUR SITE ===
+
+[ ] 1. Go to Netlify Dashboard
+[ ] 2. Click your OXIC project
+[ ] 3. Click "Deployments" tab
+[ ] 4. Click "Trigger deploy" → "Deploy site"
+[ ] 5. Wait for deployment to complete (2-3 minutes)
+[ ] 6. Check for "Published" status
+
+=== STEP 5: TEST THE SYSTEM ===
+
+[ ] 1. Open your site in browser
+[ ] 2. Open Developer Tools (F12)
+[ ] 3. Go to Console tab
+[ ] 4. Fill out enquiry form with:
+       - Name: Test User
+       - Email: your-actual-email@gmail.com
+       - Interest: Real Estate
+       - Message: Testing the system
+[ ] 5. Submit the form
+[ ] 6. Watch the console for logs starting with "[v0]"
+
+=== STEP 6: VERIFY EMAILS ARRIVED ===
+
+[ ] 1. Check your email inbox (the one you used in form)
+       - You should see 1 auto-reply from OXIC
+[ ] 2. Check oxicgroupltd@gmail.com inbox
+       - You should see 1 inquiry notification
+[ ] 3. Check Info@oxicinternational.co.ke inbox
+       - You should see 1 inquiry notification
+[ ] 4. Total: 3 emails should arrive
+
+=== IF EMAILS DON'T ARRIVE ===
+
+[ ] 1. Check your spam/junk folder in all 3 email accounts
+[ ] 2. Read DEBUG_GUIDE.md for detailed troubleshooting
+[ ] 3. Check browser console for error messages
+[ ] 4. Verify RESEND_API_KEY is added to Netlify
+[ ] 5. Verify site was redeployed after adding API key
+
+=== SUCCESSFUL TEST INDICATORS ===
+
+Console should show:
+✓ [v0] ===== INVESTMENT ENQUIRY REQUEST START =====
+✓ [v0] All required fields present ✓
+✓ [v0] Email validation passed ✓
+✓ [v0] ===== INQUIRY EMAIL DISTRIBUTION START =====
+✓ [v0] ===== EMAIL SEND SUCCESS ===== (appears 3 times)
+✓ [v0] ===== INQUIRY EMAIL DISTRIBUTION COMPLETE =====
+✓ [v0] SUMMARY: teamEmailsSent: 2, autoReplySent: true
+
+Browser should show:
+✓ Response with "success": true
+✓ "totalEmailsSent": 3
+✓ "allEmailsDelivered": true
+
+Inboxes should contain:
+✓ 1 email to your address (auto-reply)
+✓ 1 email to oxicgroupltd@gmail.com
+✓ 1 email to Info@oxicinternational.co.ke
+
+=== COMMON ISSUES ===
+
+Issue: API Key present: false
+Fix: Add RESEND_API_KEY to Netlify environment variables
+
+Issue: Response status: 401
+Fix: API key is invalid, get a new one from https://resend.com/api-keys
+
+Issue: Invalid from address error
+Fix: Verify "inquiries@oxicinternational.co.ke" in Resend (https://resend.com/emails)
+
+Issue: Emails go to spam
+Fix: Mark as "Not Spam" in your email client
+
+Issue: Only 1-2 emails arrive instead of 3
+Fix: Check which one(s) are missing. If team email missing, check spam.
+
+=== NEXT STEPS ===
+
+After successful test:
+[ ] System is ready for production
+[ ] Customers can submit enquiries
+[ ] Team receives notifications
+[ ] Customers receive auto-replies
+[ ] System is deployed and working
+
+Need help? Read DEBUG_GUIDE.md for detailed troubleshooting.
+
+=== CHECKLIST COMPLETED ===
+
+Date Verified: _______________
+Verified By: _______________
+All Tests Passed: YES / NO
+
+If NO: What failed? _____________________________
