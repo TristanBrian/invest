@@ -1,5 +1,4 @@
-// app/api/forms/investment-enquiry/route.ts
-export const runtime = "edge"; // Resend works on Edge runtime
+export const runtime = "edge"; // Edge runtime
 import { NextRequest, NextResponse } from "next/server";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -17,11 +16,14 @@ interface FormSubmission {
   message: string;
 }
 
+function generateSubmissionId() {
+  return `OXIC-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const data: FormSubmission = await req.json();
 
-    // Validate required fields
     if (!data.name || !data.email || !data.message) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -29,7 +31,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Construct email HTML
+    const submissionId = generateSubmissionId();
+
     const html = `
       <h2>New Investment Enquiry</h2>
       <p><strong>Name:</strong> ${data.name}</p>
@@ -38,6 +41,8 @@ export async function POST(req: NextRequest) {
       <p><strong>Organization:</strong> ${data.organization || "N/A"}</p>
       <p><strong>Interest:</strong> ${data.interest || "N/A"}</p>
       <p><strong>Message:</strong><br>${data.message.replace(/\n/g, "<br>")}</p>
+      <p><strong>Submission ID:</strong> ${submissionId}</p>
+      <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
     `;
 
     const sendResults = await Promise.allSettled(
@@ -59,24 +64,21 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // Log results for debugging
-    sendResults.forEach((result, index) => {
-      if (result.status === "fulfilled") {
-        console.log(`✅ Email sent to ${RECIPIENT_EMAILS[index]}`);
-      } else {
-        console.error(
-          `❌ Failed to send email to ${RECIPIENT_EMAILS[index]}:`,
-          result.reason
-        );
-      }
-    });
+    const emailStatus = {
+      totalEmails: RECIPIENT_EMAILS.length,
+      emailsSent: sendResults.filter((r) => r.status === "fulfilled").length,
+      emailsFailed: sendResults.filter((r) => r.status === "rejected").length,
+      results: sendResults.map((r, i) => ({
+        recipient: RECIPIENT_EMAILS[i],
+        status: r.status,
+        reason: r.status === "rejected" ? (r as PromiseRejectedResult).reason : undefined,
+      })),
+    };
 
     return NextResponse.json({
       message: "Form submission received. Emails processed.",
-      emailResults: sendResults.map((r, i) => ({
-        recipient: RECIPIENT_EMAILS[i],
-        status: r.status,
-      })),
+      submissionId,
+      emailStatus,
     });
   } catch (error) {
     console.error("Error handling form submission:", error);
