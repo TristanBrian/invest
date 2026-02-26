@@ -264,7 +264,7 @@ function generateAutoReplyHTML(customerName: string): string {
 }
 
 /**
- * Send email via Resend API with retry logic
+ * Send email via Resend API with comprehensive debugging
  */
 async function sendEmailViaResend(
   to: string,
@@ -274,38 +274,50 @@ async function sendEmailViaResend(
 ): Promise<EmailResult> {
   const resendApiKey = process.env.RESEND_API_KEY
   
+  console.log("[v0] Sending email to:", to)
+  console.log("[v0] API Key exists:", !!resendApiKey)
+  console.log("[v0] API Key length:", resendApiKey?.length)
+  console.log("[v0] API Key starts with 're_':", resendApiKey?.startsWith("re_"))
+  
   if (!resendApiKey) {
-    console.error("[v0] RESEND_API_KEY not configured")
+    console.error("[v0] CRITICAL: RESEND_API_KEY is undefined")
+    console.error("[v0] Environment variables available:", Object.keys(process.env).filter(k => k.includes("RESEND") || k.includes("API")).join(", ") || "NONE")
     return { success: false, reason: "RESEND_API_KEY not configured" }
   }
 
   try {
+    console.log("[v0] Calling Resend API...")
+    const requestBody = {
+      from: "inquiries@oxicinternational.co.ke",
+      to,
+      subject,
+      html,
+      reply_to: replyTo,
+    }
+    
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${resendApiKey}`,
       },
-      body: JSON.stringify({
-        from: "inquiries@oxicinternational.co.ke",
-        to,
-        subject,
-        html,
-        reply_to: replyTo,
-      }),
+      body: JSON.stringify(requestBody),
     })
 
+    console.log("[v0] Resend API response status:", response.status)
+    
     if (!response.ok) {
       const errorData = await response.json()
-      console.error(`[v0] Email failed to ${to}: ${response.status} - ${errorData.message}`)
-      return { success: false, reason: `API Error ${response.status}: ${errorData.message}` }
+      console.error(`[v0] Email failed to ${to}: ${response.status}`)
+      console.error("[v0] Error details:", errorData)
+      return { success: false, reason: `API Error ${response.status}: ${errorData.message || "Unknown error"}` }
     }
 
     const result = await response.json()
     console.log(`[v0] Email sent to ${to}: ${result.id}`)
     return { success: true, emailId: result.id }
   } catch (error) {
-    console.error(`[v0] Email exception to ${to}:`, error instanceof Error ? error.message : String(error))
+    console.error(`[v0] Email exception to ${to}:`, error)
     return { success: false, reason: String(error) }
   }
 }

@@ -1,0 +1,239 @@
+EMAIL SYSTEM COMPLETE TROUBLESHOOTING GUIDE
+============================================
+
+PROBLEM: Form shows "sent" but emails not received
+- Frontend: Success message displayed
+- teamNotificationsSent: 0
+- confirmationEmailSent: false
+
+ROOT CAUSE ANALYSIS:
+
+1. RESEND_API_KEY NOT ACCESSIBLE IN API ROUTE
+   - Environment variable not being passed to Netlify functions
+   - OR API key invalid/revoked
+
+2. INVOICE ENDPOINT WAS WRONG
+   - Was calling: /api/send-email (returns 410 Gone)
+   - Now calls: /api/invoices/send (correct endpoint)
+
+
+WHAT WAS FIXED:
+===============
+
+1. Investment Enquiry Route (/app/api/forms/investment-enquiry/route.ts)
+   - Added debugging to check if RESEND_API_KEY exists
+   - Logs API key presence and length
+   - Shows Resend API response status
+   - Reports exact error from Resend
+
+2. Invoice Component (payment-methods-section.tsx)
+   - Changed endpoint from /api/send-email to /api/invoices/send
+   - Proper payload structure with client, lineItems, details
+   - Comprehensive error logging
+
+3. Invoice API Route (/app/api/invoices/send/route.ts)
+   - Added detailed logging at each step
+   - Shows RESEND_API_KEY check result
+   - Logs email send status before responding
+
+
+TESTING STEPS - DO THIS NOW:
+============================
+
+Step 1: Verify RESEND_API_KEY is set in Netlify
+   - Go to https://app.netlify.com
+   - Your Site → Site Settings → Build & Deploy → Environment
+   - Look for RESEND_API_KEY variable
+   - If missing: Add it with your actual key from https://resend.com
+
+Step 2: Redeploy to Netlify
+   - Click "Trigger deploy" → "Deploy site"
+   - Wait for "Published" status (2-3 minutes)
+
+Step 3: Test Investment Inquiry
+   - Open browser console (F12)
+   - Go to https://theoxic.netlify.app
+   - Scroll to "Get Started - Investment Inquiry" form
+   - Fill form with test data:
+     * Name: Test User
+     * Email: your-actual-email@gmail.com
+     * Phone: +254700000000
+     * Interest: Technology
+     * Message: Test message
+     * Check consent box
+   - Click "Send Inquiry"
+
+Step 4: Watch Console Output
+   Look for [v0] logs showing:
+   
+   [v0] ===== FORM SUBMISSION START =====
+   [v0] Submitting form data: {...}
+   [v0] Sending POST request to /api/forms/investment-enquiry
+   [v0] Response received. Status: 200
+   [v0] Sending email to: oxicgroupltd@gmail.com
+   [v0] API Key exists: true
+   [v0] API Key length: 42
+   [v0] API Key starts with 're_': true
+   [v0] Calling Resend API...
+   [v0] Resend API response status: 200
+   [v0] Email sent to oxicgroupltd@gmail.com: re_xxxxx
+   
+   Then for second team email and auto-reply...
+   
+   [v0] Inquiry sent - Team: 2 Auto-reply: true
+
+Step 5: Check Your Email
+   - Check inbox for 3 emails:
+     1. Auto-reply from oxicinternational.co.ke
+     2. Inquiry notification to your email (team copy 1)
+     3. Inquiry notification to your email (team copy 2)
+   - All should arrive within 1-2 minutes
+
+Step 6: Test Invoice
+   - In same console session
+   - Scroll to "Professional Invoice Generator"
+   - Fill in:
+     * Contact Person: Test Client
+     * Company Name: Test Company
+     * Email: your-actual-email@gmail.com
+     * Amount: 50000
+     * Currency: KES
+     * Description: Test invoice
+   - Click "Generate Invoice"
+   - Click "Send Invoice"
+
+Step 7: Watch Invoice Console Output
+   Look for:
+   
+   [v0] Invoice Send Starting...
+   [v0] Sending to /api/invoices/send with payload: {...}
+   [v0] API response status: 200
+   [v0] Invoice API response: {success: true, ...}
+   [v0] Invoice sent successfully!
+
+Step 8: Check Invoice Emails
+   - Should receive:
+     1. Invoice to your email (client copy)
+     2. Invoice notification to your email (team copy 1)
+     3. Invoice notification to your email (team copy 2)
+
+
+TROUBLESHOOTING:
+
+IF: "API Key exists: false"
+   PROBLEM: RESEND_API_KEY not in Netlify environment
+   SOLUTION:
+     1. Add to Netlify: RESEND_API_KEY=re_xxxxx
+     2. Redeploy
+     3. Check cache: Hard refresh browser (Ctrl+Shift+Delete)
+
+IF: "Response status: 401"
+   PROBLEM: Invalid or revoked API key
+   SOLUTION:
+     1. Check API key at https://resend.com/api-keys
+     2. Generate new key if needed
+     3. Update in Netlify
+     4. Redeploy
+
+IF: "Response status: 429"
+   PROBLEM: Rate limiting (too many requests)
+   SOLUTION: Wait 5 minutes, try again
+
+IF: "Resend API response status: 400"
+   PROBLEM: Invalid email format or payload
+   SOLUTION: Check error in console logs
+
+IF: Form shows success but emails don't arrive
+   PROBLEM 1: Check spam folder
+   PROBLEM 2: Check console for error status
+   PROBLEM 3: Verify email addresses are correct
+   PROBLEM 4: Check Resend dashboard at https://resend.com for bounces
+
+IF: Invoice sends but no emails arrive
+   PROBLEM 1: Check /api/invoices/send console logs
+   PROBLEM 2: Verify client email is valid
+   PROBLEM 3: Check RESEND_API_KEY for invoices
+
+
+CONSOLE LOG LOCATIONS:
+
+For Inquiry Errors:
+   1. Form submission: check contact-section.tsx logs
+   2. API processing: check /app/api/forms/investment-enquiry/route.ts logs
+   3. Email sending: check investment-enquiry route logs (API key, Resend response)
+
+For Invoice Errors:
+   1. Form submission: check payment-methods-section.tsx logs
+   2. API processing: check /app/api/invoices/send/route.ts logs
+   3. Email sending: check /lib/invoice-service.ts logs
+
+
+QUICK CHECKLIST:
+
+□ RESEND_API_KEY exists in Netlify environment
+□ API key format is correct (starts with 're_')
+□ API key is not revoked at https://resend.com
+□ Site is redeployed after adding env var
+□ Browser cache cleared (hard refresh)
+□ Test form submitted with valid data
+□ Console shows "API Key exists: true"
+□ Console shows "Resend API response status: 200"
+□ Email received in inbox within 2 minutes
+□ Invoice endpoint changed to /api/invoices/send
+□ Invoice data sent with correct structure
+
+
+IF NOTHING WORKS:
+
+1. Check Resend Dashboard
+   - Go to https://resend.com/logs
+   - Look for failed emails
+   - Check bounce reason
+
+2. Check Netlify Function Logs
+   - https://app.netlify.com
+   - Your Site → Functions
+   - Look for error messages
+
+3. Hard Reset Everything
+   - Clear browser cache (Ctrl+Shift+Delete)
+   - Redeploy site (trigger new deploy)
+   - Test again with fresh browser
+
+4. Verify Email Addresses
+   - Confirm oxicgroupltd@gmail.com is spelled correctly
+   - Confirm Info@oxicinternational.co.ke is spelled correctly
+   - Confirm test email address is valid
+
+5. Check for Typos
+   - API endpoint: /api/forms/investment-enquiry (correct)
+   - Invoice endpoint: /api/invoices/send (correct)
+   - Email addresses: Check spelling exactly
+
+
+EXPECTED BEHAVIOR:
+
+INQUIRY:
+✓ Form submits successfully
+✓ Frontend shows success message
+✓ Browser console shows 3 success logs for emails
+✓ You receive 3 emails within 1-2 minutes:
+  - Auto-reply to your address
+  - Notification to oxicgroupltd@gmail.com
+  - Notification to Info@oxicinternational.co.ke
+✓ All emails are professionally formatted
+
+INVOICE:
+✓ Invoice generates with correct number
+✓ "Send Invoice" button works
+✓ Frontend shows success message
+✓ Browser console shows email send logs
+✓ You receive 3 emails:
+  - Invoice to client email
+  - Notification to oxicgroupltd@gmail.com
+  - Notification to Info@oxicinternational.co.ke
+✓ All invoice totals calculated correctly
+
+
+STATUS: All code is fixed and ready for testing!
+Next step: Follow troubleshooting steps above to verify everything works.
