@@ -104,13 +104,27 @@ export function ContactSection() {
     e.preventDefault()
 
     if (!validateForm()) {
+      console.log("[v0] Form validation failed")
       return
     }
+
+    console.log("[v0] ===== FORM SUBMISSION START =====")
+    console.log("[v0] Submitting form data:", {
+      name: formData.name,
+      email: formData.email,
+      organization: formData.organization,
+      phone: formData.phone,
+      interest: formData.interest,
+      messageLength: formData.message.length,
+      consent: formData.consent,
+    })
 
     setIsSubmitting(true)
     setSubmitStatus("idle")
 
     try {
+      console.log("[v0] Sending POST request to /api/forms/investment-enquiry")
+      
       // Submit to our form API handler
       const response = await fetch("/api/forms/investment-enquiry", {
         method: "POST",
@@ -118,7 +132,16 @@ export function ContactSection() {
         body: JSON.stringify(formData),
       })
 
+      console.log("[v0] Response received. Status:", response.status, response.statusText)
+      
+      const responseData = await response.json()
+      console.log("[v0] Response data:", responseData)
+
       if (response.ok) {
+        console.log("[v0] ✅ Form submission successful")
+        console.log("[v0] Submission ID:", responseData.submissionId)
+        console.log("[v0] Email status:", responseData.emailStatus)
+        
         setSubmitStatus("success")
         setFormData({
           name: "",
@@ -131,16 +154,26 @@ export function ContactSection() {
         })
         setErrors({})
         
+        console.log("[v0] Form cleared and success message set")
+        
         // Auto-clear success message after 5 seconds
-        setTimeout(() => setSubmitStatus("idle"), 5000)
+        setTimeout(() => {
+          setSubmitStatus("idle")
+          console.log("[v0] Success message cleared")
+        }, 5000)
       } else {
+        console.error("[v0] ❌ Form submission failed with status:", response.status)
+        console.error("[v0] Error response:", responseData)
         setSubmitStatus("error")
       }
     } catch (error) {
-      console.error("[v0] Form submission error:", error)
+      console.error("[v0] ❌ Form submission error:", error)
+      console.error("[v0] Error type:", error instanceof Error ? error.name : typeof error)
+      console.error("[v0] Error message:", error instanceof Error ? error.message : String(error))
       setSubmitStatus("error")
     } finally {
       setIsSubmitting(false)
+      console.log("[v0] ===== FORM SUBMISSION END =====")
     }
   }
 
