@@ -1,5 +1,6 @@
 // app/api/forms/investment-enquiry/route.ts
-export const runtime = "edge"; // Resend works in Edge runtime
+export const runtime = "edge";
+
 import { NextRequest, NextResponse } from "next/server";
 
 interface FormSubmission {
@@ -11,8 +12,49 @@ interface FormSubmission {
   message: string;
 }
 
+/**
+ * Send email via Brevo Transactional API
+ */
+async function sendBrevoEmail({
+  to,
+  subject,
+  html,
+  replyTo,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+  replyTo?: string;
+}) {
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "api-key": process.env.BREVO_API_KEY!,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: {
+        name: "Oxic International",
+        email: "info@oxicinternational.co.ke",
+      },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+      replyTo: replyTo ? { email: replyTo } : undefined,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Brevo error: ${errorText}`);
+  }
+
+  return response.json();
+}
+
 export async function POST(req: NextRequest) {
-  console.log("[v0] Investment enquiry received");
+  console.log("[Brevo] Investment enquiry received");
 
   try {
     const body: FormSubmission = await req.json();
@@ -27,83 +69,68 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Recipients
+    // Team recipients
     const recipients = [
       "oxicgroupltd@gmail.com",
       "info@oxicinternational.co.ke",
     ];
 
-    // Send emails to team
-    const emailPromises = recipients.map((to) =>
-      fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "info@oxicinternational.co.ke",
-          to,
-          subject: `New Investment Enquiry from ${name}`,
-          html: `
-            <h2>New Investment Enquiry Received</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
-            ${organization ? `<p><strong>Organization:</strong> ${organization}</p>` : ""}
-            ${interest ? `<p><strong>Interest:</strong> ${interest}</p>` : ""}
-            <p><strong>Message:</strong></p>
-            <p>${message.replace(/\n/g, "<br>")}</p>
-          `,
-          reply_to: email,
-        }),
+    // Email content for team
+    const teamHTML = `
+      <h2>New Investment Enquiry Received</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
+      ${organization ? `<p><strong>Organization:</strong> ${organization}</p>` : ""}
+      ${interest ? `<p><strong>Interest:</strong> ${interest}</p>` : ""}
+      <p><strong>Message:</strong></p>
+      <p>${message.replace(/\n/g, "<br>")}</p>
+    `;
+
+    // Send to internal team
+    const teamEmailPromises = recipients.map((to) =>
+      sendBrevoEmail({
+        to,
+        subject: `New Investment Enquiry from ${name}`,
+        html: teamHTML,
+        replyTo: email,
       })
     );
 
-    // Send auto-responder to the sender
-    const autoResponder = fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "info@oxicinternational.co.ke",
-        to: email,
-        subject: "We received your investment enquiry",
-        html: `
-          <p>Hi ${name},</p>
-          <p>Thank you for reaching out to Oxic International. We have received your enquiry and our team will contact you shortly.</p>
-          <p>Best regards,<br/>Oxic International Team</p>
-        `,
-      }),
+    // Auto-responder
+    const autoResponderPromise = sendBrevoEmail({
+      to: email,
+      subject: "We received your investment enquiry",
+      html: `
+        <p>Hi ${name},</p>
+        <p>Thank you for reaching out to Oxic International.</p>
+        <p>We have received your enquiry and our team will contact you shortly.</p>
+        <br/>
+        <p>Best regards,<br/>Oxic International Team</p>
+      `,
     });
 
-    // Wait for all emails to finish
-    const results = await Promise.allSettled([...emailPromises, autoResponder]);
+    const results = await Promise.allSettled([
+      ...teamEmailPromises,
+      autoResponderPromise,
+    ]);
 
-    // Prepare email status report
-    const emailStatus = results.map((r, idx) => ({
-      recipient:
-        idx < recipients.length ? recipients[idx] : email,
-      status: r.status,
-      reason: r.status === "rejected" ? (r as PromiseRejectedResult).reason : null,
-    }));
+    const emailsSent = results.filter((r) => r.status === "fulfilled").length;
+    const emailsFailed = results.filter((r) => r.status === "rejected").length;
 
-    console.log("[v0] Email results:", emailStatus);
+    console.log("[Brevo] Email results:", results);
 
     return NextResponse.json({
       message: "Form submission received. Emails processed.",
       submissionId: `OXIC-${Date.now()}`,
       emailStatus: {
         totalEmails: results.length,
-        emailsSent: results.filter((r) => r.status === "fulfilled").length,
-        emailsFailed: results.filter((r) => r.status === "rejected").length,
-        results: emailStatus,
+        emailsSent,
+        emailsFailed,
       },
     });
   } catch (error) {
-    console.error("[v0] Error processing enquiry:", error);
+    console.error("[Brevo] Error processing enquiry:", error);
     return NextResponse.json(
       { error: "Failed to process form submission" },
       { status: 500 }
