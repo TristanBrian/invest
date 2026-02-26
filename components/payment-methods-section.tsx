@@ -637,38 +637,71 @@ export function PaymentMethodsSection() {
     setErrorMessage("")
 
     try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "invoice",
-          data: {
-            invoiceNumber,
-            companyName,
-            companyAddress,
-            contactPerson,
-            email: invoiceEmail,
-            amount: invoiceAmount,
-            currency: invoiceCurrency,
-            description: invoiceDescription,
-          },
-        }),
+      console.log("[v0] Invoice Send Starting...")
+      console.log("[v0] Invoice data:", {
+        number: invoiceNumber,
+        clientEmail: invoiceEmail,
+        amount: invoiceAmount,
+        currency: invoiceCurrency,
       })
 
+      // Build line items from invoice description
+      const lineItems = [
+        {
+          description: invoiceDescription || "Professional Services",
+          quantity: 1,
+          unitPrice: invoiceAmount,
+          total: invoiceAmount,
+        },
+      ]
+
+      const invoicePayload = {
+        client: {
+          name: contactPerson || companyName,
+          email: invoiceEmail,
+          address: companyAddress || "",
+        },
+        lineItems,
+        details: {
+          invoiceNumber,
+          invoiceDate: new Date().toISOString(),
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          currency: invoiceCurrency || "KES",
+          taxRate: 16,
+        },
+      }
+
+      console.log("[v0] Sending to /api/invoices/send with payload:", invoicePayload)
+
+      const response = await fetch("/api/invoices/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(invoicePayload),
+      })
+
+      console.log("[v0] API response status:", response.status)
+
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`)
+        const errorText = await response.text()
+        console.error("[v0] API error response:", errorText)
+        throw new Error(`API error: ${response.status} - ${errorText}`)
       }
 
       const result = await response.json()
+      console.log("[v0] Invoice API response:", result)
 
       if (result.success) {
+        console.log("[v0] Invoice sent successfully!")
         setInvoiceStep("sent")
+        setErrorMessage("")
       } else {
-        setErrorMessage("Failed to send invoice. Please try again.")
+        console.error("[v0] Invoice API returned success=false:", result)
+        setErrorMessage(result.message || "Failed to send invoice. Please try again.")
       }
     } catch (error) {
       console.error("[v0] Invoice send error:", error)
-      setErrorMessage("Network error. Please try again.")
+      console.error("[v0] Error message:", error instanceof Error ? error.message : String(error))
+      setErrorMessage(error instanceof Error ? error.message : "Network error. Please try again.")
     } finally {
       setInvoiceLoading(false)
     }

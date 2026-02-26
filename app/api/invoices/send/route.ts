@@ -87,12 +87,18 @@ function calculateLineItems(items: any[]) {
  */
 export async function POST(request: NextRequest) {
   try {
+    console.log("[v0] Invoice API - POST request received")
+    
     // Parse request body
     const body = await request.json() as InvoiceSendRequest
+    console.log("[v0] Request body parsed successfully")
+    console.log("[v0] Client email:", body.client?.email)
+    console.log("[v0] Line items count:", body.lineItems?.length)
 
     // Validate request
     const validation = validateInvoiceRequest(body)
     if (!validation.valid) {
+      console.error("[v0] Validation failed:", validation.error)
       return NextResponse.json(
         {
           success: false,
@@ -101,12 +107,16 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+    
+    console.log("[v0] Validation passed")
 
     // Calculate line item totals
     const lineItems = calculateLineItems(body.lineItems)
+    console.log("[v0] Line items calculated")
 
     // Generate invoice number if not provided
     const invoiceNumber = body.details.invoiceNumber || generateInvoiceNumber()
+    console.log("[v0] Invoice number:", invoiceNumber)
 
     // Create invoice object
     const invoice = createInvoice(
@@ -121,13 +131,21 @@ export async function POST(request: NextRequest) {
     console.log("[v0] Invoice created:", {
       invoiceNumber: invoice.invoiceNumber,
       client: invoice.client.name,
+      clientEmail: invoice.client.email,
       total: invoice.total,
       currency: invoice.details.currency,
       timestamp: new Date().toISOString(),
     })
 
     // Send invoice
+    console.log("[v0] Calling sendInvoice function...")
     const sendResult = await sendInvoice(invoice, body.teamEmails)
+    console.log("[v0] sendInvoice returned:", {
+      success: sendResult.success,
+      clientEmailSent: sendResult.clientEmailSent,
+      teamEmailsSent: sendResult.teamEmailsSent,
+      errors: sendResult.errors,
+    })
 
     // Update invoice status
     invoice.status = sendResult.clientEmailSent ? "sent" : "draft"
@@ -139,6 +157,8 @@ export async function POST(request: NextRequest) {
       ...sendResult,
       invoiceId: invoice.id,
     }
+
+    console.log("[v0] Invoice API - Sending response with status:", response.success ? 200 : 207)
 
     // Return success response
     return NextResponse.json(
@@ -159,6 +179,8 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error("[v0] Invoice API error:", error)
+    console.error("[v0] Error message:", error instanceof Error ? error.message : String(error))
+    console.error("[v0] Error stack:", error instanceof Error ? error.stack : "No stack")
 
     return NextResponse.json(
       {
