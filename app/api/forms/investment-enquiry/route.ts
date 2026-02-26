@@ -275,8 +275,8 @@ async function sendEmailViaResend(
   const resendApiKey = process.env.RESEND_API_KEY
   
   if (!resendApiKey) {
-    console.warn("[v0] RESEND_API_KEY not configured")
-    return { success: false, reason: "Email service not configured" }
+    console.error("[v0] RESEND_API_KEY not configured")
+    return { success: false, reason: "RESEND_API_KEY not configured" }
   }
 
   try {
@@ -296,16 +296,16 @@ async function sendEmailViaResend(
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      console.error(`[v0] Resend API error for ${to}:`, error)
-      return { success: false, reason: `API Error: ${error.message}` }
+      const errorData = await response.json()
+      console.error(`[v0] Email failed to ${to}: ${response.status} - ${errorData.message}`)
+      return { success: false, reason: `API Error ${response.status}: ${errorData.message}` }
     }
 
     const result = await response.json()
-    console.log(`[v0] Email sent successfully to ${to}:`, result.id)
+    console.log(`[v0] Email sent to ${to}: ${result.id}`)
     return { success: true, emailId: result.id }
   } catch (error) {
-    console.error(`[v0] Email sending error for ${to}:`, error)
+    console.error(`[v0] Email exception to ${to}:`, error instanceof Error ? error.message : String(error))
     return { success: false, reason: String(error) }
   }
 }
@@ -352,11 +352,7 @@ async function sendInquiryEmail(data: FormSubmission & { timestamp: string; ipAd
 
   const teamEmailsSent = teamResults.filter((r) => r.success).length
   
-  console.log("[v0] Inquiry email distribution complete:", {
-    teamEmailsSent,
-    teamResults,
-    autoReplySent: autoReplyResult.success,
-  })
+  console.log("[v0] Inquiry sent - Team:", teamEmailsSent, "Auto-reply:", autoReplyResult.success)
 
   return {
     teamEmailsSent,
@@ -371,6 +367,7 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!body.name || !body.email || !body.interest || !body.message || !body.consent) {
+      console.error("[v0] Validation failed: Missing required fields")
       return NextResponse.json(
         {
           success: false,
@@ -379,7 +376,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-
+    
     // Sanitize and prepare submission data
     const data = {
       name: body.name.trim(),
@@ -392,6 +389,8 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
       ipAddress: request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "Unknown",
     }
+    
+    console.log("[v0] Inquiry submission from:", data.email, "- Interest:", data.interest)
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -405,22 +404,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Log the submission (with privacy protection)
-    const maskedEmail = data.email.substring(0, 3) + "***" + data.email.substring(data.email.lastIndexOf("@"))
-    console.log("[v0] Investment enquiry received:", {
-      name: data.name,
-      email: maskedEmail,
-      organization: data.organization,
-      interest: data.interest,
-      timestamp: data.timestamp,
-    })
-
     // Send email notifications (to team and auto-reply to customer)
     const emailResult = await sendInquiryEmail(data)
 
     // Determine response based on email delivery status
     const emailsSent = emailResult.teamEmailsSent + (emailResult.autoReplySent ? 1 : 0)
     const allSuccess = emailResult.teamEmailsSent >= 1 && emailResult.autoReplySent
+    
+    const submissionId = `OXIC-${new Date(data.timestamp).getTime()}-${Math.random().toString(36).substring(2, 9)}`.toUpperCase()
     
     return NextResponse.json(
       {
@@ -435,12 +426,12 @@ export async function POST(request: NextRequest) {
           confirmationEmailSent: emailResult.autoReplySent,
           totalEmailsSent: emailsSent,
         },
-        submissionId: `OXIC-${new Date(data.timestamp).getTime()}-${Math.random().toString(36).substring(2, 9)}`.toUpperCase(),
+        submissionId: submissionId,
       },
       { status: 200 }
     )
   } catch (error) {
-    console.error("[v0] Form submission error:", error)
+    console.error("[v0] Form submission error:", error instanceof Error ? error.message : String(error))
 
     return NextResponse.json(
       {
