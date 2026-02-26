@@ -1,87 +1,109 @@
-export const runtime = "edge"; // Edge runtime
+// app/api/forms/investment-enquiry/route.ts
+export const runtime = "edge"; // Resend works in Edge runtime
 import { NextRequest, NextResponse } from "next/server";
-
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const SENDER_EMAIL = process.env.SENDER_EMAIL || "oxicgroupltd@gmail.com";
-const RECIPIENT_EMAILS = (process.env.RECIPIENT_EMAILS || "oxicgroupltd@gmail.com,info@oxicinternational.co.ke")
-  .split(",")
-  .map((e) => e.trim());
 
 interface FormSubmission {
   name: string;
   email: string;
-  organization?: string;
   phone?: string;
+  organization?: string;
   interest?: string;
   message: string;
 }
 
-function generateSubmissionId() {
-  return `OXIC-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-}
-
 export async function POST(req: NextRequest) {
-  try {
-    const data: FormSubmission = await req.json();
+  console.log("[v0] Investment enquiry received");
 
-    if (!data.name || !data.email || !data.message) {
+  try {
+    const body: FormSubmission = await req.json();
+
+    const { name, email, message, phone, organization, interest } = body;
+
+    // Validate required fields
+    if (!name || !email || !message) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    const submissionId = generateSubmissionId();
+    // Recipients
+    const recipients = [
+      "oxicgroupltd@gmail.com",
+      "info@oxicinternational.co.ke",
+    ];
 
-    const html = `
-      <h2>New Investment Enquiry</h2>
-      <p><strong>Name:</strong> ${data.name}</p>
-      <p><strong>Email:</strong> ${data.email}</p>
-      <p><strong>Phone:</strong> ${data.phone || "N/A"}</p>
-      <p><strong>Organization:</strong> ${data.organization || "N/A"}</p>
-      <p><strong>Interest:</strong> ${data.interest || "N/A"}</p>
-      <p><strong>Message:</strong><br>${data.message.replace(/\n/g, "<br>")}</p>
-      <p><strong>Submission ID:</strong> ${submissionId}</p>
-      <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
-    `;
-
-    const sendResults = await Promise.allSettled(
-      RECIPIENT_EMAILS.map((recipient) =>
-        fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${RESEND_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            from: SENDER_EMAIL,
-            to: recipient,
-            subject: `Investment Enquiry from ${data.name}`,
-            html,
-            reply_to: data.email,
-          }),
-        })
-      )
+    // Send emails to team
+    const emailPromises = recipients.map((to) =>
+      fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "info@oxicinternational.co.ke",
+          to,
+          subject: `New Investment Enquiry from ${name}`,
+          html: `
+            <h2>New Investment Enquiry Received</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ""}
+            ${organization ? `<p><strong>Organization:</strong> ${organization}</p>` : ""}
+            ${interest ? `<p><strong>Interest:</strong> ${interest}</p>` : ""}
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, "<br>")}</p>
+          `,
+          reply_to: email,
+        }),
+      })
     );
 
-    const emailStatus = {
-      totalEmails: RECIPIENT_EMAILS.length,
-      emailsSent: sendResults.filter((r) => r.status === "fulfilled").length,
-      emailsFailed: sendResults.filter((r) => r.status === "rejected").length,
-      results: sendResults.map((r, i) => ({
-        recipient: RECIPIENT_EMAILS[i],
-        status: r.status,
-        reason: r.status === "rejected" ? (r as PromiseRejectedResult).reason : undefined,
-      })),
-    };
+    // Send auto-responder to the sender
+    const autoResponder = fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "info@oxicinternational.co.ke",
+        to: email,
+        subject: "We received your investment enquiry",
+        html: `
+          <p>Hi ${name},</p>
+          <p>Thank you for reaching out to Oxic International. We have received your enquiry and our team will contact you shortly.</p>
+          <p>Best regards,<br/>Oxic International Team</p>
+        `,
+      }),
+    });
+
+    // Wait for all emails to finish
+    const results = await Promise.allSettled([...emailPromises, autoResponder]);
+
+    // Prepare email status report
+    const emailStatus = results.map((r, idx) => ({
+      recipient:
+        idx < recipients.length ? recipients[idx] : email,
+      status: r.status,
+      reason: r.status === "rejected" ? (r as PromiseRejectedResult).reason : null,
+    }));
+
+    console.log("[v0] Email results:", emailStatus);
 
     return NextResponse.json({
       message: "Form submission received. Emails processed.",
-      submissionId,
-      emailStatus,
+      submissionId: `OXIC-${Date.now()}`,
+      emailStatus: {
+        totalEmails: results.length,
+        emailsSent: results.filter((r) => r.status === "fulfilled").length,
+        emailsFailed: results.filter((r) => r.status === "rejected").length,
+        results: emailStatus,
+      },
     });
   } catch (error) {
-    console.error("Error handling form submission:", error);
+    console.error("[v0] Error processing enquiry:", error);
     return NextResponse.json(
       { error: "Failed to process form submission" },
       { status: 500 }
