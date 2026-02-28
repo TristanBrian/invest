@@ -1,4 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Globe, Zap, Users, Shield } from "lucide-react"
 
 const values = [
@@ -41,17 +40,13 @@ export function ValuePropositionSection() {
           {values.map((value, index) => {
             const Icon = value.icon
             return (
-              <Card key={index} className="border-border transition-all hover:shadow-lg">
-                <CardHeader>
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <Icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <CardTitle className="text-xl">{value.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="leading-relaxed">{value.description}</CardDescription>
-                </CardContent>
-              </Card>
+              <div key={index} className="border border-slate-200 rounded-lg p-6 transition-all hover:shadow-lg bg-white">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
+                  <Icon className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">{value.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{value.description}</p>
+              </div>
             )
           })}
         </div>

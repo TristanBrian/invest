@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Card } from "@/components/ui/card"
 import { Linkedin } from "lucide-react"
 
 export function FounderSection() {
@@ -18,7 +17,7 @@ export function FounderSection() {
           </p>
         </div>
 
-        <Card className="mx-auto max-w-5xl overflow-hidden border-border">
+        <div className="mx-auto max-w-5xl overflow-hidden border border-slate-200 rounded-lg bg-white">
           <div className="grid gap-8 p-8 md:grid-cols-5 md:gap-12 md:p-12">
             <div className="md:col-span-2">
               <div className="relative aspect-square overflow-hidden rounded-xl bg-muted/30 shadow-lg">
@@ -69,7 +68,7 @@ export function FounderSection() {
               </div>
             </div>
           </div>
-        </Card>
+        </div>
 
         {/* Investment Thesis Quote - Full Width */}
         <blockquote className="mx-auto max-w-5xl mt-8 border-l-4 border-secondary bg-muted/50 p-8 md:p-12 italic text-foreground/90 rounded-r-lg">

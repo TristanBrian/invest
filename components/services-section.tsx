@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { TrendingUp, FileSearch, Network, Target, CheckCircle } from "lucide-react"
 
 const services = [
@@ -61,37 +60,35 @@ export function ServicesSection() {
           {services.map((service, index) => {
             const Icon = service.icon
             return (
-              <Card
+              <div
                 key={index}
-                className="border-border bg-card transition-all hover:shadow-lg hover:border-secondary/50 group"
+                className="border border-slate-200 bg-white rounded-lg transition-all hover:shadow-lg group p-4 sm:p-6 md:p-8"
               >
-                <CardContent className="p-4 sm:p-6 md:p-8">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-secondary/20 transition-colors">
-                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-primary group-hover:text-secondary transition-colors" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base sm:text-lg md:text-xl font-semibold text-primary mb-1 sm:mb-2">
-                        {service.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed mb-3 sm:mb-4">
-                        {service.description}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                        {service.features.map((feature, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs font-medium bg-secondary/10 text-primary rounded-full"
-                          >
-                            <CheckCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-secondary" />
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 group-hover:bg-blue-200 transition-colors">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-blue-600 group-hover:text-blue-700 transition-colors" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base sm:text-lg md:text-xl font-semibold text-slate-900 mb-1 sm:mb-2">
+                      {service.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed mb-3 sm:mb-4">
+                      {service.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {service.features.map((feature, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full"
+                        >
+                          <CheckCircle className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-blue-600" />
+                          {feature}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )
           })}
         </div>
