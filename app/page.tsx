@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/hero-section"
 import { ValuePropositionSection } from "@/components/value-proposition-section"
 import { ServicesSection } from "@/components/services-section"
 import { FounderSection } from "@/components/founder-section"
+import { ConsultantSection } from "@/components/consultant-section"
 import { ContactSection } from "@/components/contact-section"
 import { LocationMap } from "@/components/location-map"
 import { ReviewsSection } from "@/components/reviews-section"
@@ -46,6 +47,7 @@ export default function Home() {
         <ValuePropositionSection />
         <ServicesSection />
         <FounderSection />
+        <ConsultantSection />
         <Suspense fallback={<PaymentSectionFallback />}>
           <PaymentMethodsSection />
         </Suspense>
