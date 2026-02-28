@@ -75,7 +75,7 @@ export function FounderSection() {
                   className="flex items-center justify-center gap-2 mt-4 w-full px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
                 >
                   <Linkedin className="h-5 w-5" />
-                  <span>Connect on LinkedIn</span>
+                  <span>Connect </span>
                 </a>
               </div>
 
@@ -175,11 +175,7 @@ export function FounderSection() {
               <div className="p-8 md:p-0 md:col-span-3 flex flex-col justify-between">
                 <div className="space-y-6">
                   <div>
-                    <p className="text-sm uppercase tracking-widest text-amber-600 font-semibold mb-2">Consultant</p>
                     <h3 className="text-3xl md:text-4xl font-bold text-slate-900">Hon. Isaac Limo</h3>
-                    <p className="text-lg text-amber-700 mt-2 font-semibold">
-                      Foreign Investment & Financial Strategy Consultant
-                    </p>
                   </div>
 
                   <div className="space-y-3 text-base leading-relaxed text-slate-700">
@@ -202,7 +198,7 @@ export function FounderSection() {
                   href="#contact"
                   className="mt-8 w-full md:w-auto inline-flex items-center justify-center bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 group hover:shadow-lg hover:-translate-y-0.5"
                 >
-                  Consult an Expert
+                  Consult
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
