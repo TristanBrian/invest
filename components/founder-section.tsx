@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { Linkedin, ArrowRight, TrendingUp, Globe, Lock, Zap } from "lucide-react"
 
-export default function LeadershipSection() {
+export function FounderSection() {
   const [founderImageLoaded, setFounderImageLoaded] = useState(false)
   const [consultantImageLoaded, setConsultantImageLoaded] = useState(false)
 
@@ -32,7 +32,7 @@ export default function LeadershipSection() {
   ]
 
   return (
-    <section id="leadership" className="bg-white">
+    <section id="founder" className="bg-white">
       {/* Founder Section */}
       <div className="bg-white py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
