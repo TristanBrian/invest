@@ -166,7 +166,7 @@ export function FounderSection() {
                   {/* Credential Badge - ON THE IMAGE */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-900/90 to-transparent p-6 text-white">
                     <p className="text-sm font-semibold text-amber-200">Expert in</p>
-                    <p className="text-xl font-bold">Tech-Finance Integration</p>
+                    <p className="text-xl font-bold">Tech-Finance </p>
                   </div>
                 </div>
               </div>
