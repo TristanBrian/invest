@@ -146,15 +146,15 @@ export function FounderSection() {
           {/* Main Profile Card */}
           <div className="mx-auto max-w-5xl overflow-hidden border border-amber-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 mb-12 bg-white">
             <div className="grid gap-0 md:grid-cols-5 md:gap-12">
-              {/* Image Section */}
-              <div className="md:col-span-2 relative h-96 md:h-auto">
-                <div className="relative h-full overflow-hidden bg-slate-100">
+              {/* Image Section - FIXED */}
+              <div className="md:col-span-2 relative">
+                <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden bg-slate-100 rounded-t-lg md:rounded-l-lg md:rounded-t-none">
                   {!consultantImageLoaded && <div className="absolute inset-0 bg-slate-200 animate-pulse z-10" />}
                   <Image
                     src="/images/isaac-limo.jpg"
                     alt="Hon. Isaac Limo, Foreign Investment & Financial Strategy Consultant"
                     fill
-                    className={`object-cover object-center transition-opacity duration-500 ${
+                    className={`object-contain md:object-cover transition-opacity duration-500 ${
                       consultantImageLoaded ? "opacity-100" : "opacity-0"
                     }`}
                     quality={95}
@@ -162,12 +162,12 @@ export function FounderSection() {
                     priority
                     onLoad={() => setConsultantImageLoaded(true)}
                   />
-                </div>
-
-                {/* Credential Badge - Gold gradient (consistent with founder) */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-900/90 to-transparent p-6 text-white">
-                  <p className="text-sm font-semibold text-amber-200">Expert in</p>
-                  <p className="text-xl font-bold">Tech-Finance </p>
+                  
+                  {/* Credential Badge - ON THE IMAGE */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-amber-900/90 to-transparent p-6 text-white">
+                    <p className="text-sm font-semibold text-amber-200">Expert in</p>
+                    <p className="text-xl font-bold">Tech-Finance Integration</p>
+                  </div>
                 </div>
               </div>
 
