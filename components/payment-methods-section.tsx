@@ -946,7 +946,7 @@ export function PaymentMethodsSection() {
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-muted-foreground text-sm">Account Name</span>
-            <span className="font-medium text-sm">THE OXIC INTERNATIONAL INTERNATIONAL</span>
+            <span className="font-medium text-sm">THE OXIC INTERNATIONAL</span>
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-muted-foreground text-sm">Account Number (KES)</span>
