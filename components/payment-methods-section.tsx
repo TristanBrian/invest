@@ -770,9 +770,8 @@ export function PaymentMethodsSection() {
                 <strong>Payment Instructions:</strong><br/>
                 Bank: KCB BANK (K) LIMITED<br/>
                 Account Name: THE OXIC INTERNATIONAL GROUP LIMITED<br/>
-                Account Number: 1316115194<br/>
-                SWIFT Code: KCBLKENX<br/>
-                M-Pesa Paybill: 522522<br/><br/>
+                Account Number: 8067769<br/>
+                M-Pesa Paybill: 522533<br/><br/>
                 <strong>Contact:</strong> info@oxicinternational.co.ke
               </div>
             </body>
