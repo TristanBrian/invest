@@ -1323,6 +1323,16 @@ export function PaymentMethodsSection() {
               )
             })}
           </div>
+          {/* View All Button */}
+          <div className="mt-8 text-center">
+            <Button 
+              asChild
+              variant="outline"
+              className="border-primary/30 text-primary hover:bg-primary/5"
+            >
+              <a href="/payment">View All Payment Methods</a>
+            </Button>
+          </div>
         </div>
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>

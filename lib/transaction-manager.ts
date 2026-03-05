@@ -172,10 +172,32 @@ class TransactionManager {
   }
 
   /**
+   * Get transaction by merchant request ID (from KCB or M-Pesa callback)
+   */
+  getTransactionByMerchantId(
+    merchantRequestId: string
+  ): PaymentTransaction | undefined {
+    return Array.from(this.transactions.values()).find(
+      (t) => t.merchantRequestId === merchantRequestId
+    )
+  }
+
+  /**
    * Get all logs for transaction
    */
   getTransactionLogs(transactionId: string): TransactionLog[] {
     return this.logs.get(transactionId) || []
+  }
+
+  /**
+   * Log transaction action (alias for logAction)
+   */
+  logTransaction(
+    transactionId: string,
+    action: string,
+    details: Record<string, unknown>
+  ): void {
+    return this.logAction(transactionId, action, details)
   }
 
   /**
