@@ -770,8 +770,9 @@ export function PaymentMethodsSection() {
                 <strong>Payment Instructions:</strong><br/>
                 Bank: KCB BANK (K) LIMITED<br/>
                 Account Name: THE OXIC INTERNATIONAL GROUP LIMITED<br/>
-                Account Number: 8067769<br/>
-                M-Pesa Paybill: 522533<br/><br/>
+                Account Number: 1316115194<br/>
+                M-Pesa Paybill: 522522<br/>
+                Swift code: KCBLKENX <br/></br>
                 <strong>Contact:</strong> info@oxicinternational.co.ke
               </div>
             </body>
@@ -950,16 +951,22 @@ export function PaymentMethodsSection() {
           </div>
           <div className="flex justify-between py-2 border-b border-border/50">
             <span className="text-muted-foreground text-sm">Account Number (KES)</span>
-            <span className="font-medium text-sm font-mono">8067769</span>
+            <span className="font-medium text-sm font-mono">1316115194</span>
           </div>
        
           <div className="flex justify-between py-2">
             <span className="text-muted-foreground text-sm">M-Pesa Paybill</span>
-            <span className="font-medium text-sm font-mono">522533</span>
+            <span className="font-medium text-sm font-mono">522522</span>
           </div>
+
+            <div className="flex justify-between py-2">
+            <span className="text-muted-foreground text-sm">SWIFT CODE</span>
+            <span className="font-medium text-sm font-mono">KCBLKENX</span>
+          </div>
+          
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <p className="text-sm text-blue-800">Use account number <span className="font-medium">8067769</span> as reference for all transfers. For invoices and wire transfers, contact our accounts team.</p>
+          <p className="text-sm text-blue-800">Use account number <span className="font-medium">1316115194</span> as reference for all Payments & Cheques For invoices and wire transfers, contact our accounts team.</p>
         </div>
         <Button className="w-full bg-[#1e3a5f] hover:bg-[#152a45]" onClick={() => window.location.href = "mailto:info@oxicinternational.co.ke?subject=Bank Transfer Inquiry"}>
           <Mail className="h-4 w-4 mr-2" />Contact Accounts Team
